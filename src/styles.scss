@@ -1,3 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "ng-zorro-antd/ng-zorro-antd.css";
+
+
+:root {
+  --main-theme: #525ceb;
+  --secondary-theme: #bfcfe7;
+  --font-color: #3d3b40;
+  --side-color: #f8edff;
+}
+.shine-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -100%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(25deg);
+  transition: all 1s ease;
+}
+
+.shine-button:hover::before {
+  left: 150%;
+}

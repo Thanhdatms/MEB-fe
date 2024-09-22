@@ -1,0 +1,12 @@
+<div class="flex justify-between p-4">
+  <span class="text-[--font-color] font-bold text-3xl pl-5" >MEB</span>
+  <div class="flex gap-x-10">
+    <ng-container *ngFor="let item of navbarItems">
+      <div [routerLink]="item.path">
+        <span nz-icon [nzType]="item.icon" nzTheme="outline" class="text-3xl text-[--main-theme] cursor-pointer"></span>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<router-outlet></router-outlet>
+

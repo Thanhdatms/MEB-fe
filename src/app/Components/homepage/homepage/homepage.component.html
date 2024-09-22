@@ -1,0 +1,82 @@
+<div class="min-h-screen">
+  <!-- Header section with user greeting -->
+  <div [style.background-image]="headerImage"
+       class="h-[150px] bg-gradient-to-r from-[var(--main-theme)] to-[var(--secondary-theme)] bg-cover bg-center bg-no-repeat">
+  </div>
+
+  <div class="container mx-auto px-4 py-8">
+    <!-- Featured/Latest section -->
+    <section class="mb-12">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-[var(--font-color)]">FEATURED/ LATEST</h2>
+        <a href="#" class="underline text-xl text-[var(--font-color)]">See more</a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Use the BlogCardComponent -->
+        <app-blog-card
+          title="JavaScript Basics"
+          author="John Doe"
+          [views]="20000000"
+          [downloads]="5000"
+          contentType="js"
+        ></app-blog-card>
+        <app-blog-card
+          title="HTML5 Fundamentals"
+          author="Jane Smith"
+          [views]="15000000"
+          [downloads]="4000"
+          contentType="html"
+        ></app-blog-card>
+        <app-blog-card
+          title="Python for Beginners"
+          author="Bob Johnson"
+          [views]="18000000"
+          [downloads]="6000"
+          contentType="python"
+        ></app-blog-card>
+        <app-blog-card
+          title="Web Development Tips"
+          author="Alice Brown"
+          [views]="22000000"
+          [downloads]="7000"
+        ></app-blog-card>
+      </div>
+    </section>
+
+    <!-- Events section -->
+    <section>
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-[var(--font-color)]">EVENTS</h2>
+        <a href="#" class="underline text-xl text-[var(--font-color)]">See more</a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Event card 1 -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="h-40 bg-gradient-to-r from-[var(--main-theme)] to-[var(--secondary-theme)]"></div>
+          <div class="p-4">
+            <span class="text-white px-2 py-1 rounded-full text-sm bg-[var(--main-theme)]">20/02/2002</span>
+            <h3 class="font-bold mt-2 mb-1 text-[var(--font-color)]">TITLE - EVENT NAME</h3>
+            <p class="text-sm mb-4 text-[var(--font-color)]">Some subtitle that is long but not that much</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-[var(--font-color)]">Attendee: 69420</span>
+              <button class="text-white px-4 py-1 rounded-full text-sm bg-[var(--main-theme)]">JOIN</button>
+            </div>
+          </div>
+        </div>
+        <!-- Event card 2 -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="h-40 bg-gradient-to-r from-[var(--main-theme)] to-[var(--secondary-theme)]"></div>
+          <div class="p-4">
+            <span class="text-white px-2 py-1 rounded-full text-sm bg-[var(--secondary-theme)]">20/02/2002</span>
+            <h3 class="font-bold mt-2 mb-1 text-[var(--font-color)]">TITLE - EVENT NAME</h3>
+            <p class="text-sm mb-4 text-[var(--font-color)]">Some subtitle that is long but not that much</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-[var(--font-color)]">Attendee: 69420</span>
+              <span class="text-white px-4 py-1 rounded-full text-sm bg-[var(--secondary-theme)]">ENDED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

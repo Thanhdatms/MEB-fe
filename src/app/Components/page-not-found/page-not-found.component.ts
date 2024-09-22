@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
   selector: 'app-page-not-found',
   standalone: true,
   imports: [],
-  templateUrl: '../../asset/404.html',
+  templateUrl: './404.html',
 })
 export class PageNotFoundComponent {
 
