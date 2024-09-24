@@ -3,6 +3,7 @@ import { PageNotFoundComponent } from './Components/page-not-found/page-not-foun
 import { LoginComponent } from './Components/login/login.component';
 import { HomepageComponent } from './Components/homepage/homepage/homepage.component';
 import { ContentLayoutComponent } from './Components/page-layout/content-layout/content-layout.component';
+import { BlogListComponent } from './Components/blog-list/blog-list/blog-list.component';
 
 export const routes: Routes = [
   {
@@ -21,7 +22,12 @@ export const routes: Routes = [
       {
         path: 'home',
         component: HomepageComponent
+      },
+      {
+        path: 'blog',
+        component: BlogListComponent
       }
+      
     ]
   },
   {

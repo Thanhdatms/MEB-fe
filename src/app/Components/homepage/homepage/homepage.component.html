@@ -14,31 +14,13 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Use the BlogCardComponent -->
         <app-blog-card
-          title="JavaScript Basics"
-          author="John Doe"
-          [views]="20000000"
-          [downloads]="5000"
-          contentType="js"
-        ></app-blog-card>
-        <app-blog-card
-          title="HTML5 Fundamentals"
-          author="Jane Smith"
-          [views]="15000000"
-          [downloads]="4000"
-          contentType="html"
-        ></app-blog-card>
-        <app-blog-card
-          title="Python for Beginners"
-          author="Bob Johnson"
-          [views]="18000000"
-          [downloads]="6000"
-          contentType="python"
-        ></app-blog-card>
-        <app-blog-card
-          title="Web Development Tips"
-          author="Alice Brown"
-          [views]="22000000"
-          [downloads]="7000"
+          *ngFor="let article of articles"
+          [title]="article.title"
+          [author]="article.author"
+          [views]="article.views"
+          [downloads]="article.downloads"
+          [contentType]="article.contentType"
+          (cardClicked)="openPopup(article)"
         ></app-blog-card>
       </div>
     </section>
@@ -79,4 +61,11 @@
       </div>
     </section>
   </div>
+
+  <!-- Blog Popup -->
+  <app-blog-popup
+    *ngIf="selectedArticle"
+    [article]="selectedArticle"
+    (close)="closePopup()"
+  ></app-blog-popup>
 </div>

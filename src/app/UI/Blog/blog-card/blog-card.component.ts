@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -13,7 +13,7 @@ export class BlogCardComponent {
   @Input() author: string = '';
   @Input() views: number = 0;
   @Input() downloads: number = 0;
-  @Input() contentType: 'js' | 'html' | 'python' | 'Others' = 'Others';
+  @Input() contentType: string = '';
 
   get cardBackground(): string {
     switch (this.contentType) {
@@ -31,5 +31,11 @@ export class BlogCardComponent {
       case 'python': return '#2563eb'; // Darker blue
       default: return 'var(--main-theme)';
     }
+  }
+
+  @Output() cardClicked = new EventEmitter<void>();
+
+  onCardClick() {
+    this.cardClicked.emit();
   }
 }

@@ -21,6 +21,6 @@ export class ContentLayoutComponent {
     { icon: 'bell', path: '/noti' },
     { icon: 'home', path: '/home' },
     { icon: 'user', path: '/account' },
-    { icon: 'menu', path: '/menu' },
+    { icon: 'menu', path: '/blog' },
   ];
 }
