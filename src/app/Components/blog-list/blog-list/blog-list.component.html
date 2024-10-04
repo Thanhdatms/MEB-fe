@@ -1,0 +1,37 @@
+<div class="flex flex-row pl-5 py-8 gap-x-40">
+  <div class="flex flex-col gap-y-5">
+    <div class="flex flex-col gap-y-5">
+      <div class="text-xl font-bold text-[var(--font-color)]">Discover</div>
+      <div class="flex flex-col gap-y-2">
+        <ng-container *ngFor="let tag of contentTags">
+          <div class="text-md  text-[var(--font-color)] cursor-pointer">{{ tag }}</div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="flex flex-col gap-y-5">
+      <div class="text-xl font-bold text-[var(--font-color)]">Personal</div>
+      <div class="flex flex-col gap-y-2">
+          <div class="text-md  text-[var(--font-color)] cursor-pointer">Bookmark</div>
+          <div class="text-md  text-[var(--font-color)] cursor-pointer">Liked</div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-y-5">
+      <div class="text-xl font-bold text-[var(--font-color)]">Groups</div>
+        <ng-container *ngFor="let group of groups">
+          <div class="text-md  text-[var(--font-color)] cursor-pointer">{{ group.name }}</div>
+        </ng-container>
+    </div>
+
+
+  </div>
+  <div class="flex flex-col gap-y-5">
+    <div class="text-5xl font-bold text-[var(--font-color)]">Blogs</div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-7 gap-y-10">
+      <ng-container *ngFor="let article of articles">
+        <app-blog-card
+          [article]="article"
+        ></app-blog-card>
+      </ng-container>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 <div class="flex p-5">
   <span class="text-[--font-color] font-bold text-3xl pl-5">MEB</span>
-  <div class="flex items-center justify-between w-full pr-10">
+  <div class="flex items-center justify-between w-full pr-5">
       <div class="flex gap-x-52 pl-20">
         <span class="text-[--font-color] text-xl pl-5 cursor-pointer" routerLink="/home">Home</span>
         <span class="text-[--font-color] text-xl pl-5 cursor-pointer" routerLink="/blog">Blog</span>
@@ -18,10 +18,9 @@
 
 </div>
 <div class="w-full bg-black h-[75px] flex items-center justify-center">
-  <div>
-    <span nz-icon nzType="menu" nzTheme="outline" class="text-[--font-color] absolute top-[10.73%] left-[32%]"></span>
+  <div class="relative">
+    <span nz-icon nzType="search" nzTheme="outline" class="text-[--font-color] absolute left-3 top-1/2 transform -translate-y-1/2"></span>
     <input type="text" placeholder="Search" class="w-[600px] h-10 rounded-full px-5 py-2 bg-[--side-color] pl-10 focus:outline-none placeholder:text-[--font-color]">
-    <img src="https://img.icons8.com/?size=100&id=132&format=png&color=000000" alt="" class="absolute top-[10%] right-[32%] w-7 h-7">
   </div>
 </div>
 <router-outlet></router-outlet>

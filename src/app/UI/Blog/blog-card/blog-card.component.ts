@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { BlogPopupComponent } from '../blog-popup/blog-popup.component';
 
 @Component({
   selector: 'app-blog-card',
@@ -8,20 +9,30 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
   imports: [
     CommonModule,
     NzIconModule,
-
+    BlogPopupComponent
   ],
   templateUrl: './blog-card.component.html',
   styleUrl: './blog-card.component.scss'
 })
-export class BlogCardComponent {
-  @Input() title: string = '';
-  @Input() author: string = '';
-  @Input() upvotes: number = 0;
-  @Input() date: string = '';
-  @Input() tags: string[] = [];
+export class BlogCardComponent implements OnInit {
+  @Input() article: any;
+  title: string = '';
+  author: string = '';
+  upvotes: number = 0;
+  date: string = '';
+  tags: string[] = [];
+  isPopupVisible: boolean = false;
+
+  ngOnInit(): void {
+    this.title = this.article.title;
+    this.author = this.article.author;
+    this.upvotes = this.article.upvotes;
+    this.date = this.article.date;
+    this.tags = this.article.tags;
+  }
 
   get cardBackground(): string {
-    switch (this.tags[0]) {
+    switch (this.article.tags[0]) {
       case 'js': return 'url("/asset/blog-card/js.webp")';
       case 'html': return 'url("/asset/blog-card/html.jpg")';
       case 'python': return 'url("/asset/blog-card/python.jpg")';
@@ -39,9 +50,12 @@ export class BlogCardComponent {
     }
   }
 
-  @Output() cardClicked = new EventEmitter<void>();
-
-  onCardClick() {
-    this.cardClicked.emit();
+  openPopup() {
+    this.isPopupVisible = true;
   }
+
+  closePopup() {
+    this.isPopupVisible = false;
+  }
+
 }

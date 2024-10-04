@@ -4,7 +4,7 @@
        class="h-[250px] bg-gradient-to-r from-[var(--main-theme)] to-[var(--secondary-theme)] bg-cover bg-center bg-no-repeat">
   </div>
 
-  <div class="container mx-auto px-20 py-8">
+  <div class="container mx-auto px-10 py-8">
     <!-- Featured/Latest section -->
     <section class="mb-12">
       <div class="flex justify-between items-center mb-4">
@@ -15,12 +15,8 @@
         <!-- Use the BlogCardComponent -->
         <app-blog-card
           *ngFor="let article of articles"
-          [title]="article.title"
-          [author]="article.author"
-          [upvotes]="article.upvotes"
-          [date]="article.date"
-          [tags]="article.tags"
-          (cardClicked)="openPopup(article)"
+          [article]="article"
+
         ></app-blog-card>
       </div>
     </section>
@@ -62,10 +58,4 @@
     </section>
   </div>
 
-  <!-- Blog Popup -->
-  <app-blog-popup
-    *ngIf="selectedArticle"
-    [article]="selectedArticle"
-    (close)="closePopup()"
-  ></app-blog-popup>
 </div>

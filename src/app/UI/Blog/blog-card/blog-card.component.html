@@ -1,10 +1,10 @@
-<div class="card bg-white rounded-3xl shadow-md overflow-hidden cursor-pointer w-[300px] h-[350px]" (click)="onCardClick()">
+<div class="card bg-white rounded-3xl shadow-md overflow-hidden cursor-pointer w-[18vw] h-[45vh]" (click)="openPopup()">
   <div class="card-image h-40 relative">
     <div class="absolute inset-0"
          [style.background-image]="cardBackground"
          [style.background-size]="'cover'"
          [style.background-position]="'center'"></div>
-    
+
   </div>
   <div class="flex flex-col justify-between h-[200px] py-4 px-2">
     <div class="flex justify-between">
@@ -21,13 +21,13 @@
         <img src="https://img.icons8.com/?size=100&id=82461&format=png&color=000000" alt="" class="w-8 h-8">
       </div>
     </div>
-    
+
     <h3 class="font-bold mb-1 text-2xl ">{{ title }}</h3>
     <div class="flex justify-between">
       <p class="author text-sm mb-2" style="color: var(--font-color);">{{ author }}</p>
       <p class="date text-sm mb-2" style="color: var(--font-color);">{{ date }}</p>
     </div>
-    
+
     <div class="card-stats flex justify-between text-sm" style="color: var(--font-color);">
       <span class="views flex items-center text-xl">
         <span nz-icon nzType="caret-up" nzTheme="outline" class="text-3xl"></span>
@@ -36,3 +36,11 @@
     </div>
   </div>
 </div>
+
+<app-blog-popup
+  *ngIf="isPopupVisible"
+  [article]="article"
+  (close)="closePopup()"
+>
+
+</app-blog-popup>
