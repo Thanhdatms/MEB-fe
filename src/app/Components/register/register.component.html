@@ -1,0 +1,52 @@
+<div class="min-h-screen flex justify-center">
+  <div class="rounded-lg flex w-[100vw]">
+    <!-- Left side: Form -->
+    <div class="w-1/2 p-[5%]">
+      <!-- Welcome Section -->
+      <div class="mb-24">
+        <h2 class="text-5xl font-bold text-[--font-color] tracking-widest">CREATE ACCOUNT</h2>
+        <p class="text-gray-500 text-2xl pt-4">Already have an account? <a [routerLink]="['/auth/login']" routerLinkActive="router-link-active"  class="text-[--main-theme]">Sign in</a></p>
+      </div>
+
+      <!-- Form -->
+      <form class="gap-y-2 flex flex-col">
+        <div class="mb-10">
+          <label for="username" class="block text-4xl font-medium text-[--font-color]">Username</label>
+          <input type="text" id="username" name="username" placeholder="Username" class="w-full mt-2 h-14 p-3 border text-[--main-theme] text-xl rounded-3xl border-[#5e74bc] focus:ring-blue-500 focus:border-[#5e74bc]">
+        </div>
+
+        <div class="mb-10">
+          <label for="email" class="block text-4xl font-medium text-[--font-color]">Email</label>
+          <input type="email" id="email" name="email" placeholder="Email address" class="w-full mt-2 h-14 p-3 border text-[--main-theme] text-xl rounded-3xl border-[#5e74bc] focus:ring-blue-500 focus:border-[#5e74bc]">
+        </div>
+
+        <div class="mb-10">
+          <label for="password" class="block text-4xl font-medium text-[--font-color]">Password</label>
+          <div class="relative">
+            <input type="password" id="password" name="password" placeholder="••••••••" class="w-full mt-2 h-14 p-3 pr-10 border text-[--main-theme] text-xl rounded-3xl border-[rgb(94,116,188)] focus:ring-blue-500 focus:border-[#5e74bc]">
+            <span nz-icon nzType="eye-invisible" nzTheme="outline" class="absolute text-3xl top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer right-5 mt-[3px]"></span>
+          </div>
+        </div>
+
+        <div class="mb-10">
+          <label for="confirm-password" class="block text-4xl font-medium text-[--font-color]">Confirm Password</label>
+          <div class="relative">
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="••••••••" class="w-full mt-2 h-14 p-3 pr-10 border text-[--main-theme] text-xl rounded-3xl border-[#5e74bc] focus:ring-blue-500 focus:border-[#5e74bc]">
+            <span nz-icon nzType="eye-invisible" nzTheme="outline" class="absolute text-3xl top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer right-5 mt-[3px]"></span>
+          </div>
+        </div>
+
+        <div class="mt-1">
+          <button type="submit" class="shine-button w-full bg-[--main-theme] rounded-3xl text-white py-4 text-4xl">Register</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Right side: Image -->
+    <div class="w-1/2">
+      <div class="">
+        <img [src]="imagePath" class="h-[100vh] object-cover">
+      </div>
+    </div>
+  </div>
+</div>

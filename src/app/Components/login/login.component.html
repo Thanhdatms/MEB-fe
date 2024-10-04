@@ -1,25 +1,25 @@
 <div class="min-h-screen flex  justify-center">
-  <div class="pl-[10%] p-4 pt-24 rounded-lg flex w-[100vw]">
+  <div class="  rounded-lg flex w-[100vw]">
     <!-- Left side: Form -->
-    <div class="w-1/2 pr-8">
+    <div class="w-1/2 p-[5%]">
       <!-- Welcome Back Section -->
       <div class="mb-24">
-        <h2 class="text-4xl font-bold text-[--font-color]">WELCOME BACK!</h2>
-        <p class="text-gray-500 text-2xl">Don't have an account? <a href="#" class="text-[--main-theme]">Sign up</a></p>
+        <h2 class="text-5xl font-bold text-[--font-color] tracking-widest">WELCOME BACK!</h2>
+        <p class="text-gray-500 text-2xl pt-4">Don't have an account? <a [routerLink]="['/auth/register']" routerLinkActive="router-link-active" class="text-[--main-theme]">Sign up</a></p>
       </div>
 
       <!-- Form -->
-      <form  class="">
-        <div class="mb-8">
+      <form  class="gap-y-5 flex flex-col">
+        <div class="mb-10">
           <label for="username" class="block text-4xl font-medium text-[--font-color]">Username</label>
-          <input type="email" id="username" name="username" placeholder="username" class="w-full mt-2 h-14 p-2 border text-[--main-theme] text-xl rounded-2xl border-[#5e74bc] focus:ring-blue-500 focus:border-[#5e74bc]">
+          <input type="email" id="username" name="username" placeholder="username" class="w-full mt-2 h-14 p-3 border text-[--main-theme] text-xl rounded-3xl border-[#5e74bc] focus:ring-blue-500 focus:border-[#5e74bc]">
         </div>
 
-        <div class="mb-5">
+        <div class="mb-10">
           <label for="password" class="block text-4xl font-medium text-[--font-color]">Password</label>
           <div class="relative">
-            <input type="password" id="password" name="password" placeholder="••••••••" class="w-full mt-2 h-14 p-2 border text-[--main-theme] text-xl rounded-2xl border-[#5e74bc] focus:ring-blue-500 focus:border-[#5e74bc]">
-            <span nz-icon nzType="eye-invisible" nzTheme="outline"></span>
+            <input type="password" id="password" name="password" placeholder="••••••••" class="w-full mt-2 h-14 p-3 pr-10 border text-[--main-theme] text-xl rounded-3xl border-[#5e74bc] focus:ring-blue-500 focus:border-[#5e74bc]">
+            <span nz-icon nzType="eye-invisible" nzTheme="outline" class="absolute text-3xl top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer right-5 mt-[3px]"></span>
           </div>
         </div>
 
@@ -28,22 +28,21 @@
             <input type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
             <span class="ml-2 text-xl text-gray-600">Remember me</span>
           </label>
-          <a  class="text-xl text-[--main-theme]">Forget password?</a>
+          <a    class="text-xl text-[--main-theme]">Forget password?</a>
         </div>
 
-        <div class="mt-20">
-          <button type="submit" class="shine-button w-full bg-[--main-theme] rounded-xl text-white py-2 text-4xl">Sign In</button>
+        <div class="mt-10">
+          <button type="submit" class="shine-button w-full bg-[--main-theme] rounded-3xl text-white py-4 text-4xl">Sign In</button>
         </div>
       </form>
 
     </div>
 
     <!-- Right side: Image and Header Links -->
-    <div class="w-1/2 flex flex-col items-center justify-center">
-      <div class="w-[500px] h-7w-[500px]">
-        <img [src]="imagePath" class="rounded-full w-[500px] h-[500px] object-cover">
+    <div class="w-1/2">
+      <div class="">
+        <img [src]="imagePath" class="h-[100vh] object-cover">
       </div>
-      <p class="mt-4 text-5xl font-semibold text-[--main-theme] ">MEB</p>
     </div>
   </div>
 </div>

@@ -1,12 +1,34 @@
 <div class="flex justify-between p-4">
-  <span class="text-[--font-color] font-bold text-3xl pl-5" >MEB</span>
+  <span class="text-[--font-color] font-bold text-3xl pl-5">MEB</span>
   <div class="flex gap-x-10">
     <ng-container *ngFor="let item of navbarItems">
-      <div [routerLink]="item.path">
+      <div *ngIf="item.icon !== 'menu'; else menuDrawer" [routerLink]="item.path">
         <span nz-icon [nzType]="item.icon" nzTheme="outline" class="text-3xl text-[--main-theme] cursor-pointer"></span>
       </div>
+      <ng-template #menuDrawer>
+        <span nz-icon [nzType]="item.icon" nzTheme="outline" class="text-3xl text-[--main-theme] cursor-pointer" (click)="openDrawer()"></span>
+      </ng-template>
     </ng-container>
   </div>
 </div>
 <router-outlet></router-outlet>
+
+<nz-drawer 
+  [nzVisible]="isDrawerVisible" 
+  nzPlacement="top" 
+  (nzOnClose)="closeDrawer()"
+  nzHeight="20%"
+  [nzBodyStyle]="{
+    backgroundColor: 'var(--side-color)'
+  }"
+  nzTitle="Menu"
+>
+  <ng-container *nzDrawerContent>
+    <ul class="flex flex-col items-center gap-4">
+      <li *ngFor="let drawerItem of drawerItems">
+        <a [routerLink]="drawerItem.path" (click)="closeDrawer()" class="text-lg text-[--main-theme] hover:text-[--secondary-theme] font-bold ">{{ drawerItem.label }}</a>
+      </li>
+    </ul>
+  </ng-container>
+</nz-drawer>
 
