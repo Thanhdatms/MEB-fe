@@ -21,22 +21,8 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 export class ContentLayoutComponent {
   navbarItems = [
     { icon: 'bell', path: '/noti' },
-    { icon: 'home', path: '/home' },
     { icon: 'user', path: '/account' },
-    { icon: 'menu', path: '/blog' },
   ];
 
-  drawerItems = [
-    { label: 'Blog', path: '/blog' },
-  ];
 
-  isDrawerVisible = false;
-
-  openDrawer(): void {
-    this.isDrawerVisible = true;
-  }
-
-  closeDrawer(): void {
-    this.isDrawerVisible = false;
-  }
 }

@@ -1,25 +1,25 @@
 <div class="min-h-screen">
   <!-- Header section with user greeting -->
   <div [style.background-image]="headerImage"
-       class="h-[150px] bg-gradient-to-r from-[var(--main-theme)] to-[var(--secondary-theme)] bg-cover bg-center bg-no-repeat">
+       class="h-[250px] bg-gradient-to-r from-[var(--main-theme)] to-[var(--secondary-theme)] bg-cover bg-center bg-no-repeat">
   </div>
 
-  <div class="container mx-auto px-4 py-8">
+  <div class="container mx-auto px-20 py-8">
     <!-- Featured/Latest section -->
     <section class="mb-12">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-2xl font-bold text-[var(--font-color)]">FEATURED/ LATEST</h2>
         <a href="#" class="underline text-xl text-[var(--font-color)]">See more</a>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-items-center">
         <!-- Use the BlogCardComponent -->
         <app-blog-card
           *ngFor="let article of articles"
           [title]="article.title"
           [author]="article.author"
-          [views]="article.views"
-          [downloads]="article.downloads"
-          [contentType]="article.contentType"
+          [upvotes]="article.upvotes"
+          [date]="article.date"
+          [tags]="article.tags"
           (cardClicked)="openPopup(article)"
         ></app-blog-card>
       </div>
@@ -31,7 +31,7 @@
         <h2 class="text-2xl font-bold text-[var(--font-color)]">EVENTS</h2>
         <a href="#" class="underline text-xl text-[var(--font-color)]">See more</a>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
         <!-- Event card 1 -->
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
           <div class="h-40 bg-gradient-to-r from-[var(--main-theme)] to-[var(--secondary-theme)]"></div>

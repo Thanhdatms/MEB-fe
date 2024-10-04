@@ -22,31 +22,30 @@ export class HomepageComponent {
     {
       title: "JavaScript Basics",
       author: "John Doe",
-      views: 20000000,
-      downloads: 5000,
-      contentType: "js",
-      
+      date: "20/12/2024",
+      upvotes: 100,
+      tags: ["js", "html", "css"],  
     },
     {
       title: "HTML5 Fundamentals",
       author: "Jane Smith",
-      views: 15000000,
-      downloads: 4500,
-      contentType: "html",
+      date: "20/12/2024",
+      upvotes: 100,
+      tags: ["html", "css","scss"],
     },
     {
       title: "Python for Beginners",
       author: "Mike Johnson",
-      views: 18000000,
-      downloads: 6000,
-      contentType: "python",
+      date: "20/12/2024",
+      upvotes: 100,
+      tags: ["python"],
     },
     {
       title: "Web Development Best Practices",
       author: "Sarah Williams",
-      views: 12000000,
-      downloads: 3800,
-      contentType: "Others",
+      date: "20/12/2024",
+      upvotes: 100,
+      tags: ["others"],
     }
   ];
 
