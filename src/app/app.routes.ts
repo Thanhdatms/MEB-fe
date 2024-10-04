@@ -5,6 +5,7 @@ import { HomepageComponent } from './Components/homepage/homepage/homepage.compo
 import { ContentLayoutComponent } from './Components/page-layout/content-layout/content-layout.component';
 import { BlogListComponent } from './Components/blog-list/blog-list/blog-list.component';
 import { RegisterComponent } from './Components/register/register.component';
+import { ProfileComponent } from './Components/profile/profile.component';
 
 export const routes: Routes = [
   {
@@ -36,8 +37,11 @@ export const routes: Routes = [
       {
         path: 'blog',
         component: BlogListComponent
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent
       }
-      
     ]
   },
   {

@@ -1,20 +1,21 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BlogCardComponent } from '../../../UI/Blog/blog-card/blog-card.component';
-import { SideBarComponent } from '../../../UI/side-bar/side-bar.component';
+import { Component } from '@angular/core';
+import { BlogCardComponent } from '../../UI/Blog/blog-card/blog-card.component';
+import { SideBarComponent } from '../../UI/side-bar/side-bar.component';
+
 @Component({
-  selector: 'app-blog-list',
+  selector: 'app-profile',
   standalone: true,
   imports: [
     CommonModule,
     BlogCardComponent,
     SideBarComponent
-],
-  templateUrl: './blog-list.component.html',
-  styleUrl: './blog-list.component.scss'
+  ],
+  templateUrl: './profile.component.html',
+  styleUrl: './profile.component.scss'
 })
-export class BlogListComponent {
-  selectedArticle: any | null = null;
+export class ProfileComponent {
+
   articles = [
     {
       title: "Web Development Best Practices",
@@ -66,6 +67,5 @@ export class BlogListComponent {
       tags: ["others"],
     },
   ];
-
 
 }

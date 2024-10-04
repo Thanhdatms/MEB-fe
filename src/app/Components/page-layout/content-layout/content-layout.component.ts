@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 @Component({
   selector: 'app-content-layout',
@@ -13,7 +13,7 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer';
     RouterModule,
     NzIconModule,
     NzLayoutModule,
-    NzDrawerModule
+    NzDropDownModule
   ],
   templateUrl: './content-layout.component.html',
   styleUrl: './content-layout.component.scss'
