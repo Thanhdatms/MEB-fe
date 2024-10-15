@@ -1,53 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { BlogState } from '../../../store/blog/blog.state';
+import { Observable } from 'rxjs';
 import { BlogCardComponent } from '../../../UI/Blog/blog-card/blog-card.component';
 import { BlogPopupComponent } from '../../../UI/Blog/blog-popup/blog-popup.component';
 import { CommonModule } from '@angular/common';
-
+import { RouterModule } from '@angular/router';
+import { Blog } from '../../../store/blog/blog.state';
 @Component({
   selector: 'app-homepage',
   standalone: true,
   imports: [
     BlogCardComponent,
     BlogPopupComponent,
-    CommonModule
+    CommonModule,
+    RouterModule
   ],
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.scss']
 })
-export class HomepageComponent {
+export class HomepageComponent implements OnInit {
   headerImage = 'url("/asset/homepage/homepage-bg.png")';
   selectedArticle: any | null = null;
 
-  articles = [
-    {
-      title: "JavaScript Basics",
-      author: "John Doe",
-      date: "20/12/2024",
-      upvotes: 100,
-      tags: ["js", "html", "css"],  
-    },
-    {
-      title: "HTML5 Fundamentals",
-      author: "Jane Smith",
-      date: "20/12/2024",
-      upvotes: 100,
-      tags: ["html", "css","scss"],
-    },
-    {
-      title: "Python for Beginners",
-      author: "Mike Johnson",
-      date: "20/12/2024",
-      upvotes: 100,
-      tags: ["python"],
-    },
-    {
-      title: "Web Development Best Practices",
-      author: "Sarah Williams",
-      date: "20/12/2024",
-      upvotes: 100,
-      tags: ["others"],
-    }
-  ];
+  blog$!: Observable<Blog[]>; 
+  loading: boolean = true;
+  constructor(private store: Store) {}
+
+  ngOnInit() {
+    this.blog$ = this.store.select(BlogState.blogs); 
+    this.blog$.subscribe((articles: Blog[]) => {
+      this.loading = false; 
+      console.log(articles);
+    })
+  }
 
   openPopup(article: any) {
     this.selectedArticle = article;
@@ -56,4 +42,5 @@ export class HomepageComponent {
   closePopup() {
     this.selectedArticle = null;
   }
+
 }

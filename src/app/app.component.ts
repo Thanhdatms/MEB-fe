@@ -14,6 +14,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
     NzIconModule,
     NzLayoutModule,
     NzMenuModule,
+    
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']

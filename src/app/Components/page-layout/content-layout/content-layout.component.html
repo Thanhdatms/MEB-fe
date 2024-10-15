@@ -1,13 +1,13 @@
 <div class="flex p-5">
   <span class="text-[--font-color] font-bold text-3xl pl-5">MEB</span>
   <div class="flex items-center justify-between w-full pr-5">
-      <div class="flex gap-x-52 pl-20">
+      <div class="flex justify-between w-[700px] pl-20">
         <span class="text-[--font-color] text-xl pl-5 cursor-pointer" routerLink="/home">Home</span>
         <span class="text-[--font-color] text-xl pl-5 cursor-pointer" routerLink="/blog">Blog</span>
         <span class="text-[--font-color] text-xl pl-5 cursor-pointer" routerLink="/about">About</span>
       </div>
       <div class="gap-x-10 flex items-center justify-between ">
-        <div class="shine-button bg-[--main-theme] text-white w-48 flex items-center justify-center h-10 px-5 py-2 rounded-xl font-bold">SHARE SOMETHING</div>
+        <div class="shine-button bg-[--main-theme] text-white w-48 flex items-center justify-center h-10 px-5 py-2 rounded-xl font-bold" (click)="openCreatePopup()">SHARE SOMETHING</div>
         <ng-container *ngFor="let item of navbarItems">
           @if (item.icon === 'user') {
             <div nz-dropdown nzTrigger="hover" [nzDropdownMenu]="menu" nzPlacement="bottomCenter">
@@ -46,7 +46,7 @@
                   Customize
                 </li>
                 <li class="mt-4">
-                  <button class="w-full text-lg bg-[var(--main-theme)] text-white py-2 rounded-lg font-bold">LOGOUT</button>
+                  <button routerLink="/auth" class="w-full text-lg bg-[var(--main-theme)] text-white py-2 rounded-lg font-bold">LOGOUT</button>
                 </li>
               </ul>
             </nz-dropdown-menu>
@@ -69,3 +69,8 @@
 <router-outlet></router-outlet>
 
 
+<app-create-blog
+  *ngIf="isCreatePopupVisible"
+  (close)="closeCreatePopup()"
+  >
+</app-create-blog>

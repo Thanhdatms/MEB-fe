@@ -6,6 +6,9 @@ import { ContentLayoutComponent } from './Components/page-layout/content-layout/
 import { BlogListComponent } from './Components/blog-list/blog-list/blog-list.component';
 import { RegisterComponent } from './Components/register/register.component';
 import { ProfileComponent } from './Components/profile/profile.component';
+import { importProvidersFrom } from '@angular/core';
+import { NgxsModule } from '@ngxs/store';
+import { BlogState } from './store/blog/blog.state';
 
 export const routes: Routes = [
   {
@@ -18,6 +21,10 @@ export const routes: Routes = [
       {
         path: 'register',
         component: RegisterComponent
+      },
+      {
+        path: '**',
+        redirectTo: 'login',
       }
     ]
   },
@@ -42,6 +49,13 @@ export const routes: Routes = [
         path: 'profile',
         component: ProfileComponent
       }
+    ],
+    providers: [
+      importProvidersFrom(
+        NgxsModule.forFeature([
+          BlogState
+        ])
+      )
     ]
   },
   {

@@ -1,4 +1,4 @@
-<div class="card bg-white rounded-3xl shadow-md overflow-hidden cursor-pointer w-[18vw] h-[45vh]" (click)="openPopup()">
+<div class="card bg-white rounded-3xl shadow-md overflow-hidden cursor-pointer w-[18vw] h-auto" (click)="openPopup()">
   <div class="card-image h-40 relative">
     <div class="absolute inset-0"
          [style.background-image]="cardBackground"
@@ -17,12 +17,15 @@
           </div>
         </ng-container>
       </div>
-      <div>
-        <img src="https://img.icons8.com/?size=100&id=82461&format=png&color=000000" alt="" class="w-8 h-8">
+      <div *ngIf="!isBookmarked">
+        <img src="https://img.icons8.com/?size=100&id=p5IcHfcSGnlD&format=png&color=000000" alt="" class="w-8 h-8">
+      </div>
+      <div *ngIf="isBookmarked">
+        <img src="https://img.icons8.com/?size=100&id=JMInrzeOBty5&format=png&color=000000" alt="" class="w-8 h-8">
       </div>
     </div>
 
-    <h3 class="font-bold mb-1 text-2xl ">{{ title }}</h3>
+    <h3 class="font-bold mb-1 text-2xl ">{{ title  }}</h3>
     <div class="flex justify-between">
       <p class="author text-sm mb-2" style="color: var(--font-color);">{{ author }}</p>
       <p class="date text-sm mb-2" style="color: var(--font-color);">{{ date }}</p>

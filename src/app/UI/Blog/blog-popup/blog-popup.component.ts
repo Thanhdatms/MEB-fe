@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { ApiService } from '../../../../service/api.service';
 
 @Component({
   selector: 'app-blog-popup',
@@ -15,6 +16,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 export class BlogPopupComponent {
   @Input() article: any; // Replace 'any' with your article interface
   @Output() close = new EventEmitter<void>();
+  isBookmarked: boolean = true;
 
   AuthorImage = '/sample-logo.jpg';
   ContentImage = '/asset/temp/kda-gg.jpg';

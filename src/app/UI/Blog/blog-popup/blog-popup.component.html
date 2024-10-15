@@ -14,14 +14,10 @@
             <h2 class="text-6xl font-bold mb-2 tracking-wider">{{ article.title }}</h2>
             <p class="text-xl text-gray-600 mb-4">11/03/2003</p>
           <!-- Content -->
-          <div class="w-full h-[50vh] mb-4 rounded overflow-hidden">
-            <img [src]="ContentImage" alt="Article image" class="w-full h-full object-cover">
+          <div *ngIf="article.thumbnail" class="w-full h-[50vh] mb-4 rounded overflow-hidden">
+            <img [src]="article.thumbnail" alt="Article image" class="w-full h-full object-cover">
           </div>
-          <!-- <p class="mb-4">{{ article.content }}</p> -->
-           <p class="mb-4 text-lg">
-            Brain rot (or brainrot) is a slang term used to describe internet content of low quality or value, or negative effects (psychological, cognitive, etc.) caused by it.[1] As a psychological descriptor, it implies the spending of excessive amounts of time spent online, with possible deterioration in cognitive functioning and attention span.
-           </p>
-          <!-- Action -->
+          <p class="mb-4 text-lg">{{ article.content }}</p>
           <div class="bg-[var(--font-color)] text-white text-lg rounded-[10px] p-2 flex justify-between">
             <div class="flex items-center space-x-4">
               <button class="flex items-center space-x-1">
@@ -37,7 +33,12 @@
               <span>Comment</span>
             </button>
             <button class="flex items-center space-x-1">
-              <span nz-icon nzType="book" nzTheme="outline"></span>
+              <div *ngIf="!isBookmarked">
+                <img src="https://img.icons8.com/?size=100&id=p5IcHfcSGnlD&format=png&color=000000" alt="" class="w-8 h-8">
+              </div>
+              <div *ngIf="isBookmarked">
+                <img src="https://img.icons8.com/?size=100&id=JMInrzeOBty5&format=png&color=ffffff" alt="" class="w-8 h-8">
+              </div>
               <span>Bookmark</span>
             </button>
             <button class="flex items-center space-x-1">
