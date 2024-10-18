@@ -9,6 +9,7 @@ import { Store } from '@ngxs/store';
 import { BlogAction } from '../../../store/blog/blog.action';
 import { CreateBlogComponent } from '../../../UI/createBlog/create-blog/create-blog.component';
 
+
 @Component({
   selector: 'app-content-layout',
   standalone: true,
@@ -19,6 +20,7 @@ import { CreateBlogComponent } from '../../../UI/createBlog/create-blog/create-b
     NzLayoutModule,
     NzDropDownModule,
     CreateBlogComponent
+    
   ],
   templateUrl: './content-layout.component.html',
   styleUrl: './content-layout.component.scss'

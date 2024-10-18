@@ -9,6 +9,7 @@ import { ProfileComponent } from './Components/profile/profile.component';
 import { importProvidersFrom } from '@angular/core';
 import { NgxsModule } from '@ngxs/store';
 import { BlogState } from './store/blog/blog.state';
+import { AboutComponent } from './Components/about/about.component';
 
 export const routes: Routes = [
   {
@@ -48,6 +49,10 @@ export const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent
+      },
+      {
+        path:'about',
+        component: AboutComponent
       }
     ],
     providers: [

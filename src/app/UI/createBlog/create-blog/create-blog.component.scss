@@ -1,7 +1,13 @@
+/* app.component.css */
+
+@import 'ckeditor5/ckeditor5.css';
+@import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
+
+
 /* Add this to your component's CSS file or global styles */
 .custom-file-upload {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 10px 10px;
     cursor: pointer;
     background-color: var(--main-theme); /* Change to your desired color */
     color: white;
@@ -21,15 +27,3 @@
     background-color: var(--font-color) !important;
     
 }
-
-.quill-editor {
-    height: 200px; /* Adjust as needed */
-    background-color: #fff; /* Ensure a background color is applied */
-    border: 1px solid #ddd; /* Border for better visibility */
-  }
-  
-  .ql-container {
-    height: 150px; /* Editor content height */
-    background-color: #fff; /* Ensure the content area is visible */
-  }
-  

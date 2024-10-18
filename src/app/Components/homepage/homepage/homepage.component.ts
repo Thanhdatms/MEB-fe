@@ -31,7 +31,6 @@ export class HomepageComponent implements OnInit {
     this.blog$ = this.store.select(BlogState.blogs); 
     this.blog$.subscribe((articles: Blog[]) => {
       this.loading = false; 
-      console.log(articles);
     })
   }
 

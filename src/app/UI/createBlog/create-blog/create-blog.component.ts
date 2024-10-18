@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
+import { Component, EventEmitter, Output, ViewEncapsulation } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { Store } from '@ngxs/store';
@@ -8,8 +7,9 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { CommonModule } from '@angular/common';
-import { QuillConfigModule, QuillModule } from 'ngx-quill';
-
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import {environment} from '../../../../environment/environment'
+import { ClassicEditor, Bold, Essentials, Italic, Mention, Paragraph, Undo, Heading, Font, Code, CodeBlock, BlockQuote, Table, Alignment, Link,  ImageUpload, EditorConfig, MediaEmbed, Image, ImageInsert } from 'ckeditor5';
 
 @Component({
   selector: 'app-create-blog',
@@ -21,9 +21,9 @@ import { QuillConfigModule, QuillModule } from 'ngx-quill';
     NzInputModule,
     CommonModule,
     ReactiveFormsModule,
-    QuillConfigModule,
-    QuillModule    
+    CKEditorModule
   ],
+  encapsulation: ViewEncapsulation.None,
   templateUrl: './create-blog.component.html',
   styleUrl: './create-blog.component.scss'
 })
@@ -56,7 +56,7 @@ export class CreateBlogComponent {
     if (this.form.invalid) {
       console.log(this.form)
         this.msg.error('Please fill in all required fields.');
-        return; // Prevent submission if the form is invalid
+        return; 
     }
 
     const formData = new FormData(); 
@@ -85,11 +85,45 @@ export class CreateBlogComponent {
       }
   }
 
-  quillConfig = {
-    toolbar: [
-      ['bold', 'italic', 'underline'],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      ['link', 'image']
-    ]
-  }
+  editor = ClassicEditor;
+  
+  editorConfig: EditorConfig = {
+      plugins: [
+          Bold, 
+          Essentials, 
+          Italic, 
+          Mention, 
+          Paragraph, 
+          Undo, 
+          Heading,
+          Font, 
+          Code, 
+          CodeBlock, 
+          BlockQuote, 
+          Table, 
+          Alignment,
+          Link,
+          MediaEmbed,
+          Image,
+          ImageInsert
+          // ImageUpload
+        ],
+      toolbar: [
+            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor' ,
+            '|',
+            'bold', 'italic','insertTable', 
+            '|',
+            'link', 'blockQuote', 'code',
+            
+            '|',
+            'mediaEmbed',
+            // 'insertImage',
+            '|',
+            'alignment', 
+
+
+        ],
+
+    
+  };
 }
