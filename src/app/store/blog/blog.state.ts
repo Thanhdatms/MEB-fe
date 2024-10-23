@@ -17,14 +17,17 @@ export interface Blog {
 
 export interface BlogStateModel {
     blogs: Blog[];
+    status: boolean;
 }
 
 
 @State<BlogStateModel>({
     name: 'blogs',
     defaults: {
-    blogs: []
-    }
+        blogs: [],
+        status: false
+    },
+    
 })
 @Injectable()
 export class BlogState {
@@ -34,10 +37,13 @@ export class BlogState {
     static blogs(state: BlogStateModel): Blog[] {
         return state.blogs;
     }
+    static status(state: BlogStateModel): boolean {
+        return state.status;
+    }
     
     @Action(BlogAction.GetBlogs)
     getBlogs(ctx: StateContext<BlogStateModel>) {
-        this.apiService.getBlog().pipe(
+        this.apiService.blog.getBlogs().pipe(
         tap(
             (response: any) => {
                 const blogs: Blog[] = response.result; 
@@ -48,15 +54,16 @@ export class BlogState {
 
     @Action(BlogAction.CreateBlog)
     createBlog(ctx: StateContext<BlogStateModel>, action: BlogAction.CreateBlog) {
-    return this.apiService.createBlog(action.payload).pipe(
-        tap(() => 
+    return this.apiService.blog.createBlog(action.payload).pipe(
+        tap((response) => 
             {
+                if(response.status === 201) {
+                    ctx.patchState({ status: true });
+                }
                 return ctx.dispatch(new BlogAction.GetBlogs());
             }
         ),
-        catchError((error) => {
-            console.error('Error creating blog:', error); // Log the error
-            
+        catchError((error) => {            
             return throwError(error); 
         })
     ).subscribe();

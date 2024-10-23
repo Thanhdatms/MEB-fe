@@ -10,6 +10,12 @@ import { importProvidersFrom } from '@angular/core';
 import { NgxsModule } from '@ngxs/store';
 import { BlogState } from './store/blog/blog.state';
 import { AboutComponent } from './Components/about/about.component';
+import { SettingLayoutComponent } from './Components/setting/setting-layout/setting-layout.component';
+import { SettingProfileComponent } from './Components/setting/setting-profile/setting-profile.component';
+import { SettingSecurityComponent } from './Components/setting/setting-security/setting-security.component';
+import { TagsState } from './store/tags/tags.state';
+import { AuthState } from './store/auth/auth.state';
+import { UserState } from './store/user/user.state';
 
 export const routes: Routes = [
   {
@@ -27,6 +33,14 @@ export const routes: Routes = [
         path: '**',
         redirectTo: 'login',
       }
+    ],
+    providers: [
+      importProvidersFrom(
+        NgxsModule.forFeature([
+          AuthState,
+          UserState
+        ])
+      )
     ]
   },
   {
@@ -53,12 +67,33 @@ export const routes: Routes = [
       {
         path:'about',
         component: AboutComponent
+      },
+      {
+        path:'setting',
+        component: SettingLayoutComponent,
+        children:[
+          {
+            path:'',
+            redirectTo:'profile',
+            pathMatch:'full'
+          },
+          {
+            path:'profile',
+            component: SettingProfileComponent
+          },
+          {
+            path:'security',
+            component: SettingSecurityComponent
+          }
+        ]
       }
     ],
     providers: [
       importProvidersFrom(
         NgxsModule.forFeature([
-          BlogState
+          BlogState,
+          TagsState,
+          
         ])
       )
     ]

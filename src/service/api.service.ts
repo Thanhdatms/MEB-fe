@@ -1,22 +1,25 @@
-// src/service/api.service.ts
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BlogService } from './api/blog.service';
+import { TagsService } from './api/tags.service';
+import { AuthService } from './auth/auth.service';
+import { UserService } from './api/user.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:8080'; 
+  private apiUrl = 'http://localhost:8080';
 
-  constructor(private http: HttpClient) {}
+  public blog: BlogService;
+  public tags: TagsService;
+  public auth: AuthService;
+  public user: UserService;
 
-  getBlog(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/blogs`); 
-  }
-  createBlog(blog: any): Observable<any> {
-    console.log('blg', blog);
-    return this.http.post(`${this.apiUrl}/blogs`, blog); 
+  constructor(private http: HttpClient) {
+    this.blog = new BlogService(http, this.apiUrl);
+    this.tags = new TagsService(http, this.apiUrl);
+    this.auth = new AuthService(http, this.apiUrl);
+    this.user = new UserService(http, this.apiUrl);
   }
 }

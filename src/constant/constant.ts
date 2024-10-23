@@ -1,9 +1,1 @@
-export type Blog = {
-    id: string;
-    title: string;
-    status: boolean;
-    content: Text;
-    tags: string[];
-    summary: Text;
-    thumbnail: string;
-}
+const FILE_SIZE_MAX = 1 //1MB
