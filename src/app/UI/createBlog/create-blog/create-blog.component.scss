@@ -27,3 +27,30 @@
     background-color: var(--font-color) !important;
     
 }
+.ant-select-selector {
+    background-color: var(--font-color) !important;; 
+    border-radius: 12px !important; 
+    padding: 5px !important;
+    padding-left: 10px !important;
+    color:white
+    
+}
+
+.ant-select-multiple .ant-select-selection-item{
+    background-color: var(--main-theme) !important;; 
+    border-radius: 5px; 
+    color:white
+}
+.ant-select-selection-item-remove  {
+    color:white !important
+}
+.ant-select-select-close-icon {
+    color:white !important
+}
+
+// .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+//     background-color: var(--font-color) !important;; 
+//     border-radius: 5px; 
+//     padding: 8px; 
+//     color:white
+// }

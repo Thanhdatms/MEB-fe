@@ -1,15 +1,20 @@
-import { Component, EventEmitter, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
-import { Store } from '@ngxs/store';
+import { select, Store } from '@ngxs/store';
 import { BlogAction } from '../../../store/blog/blog.action';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { CommonModule } from '@angular/common';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import {environment} from '../../../../environment/environment'
 import { ClassicEditor, Bold, Essentials, Italic, Mention, Paragraph, Undo, Heading, Font, Code, CodeBlock, BlockQuote, Table, Alignment, Link,  ImageUpload, EditorConfig, MediaEmbed, Image, ImageInsert } from 'ckeditor5';
+import { Observable } from 'rxjs';
+import { BlogState } from '../../../store/blog/blog.state';
+import { TagsState } from '../../../store/tags/tags.state';
+import { TagsAction } from '../../../store/tags/tags.actions';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+
 
 @Component({
   selector: 'app-create-blog',
@@ -19,6 +24,7 @@ import { ClassicEditor, Bold, Essentials, Italic, Mention, Paragraph, Undo, Head
     FormsModule,
     NzFormModule,
     NzInputModule,
+    NzSelectModule,
     CommonModule,
     ReactiveFormsModule,
     CKEditorModule
@@ -27,7 +33,7 @@ import { ClassicEditor, Bold, Essentials, Italic, Mention, Paragraph, Undo, Head
   templateUrl: './create-blog.component.html',
   styleUrl: './create-blog.component.scss'
 })
-export class CreateBlogComponent {
+export class CreateBlogComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
 
   title: string = ''; 
@@ -36,6 +42,10 @@ export class CreateBlogComponent {
   uploadedFiles: any[] = [];
   blog: any;
   form : FormGroup
+  imagePreview: string | ArrayBuffer | null = null;
+
+  status$: Observable<boolean>
+  tags$: Observable<any>
 
   onClose() {
     this.close.emit();
@@ -48,14 +58,22 @@ export class CreateBlogComponent {
     this.form = this.fb.group({
       title: ['',Validators.required],
       content: ['', Validators.required],
+      tags:[[''], Validators.required],
       file: [null, Validators.required]
     })
+
+    this.status$ = this.store.select(BlogState.status)
+    this.tags$ = this.store.select(TagsState.tags)
+  }
+
+
+  ngOnInit(): void {
+    this.store.dispatch(new TagsAction.GetTags);
   }
 
   onSubmit() { 
     if (this.form.invalid) {
-      console.log(this.form)
-        this.msg.error('Please fill in all required fields.');
+        this.msg.error('Please fill in all fields.');
         return; 
     }
 
@@ -63,7 +81,7 @@ export class CreateBlogComponent {
     this.blog = {
       title: this.form.value.title, 
       content: this.form.value.content, 
-      created_at: new Date().toISOString(),
+      tags: this.form.value.tags
     }
 
     let blogdata = new Blob([JSON.stringify(this.blog)], { type: 'application/json' });
@@ -71,18 +89,32 @@ export class CreateBlogComponent {
     formData.append('blog', blogdata); 
     formData.append('file', this.uploadedFiles[0]); 
 
-    this.store.dispatch(new BlogAction.CreateBlog(formData)).subscribe(() => {
-        this.msg.success('Blog created successfully!');
-        this.onClose(); 
-    });
+    this.store.dispatch(new BlogAction.CreateBlog(formData)).subscribe(
+      () => this.onClose()
+    )
+
+  
 }
 
   onFileChange(event: Event) {
       const input = event.target as HTMLInputElement;
       if (input.files && input.files.length > 0) {
+          const fileUpload = input.files[0];
+          if(fileUpload.size > (1 * 1024 * 1024)) 
+          {
+            this.msg.error('File size should not exceed 1MB');
+            return;
+
+          }
           this.uploadedFiles = Array.from(input.files);
           this.form.patchValue({ file: this.uploadedFiles[0].name });
+          const reader = new FileReader();
+        reader.onload = (e) => {
+          this.imagePreview = e.target?.result as string | ArrayBuffer | null; // Store the image data URL for preview
+        };
+      reader.readAsDataURL(input.files[0]);
       }
+      
   }
 
   editor = ClassicEditor;
@@ -115,15 +147,16 @@ export class CreateBlogComponent {
             '|',
             'link', 'blockQuote', 'code',
             
-            '|',
-            'mediaEmbed',
+            // '|',
+            // 'mediaEmbed',
             // 'insertImage',
             '|',
             'alignment', 
 
 
         ],
-
-    
+        mediaEmbed: {
+          previewsInData: true
+      }
   };
 }

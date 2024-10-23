@@ -26,12 +26,14 @@ export class BlogPopupComponent implements OnInit {
 
   constructor(private sanitizer: DomSanitizer) 
   {
+    
   }
   ngOnInit() {
       this.sanitizedContent = this.sanitizer.bypassSecurityTrustHtml(this.article.content);
   }
 
   onClose() {
+    console.log(this.article);
     this.close.emit();
   }
 }

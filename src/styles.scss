@@ -45,6 +45,37 @@
   font-size: 0.5rem;
 }
 
+.BlogList{
+  ::placeholder {
+    color: white !important;
+  }
+  .ant-select-selection-item{
+    background-color: var(--main-theme) !important;
+    font-weight: bold;
+    color:white
+  }
+  nz-select-top-control.ant-select-selector{
+    background-color: var(--main-theme) !important;; 
+    border-radius: 12px !important; 
+    color:white !important
+  }
+  .ant-select-selection-search{
+    color:white !important
+  }
+  nz-select::placeholder { 
+    color: red !important;
+  }
+  .ant-select-close-icon, 
+  .anticon-close-circle{
+    color:white !important
+  }
+  .ant-select-clear{
+    background-color: transparent !important;
+}
+  
+}
+
+
 .shine-button {
   position: relative;
   overflow: hidden;

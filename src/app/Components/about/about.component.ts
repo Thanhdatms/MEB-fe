@@ -10,5 +10,5 @@ import { Component } from '@angular/core';
   styleUrl: './about.component.scss'
 })
 export class AboutComponent {
-
+  headerImage = 'url("/asset/about/bg-thumbnail.png")';
 }

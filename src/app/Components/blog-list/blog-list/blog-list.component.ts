@@ -5,30 +5,84 @@ import { SideBarComponent } from '../../../UI/side-bar/side-bar.component';
 import { Blog, BlogState } from '../../../store/blog/blog.state';
 import { Observable } from 'rxjs';
 import { Store } from '@ngxs/store';
+import { Tags, TagsState } from '../../../store/tags/tags.state';
+import { TagsAction } from '../../../store/tags/tags.actions';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { FormsModule } from '@angular/forms';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 @Component({
   selector: 'app-blog-list',
   standalone: true,
   imports: [
     CommonModule,
     BlogCardComponent,
-    SideBarComponent
+    SideBarComponent,
+    NzSelectModule,
+    FormsModule,
+    NzIconModule
 ],
   templateUrl: './blog-list.component.html',
   styleUrl: './blog-list.component.scss'
 })
 export class BlogListComponent implements OnInit {
   selectedArticle: any | null = null;
+  selectedTag: Tags | null = null;
 
   blog$!: Observable<Blog[]>; 
+  tags$!: Observable<any>;
+  blogsByTag$!: Observable<Blog[]>;
   loading: boolean = true;
-  constructor(private store: Store) {}
-
-  ngOnInit() {
+  displayedBlog: Blog[] = [];
+  constructor(private store: Store) {
     this.blog$ = this.store.select(BlogState.blogs); 
-    this.blog$.subscribe((articles: Blog[]) => {
+    this.tags$ = this.store.select(TagsState.tags);
+    this.blogsByTag$ = this.store.select(TagsState.getBlogByTag);
+    this.blog$.subscribe((blogs: Blog[]) => {
+      this.displayedBlog = blogs;
       this.loading = false; 
     })
   }
+
+  ngOnInit() {
+    this.store.dispatch(new TagsAction.GetTags)
+  }
+
+  // filterByTag(tag: Tags) {
+    // this.selectedTag = tag;
+    // this.store.dispatch(new TagsAction.GetBlogByTag(tag.id))
+    // this.blogsByTag$.subscribe((blogs: Blog[]) => {
+    //   if (blogs && blogs.length > 0) {
+    //     this.displayedBlog = blogs;
+    //   } else {
+    //     this.displayedBlog = [];
+    //   }
+    //   this.loading = false; 
+    // });
+  // }
+  filterByTag(tag: Tags | null) {
+    if (tag) {
+      this.selectedTag = tag;
+      this.store.dispatch(new TagsAction.GetBlogByTag(tag.id));
+      this.blogsByTag$.subscribe((blogs: Blog[]) => {
+        if (blogs && blogs.length > 0) {
+          this.displayedBlog = blogs;
+        } else {
+          this.displayedBlog = [];
+        }
+        this.loading = false;
+      });
+    } else {
+      // If no tag is selected, display all blogs
+      this.blog$.subscribe((blogs: Blog[]) => {
+        this.displayedBlog = blogs;
+        this.loading = false;
+      });
+    }
+  }
+  
+  
+  
+  
 
   openPopup(article: any) {
     this.selectedArticle = article;
