@@ -6,19 +6,15 @@ import { BlogPopupComponent } from '../blog-popup/blog-popup.component';
 @Component({
   selector: 'app-blog-card',
   standalone: true,
-  imports: [
-    CommonModule,
-    NzIconModule,
-    BlogPopupComponent
-  ],
+  imports: [CommonModule, NzIconModule, BlogPopupComponent],
   templateUrl: './blog-card.component.html',
-  styleUrl: './blog-card.component.scss'
+  styleUrl: './blog-card.component.scss',
 })
 export class BlogCardComponent implements OnInit {
   @Input() article: any;
   title: string = '';
-  author: string = '' ;
-  upvotes: number = 0 ;
+  author: string = '';
+  upvotes: number = 0;
   date: string = '';
   tags: string[] = [];
   isPopupVisible: boolean = false;
@@ -39,17 +35,21 @@ export class BlogCardComponent implements OnInit {
     //   case 'python': return 'url("/asset/blog-card/python.jpg")';
     //   default: return 'url("/asset/blog-card/default.png")';
     // }
-    return 'url("/asset/blog-card/default.png")'
+    return 'url("/asset/blog-card/default.png")';
   }
-  
 
   contentTypeColor(tag: string): string {
     switch (tag) {
-      case 'js': return '#ca8a04'; // Darker amber
-      case 'html': return '#ea580c'; // Darker orange
-      case 'python': return '#2563eb'; // Darker blue
-      case 'css': return '#0ea5e9'; // Darker blue
-      default: return 'var(--main-theme)';
+      case 'js':
+        return '#ca8a04'; // Darker amber
+      case 'html':
+        return '#ea580c'; // Darker orange
+      case 'python':
+        return '#2563eb'; // Darker blue
+      case 'css':
+        return '#0ea5e9'; // Darker blue
+      default:
+        return 'var(--main-theme)';
     }
   }
 
@@ -60,5 +60,4 @@ export class BlogCardComponent implements OnInit {
   closePopup() {
     this.isPopupVisible = false;
   }
-
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
@@ -8,7 +8,7 @@ import { ApiService } from '../../../../service/api.service';
 import { Store } from '@ngxs/store';
 import { BlogAction } from '../../../store/blog/blog.action';
 import { CreateBlogComponent } from '../../../UI/createBlog/create-blog/create-blog.component';
-
+import { AuthAction } from '../../../store/auth/auth.action';
 
 @Component({
   selector: 'app-content-layout',
@@ -19,11 +19,10 @@ import { CreateBlogComponent } from '../../../UI/createBlog/create-blog/create-b
     NzIconModule,
     NzLayoutModule,
     NzDropDownModule,
-    CreateBlogComponent
-    
+    CreateBlogComponent,
   ],
   templateUrl: './content-layout.component.html',
-  styleUrl: './content-layout.component.scss'
+  styleUrl: './content-layout.component.scss',
 })
 export class ContentLayoutComponent {
   isCreatePopupVisible = false;
@@ -33,15 +32,23 @@ export class ContentLayoutComponent {
     { icon: 'user', path: '/account' },
   ];
 
-  constructor(private apiService: ApiService, private store: Store) {
-    this.store.dispatch(new BlogAction.GetBlogs); 
+  constructor(
+    private apiService: ApiService,
+    private store: Store,
+    private router: Router,
+  ) {
+    this.store.dispatch(new BlogAction.GetBlogs());
   }
-
 
   openCreatePopup() {
     this.isCreatePopupVisible = true;
   }
   closeCreatePopup() {
     this.isCreatePopupVisible = false;
+  }
+
+  onLogout() {
+    this.store.dispatch(new AuthAction.Logout());
+    this.router.navigate(['/auth']);
   }
 }

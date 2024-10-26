@@ -4,15 +4,27 @@
   <div class="flex flex-col gap-y-5 w-ful text-xl">
     <!-- User profile header -->
     <div class="flex items-center gap-x-4 w-50%">
-      <img src="./sample-logo.jpg" alt="User profile" class="w-24 h-24 rounded-full">
+      <img
+        src="./sample-logo.jpg"
+        alt="User profile"
+        class="w-24 h-24 rounded-full"
+      />
       <div>
         <h1 class="text-3xl font-bold text-[var(--font-color)]">Username</h1>
         <p class="text-gray-600"><code>&#64;</code>nametag</p>
         <p class="text-gray-600">bio- which is long as sh ...see more</p>
       </div>
       <div class="ml-[20%] gap-x-4 flex font-bold">
-        <button class="px-4 py-2 bg-gray-200 text-[var(--font-color)] mr-2 rounded-xl">FOLLOWED</button>
-        <button class="shine-button px-4 py-2 bg-[var(--main-theme)] text-white rounded-xl">MESSAGE</button>
+        <button
+          class="px-4 py-2 bg-gray-200 text-[var(--font-color)] mr-2 rounded-xl"
+        >
+          FOLLOWED
+        </button>
+        <button
+          class="shine-button px-4 py-2 bg-[var(--main-theme)] text-white rounded-xl"
+        >
+          MESSAGE
+        </button>
       </div>
     </div>
 
@@ -22,16 +34,14 @@
       <div><span class="font-bold">420</span> Following</div>
       <div><span class="font-bold">69k</span> Followers</div>
     </div>
-    <div>
-
-    </div>
+    <div></div>
     <!-- User's blogs -->
     <div class="text-3xl font-bold text-[var(--font-color)]">Your Blogs</div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-7 gap-y-10">
+    <div
+      class="grid grid-cols-1 lg:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-6 gap-x-[5vw] gap-y-10"
+    >
       <ng-container *ngFor="let article of articles">
-        <app-blog-card
-          [article]="article"
-        ></app-blog-card>
+        <app-blog-card [article]="article"></app-blog-card>
       </ng-container>
     </div>
   </div>
