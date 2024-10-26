@@ -10,28 +10,23 @@ import { Blog } from '../../../store/blog/blog.state';
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [
-    BlogCardComponent,
-    BlogPopupComponent,
-    CommonModule,
-    RouterModule
-  ],
+  imports: [BlogCardComponent, BlogPopupComponent, CommonModule, RouterModule],
   templateUrl: './homepage.component.html',
-  styleUrls: ['./homepage.component.scss']
+  styleUrls: ['./homepage.component.scss'],
 })
 export class HomepageComponent implements OnInit {
   headerImage = 'url("/asset/homepage/homepage-bg.png")';
   selectedArticle: any | null = null;
 
-  blog$!: Observable<Blog[]>; 
+  blog$!: Observable<Blog[]>;
   loading: boolean = true;
   constructor(private store: Store) {}
 
   ngOnInit() {
-    this.blog$ = this.store.select(BlogState.blogs); 
+    this.blog$ = this.store.select(BlogState.blogs);
     this.blog$.subscribe((articles: Blog[]) => {
-      this.loading = false; 
-    })
+      this.loading = false;
+    });
   }
 
   openPopup(article: any) {
@@ -41,5 +36,4 @@ export class HomepageComponent implements OnInit {
   closePopup() {
     this.selectedArticle = null;
   }
-
 }

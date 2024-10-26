@@ -16,32 +16,29 @@ import { SettingSecurityComponent } from './Components/setting/setting-security/
 import { TagsState } from './store/tags/tags.state';
 import { AuthState } from './store/auth/auth.state';
 import { UserState } from './store/user/user.state';
+import { authGuard, unAuthGuard } from '../guard/auth.guard';
 
 export const routes: Routes = [
   {
     path: 'auth',
+    canActivate: [unAuthGuard],
     children: [
       {
         path: 'login',
-        component: LoginComponent
+        component: LoginComponent,
       },
       {
         path: 'register',
-        component: RegisterComponent
+        component: RegisterComponent,
       },
       {
         path: '**',
         redirectTo: 'login',
-      }
+      },
     ],
     providers: [
-      importProvidersFrom(
-        NgxsModule.forFeature([
-          AuthState,
-          UserState
-        ])
-      )
-    ]
+      importProvidersFrom(NgxsModule.forFeature([AuthState, UserState])),
+    ],
   },
   {
     path: '',
@@ -50,56 +47,54 @@ export const routes: Routes = [
       {
         path: '',
         redirectTo: 'home',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'home',
-        component: HomepageComponent
+        component: HomepageComponent,
       },
       {
         path: 'blog',
-        component: BlogListComponent
+        component: BlogListComponent,
       },
       {
         path: 'profile',
-        component: ProfileComponent
+        canActivate: [authGuard],
+        component: ProfileComponent,
       },
       {
-        path:'about',
-        component: AboutComponent
+        path: 'about',
+        component: AboutComponent,
       },
       {
-        path:'setting',
+        path: 'setting',
+        canActivateChild: [authGuard],
         component: SettingLayoutComponent,
-        children:[
+        children: [
           {
-            path:'',
-            redirectTo:'profile',
-            pathMatch:'full'
+            path: '',
+            redirectTo: 'profile',
+            pathMatch: 'full',
           },
           {
-            path:'profile',
-            component: SettingProfileComponent
+            path: 'profile',
+            component: SettingProfileComponent,
           },
           {
-            path:'security',
-            component: SettingSecurityComponent
-          }
-        ]
-      }
+            path: 'security',
+            component: SettingSecurityComponent,
+          },
+        ],
+      },
     ],
     providers: [
       importProvidersFrom(
-        NgxsModule.forFeature([
-          BlogState,
-          TagsState,
-          
-        ])
-      )
-    ]
+        NgxsModule.forFeature([BlogState, TagsState, AuthState]),
+      ),
+    ],
   },
   {
     path: '**',
-    component: PageNotFoundComponent
-  }
+    component: PageNotFoundComponent,
+  },
 ];

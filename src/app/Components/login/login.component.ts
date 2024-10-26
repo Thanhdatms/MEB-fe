@@ -1,50 +1,75 @@
 import { Component } from '@angular/core';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NzFormModule } from 'ng-zorro-antd/form';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { AuthAction } from '../../store/auth/auth.action';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { AuthState } from '../../store/auth/auth.state';
-import { UserState } from '../../store/user/user.state';
-import { UserAction } from '../../store/user/user.action';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     NzIconModule,
-    RouterModule ,
+    RouterModule,
     NzFormModule,
     ReactiveFormsModule,
+    CommonModule,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   imagePath = '/sample-bg.png';
-  loginForm: FormGroup
+  loginForm: FormGroup;
 
-  token$: Observable<string>
+  status$: Observable<boolean>;
+  private destroy$ = new Subject<void>();
 
   constructor(
-    private fb: FormBuilder,
-    private _store: Store
-  ) { 
-    this.loginForm = this.fb.group({
-      username: [''],
-      password: ['']
-    })
-    this.token$ = this._store.select(AuthState.token);
+    private _fb: FormBuilder,
+    private _store: Store,
+    private _router: Router,
+    private _msg: NzMessageService,
+  ) {
+    this.loginForm = this._fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+    });
+    this.status$ = this._store.select(AuthState.LoginStatus);
+    this.status$.pipe(takeUntil(this.destroy$)).subscribe((status) => {
+      if (status === true) {
+        this._msg.success('Login successfully');
+        this._router.navigate(['/']);
+      }
+    });
   }
 
   onLogin() {
-    const payload = { 
-      username: this.loginForm.get('username')?.value, 
-      password : this.loginForm.get('password')?.value
-    } ;
+    const payload = {
+      username: this.loginForm.get('username')?.value,
+      password: this.loginForm.get('password')?.value,
+    };
     if (payload) {
-      this._store.dispatch(new AuthAction.Login({ payload }));
+      this._store.dispatch(
+        new AuthAction.Login({
+          username: payload.username,
+          password: payload.password,
+        }),
+      );
     }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

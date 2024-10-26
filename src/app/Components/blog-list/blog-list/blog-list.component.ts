@@ -19,46 +19,48 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     SideBarComponent,
     NzSelectModule,
     FormsModule,
-    NzIconModule
-],
+    NzIconModule,
+  ],
   templateUrl: './blog-list.component.html',
-  styleUrl: './blog-list.component.scss'
+  styleUrl: './blog-list.component.scss',
 })
 export class BlogListComponent implements OnInit {
   selectedArticle: any | null = null;
   selectedTag: Tags | null = null;
 
-  blog$!: Observable<Blog[]>; 
+  blog$!: Observable<Blog[]>;
   tags$!: Observable<any>;
   blogsByTag$!: Observable<Blog[]>;
   loading: boolean = true;
   displayedBlog: Blog[] = [];
   constructor(private store: Store) {
-    this.blog$ = this.store.select(BlogState.blogs); 
+    this.blog$ = this.store.select(BlogState.blogs);
     this.tags$ = this.store.select(TagsState.tags);
     this.blogsByTag$ = this.store.select(TagsState.getBlogByTag);
     this.blog$.subscribe((blogs: Blog[]) => {
       this.displayedBlog = blogs;
-      this.loading = false; 
-    })
+      this.loading = false;
+    });
   }
 
   ngOnInit() {
-    this.store.dispatch(new TagsAction.GetTags)
+    this.store.dispatch(new TagsAction.GetTags());
   }
 
   // filterByTag(tag: Tags) {
-    // this.selectedTag = tag;
-    // this.store.dispatch(new TagsAction.GetBlogByTag(tag.id))
-    // this.blogsByTag$.subscribe((blogs: Blog[]) => {
-    //   if (blogs && blogs.length > 0) {
-    //     this.displayedBlog = blogs;
-    //   } else {
-    //     this.displayedBlog = [];
-    //   }
-    //   this.loading = false; 
-    // });
+  // this.selectedTag = tag;
+  // this.store.dispatch(new TagsAction.GetBlogByTag(tag.id))
+  // this.blogsByTag$.subscribe((blogs: Blog[]) => {
+  //   if (blogs && blogs.length > 0) {
+  //     this.displayedBlog = blogs;
+  //   } else {
+  //     this.displayedBlog = [];
+  //   }
+  //   this.loading = false;
+  // });
+
   // }
+
   filterByTag(tag: Tags | null) {
     if (tag) {
       this.selectedTag = tag;
@@ -79,10 +81,6 @@ export class BlogListComponent implements OnInit {
       });
     }
   }
-  
-  
-  
-  
 
   openPopup(article: any) {
     this.selectedArticle = article;
@@ -91,5 +89,4 @@ export class BlogListComponent implements OnInit {
   closePopup() {
     this.selectedArticle = null;
   }
-
 }

@@ -4,30 +4,28 @@
   <div class="flex flex-col gap-y-5">
     <div class="text-5xl font-bold text-[var(--font-color)]">Blogs</div>
     <div class="flex flex-wrap gap-2">
-      <nz-select 
-        (ngModelChange)="filterByTag($event)" 
-        nzMode="default" 
-        [(ngModel)]="selectedTag" 
-        nzAllowClear  
+      <nz-select
+        (ngModelChange)="filterByTag($event)"
+        nzMode="default"
+        [(ngModel)]="selectedTag"
+        nzAllowClear
         [nzPlaceHolder]="placeholder"
         class="w-40"
         nzShowArrow="false"
-        
-        >
-        <nz-option 
-          *ngFor="let tag of (tags$ | async)" 
-          [nzValue]="tag" 
+      >
+        <nz-option
+          *ngFor="let tag of tags$ | async"
+          [nzValue]="tag"
           [nzLabel]="tag.name"
           class="font-bold"
-          ></nz-option>
+        ></nz-option>
       </nz-select>
-      
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-7 gap-y-10">
+    <div
+      class="grid grid-cols-1 lg:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-6 gap-x-[5vw] gap-y-10"
+    >
       <ng-container *ngFor="let article of displayedBlog">
-        <app-blog-card
-          [article]="article"
-        ></app-blog-card>
+        <app-blog-card [article]="article"></app-blog-card>
       </ng-container>
     </div>
   </div>
@@ -35,8 +33,12 @@
 
 <ng-template #placeholder>
   <div class="flex gap-x-4">
-    <span nz-icon nzType="menu" nzTheme="outline" class="text-white font-bold"></span>
-    <span class="text-white font-bold">FILTER</span> 
+    <span
+      nz-icon
+      nzType="menu"
+      nzTheme="outline"
+      class="text-white font-bold"
+    ></span>
+    <span class="text-white font-bold">FILTER</span>
   </div>
-  
 </ng-template>
