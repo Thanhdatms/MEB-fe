@@ -1,0 +1,298 @@
+<div class="overflow-y-auto flex-grow" *ngIf="blog$ | async as blog">
+  <div class="py-6 flex gap-5">
+    <div class="w-2/3 pl-12">
+      <h2 class="text-6xl font-bold mb-2 tracking-wider">
+        {{ blog.title }}
+      </h2>
+      <p class="text-xl text-gray-600 mb-4"></p>
+      <!-- Content -->
+      <div
+        *ngIf="blog.thumbnail"
+        class="w-full h-[50vh] mb-4 rounded overflow-hidden"
+      >
+        <img
+          [src]="blog.thumbnail"
+          alt="blog image"
+          class="w-full h-full object-cover"
+        />
+      </div>
+      <!-- <p class="mb-4 text-lg">{{ blog.content }}</p> -->
+      <div class="PopUpContent">
+        <p class="mb-4 text-lg" [innerHTML]="sanitizedContent"></p>
+      </div>
+
+      <div
+        class="bg-[var(--font-color)] text-white text-lg rounded-[10px] p-2 flex justify-between"
+      >
+        <div class="flex items-center space-x-4">
+          <div class="flex justify-center items-center">
+            <span
+              nz-icon
+              nzType="caret-up"
+              nzTheme="outline"
+              class="text-5xl cursor-pointer hover:text-green-300"
+            ></span>
+            <span>6.9M</span>
+          </div>
+          <div class="flex justify-center items-center">
+            <span
+              nz-icon
+              nzType="caret-down"
+              nzTheme="outline"
+              class="text-5xl cursor-pointer hover:text-red-400"
+            ></span>
+            <span>6.9M</span>
+          </div>
+        </div>
+        <button class="flex items-center space-x-1 hover:text-yellow-400">
+          <div>
+            <span
+              nz-icon
+              nzType="book"
+              nzTheme="outline"
+              class="text-3xl cursor-pointer"
+            ></span>
+          </div>
+          <span>Bookmark</span>
+        </button>
+        <div class="flex items-center space-x-1 hover:text-violet-400">
+          <span
+            nz-icon
+            nzType="copy"
+            nzTheme="outline"
+            class="text-3xl cursor-pointer"
+            (click)="copyToClipboard()"
+          ></span>
+          <span>Copy link</span>
+        </div>
+      </div>
+      <!-- Comment -->
+      <div
+        class="bg-[var(--font-color)] text-white text-lg rounded-[10px] p-4 mt-5"
+      >
+        <div
+          class="text-[var(--main-theme)] py-1 rounded-full text-sm font-bold flex justify-between gap-2"
+        >
+          <img
+            [src]="AuthorImage"
+            alt="Suggested blog"
+            class="w-8 h-8 rounded-full object-cover"
+          />
+          <input
+            type="text"
+            placeholder="Write something..."
+            class="bg-transparent border-none text-white focus:outline-none w-full"
+          />
+          <button
+            class="shine-button bg-white text-[var(--main-theme)] px-5 flex items-center justify-center py-1 rounded-full text-sm font-bold"
+          >
+            Comment
+          </button>
+        </div>
+      </div>
+      <!-- Comment List-->
+      <div class="bg-[var(--font-color)] rounded-[10px] p-4 mt-5">
+        <div class="flex items-center space-x-2 mb-6">
+          <div class="w-8 h-8 rounded-full overflow-hidden">
+            <img
+              [src]="AuthorImage"
+              alt="Suggested blog"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="text-gray-300 text-sm">
+            Title - something that is kinda long to be honest
+          </div>
+        </div>
+        <div class="flex items-center space-x-2 mb-6">
+          <div class="w-8 h-8 rounded-full overflow-hidden">
+            <img
+              [src]="AuthorImage"
+              alt="Suggested blog"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="text-gray-300 text-sm">
+            Title - something that is kinda long to be honest
+          </div>
+        </div>
+        <div class="flex items-center space-x-2 mb-6">
+          <div class="w-8 h-8 rounded-full overflow-hidden">
+            <img
+              [src]="AuthorImage"
+              alt="Suggested blog"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="text-gray-300 text-sm">
+            Title - something that is kinda long to be honest
+          </div>
+        </div>
+        <div class="flex items-center space-x-2 mb-6">
+          <div class="w-8 h-8 rounded-full overflow-hidden">
+            <img
+              [src]="AuthorImage"
+              alt="Suggested blog"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="text-gray-300 text-sm">
+            Title - something that is kinda long to be honest
+          </div>
+        </div>
+        <div class="flex items-center space-x-2 mb-6">
+          <div class="w-8 h-8 rounded-full overflow-hidden">
+            <img
+              [src]="AuthorImage"
+              alt="Suggested blog"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="text-gray-300 text-sm">
+            Title - something that is kinda long to be honest
+          </div>
+        </div>
+        <div class="flex items-center space-x-2 mb-6">
+          <div class="w-8 h-8 rounded-full overflow-hidden">
+            <img
+              [src]="AuthorImage"
+              alt="Suggested blog"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="text-gray-300 text-sm">
+            Title - something that is kinda long to be honest
+          </div>
+        </div>
+        <div class="flex items-center space-x-2 mb-6">
+          <div class="w-8 h-8 rounded-full overflow-hidden">
+            <img
+              [src]="AuthorImage"
+              alt="Suggested blog"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="text-gray-300 text-sm">
+            Title - something that is kinda long to be honest
+          </div>
+        </div>
+        <div class="flex items-center space-x-2 mb-6">
+          <div class="w-8 h-8 rounded-full overflow-hidden">
+            <img
+              [src]="AuthorImage"
+              alt="Suggested blog"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="text-gray-300 text-sm">
+            Title - something that is kinda long to be honest
+          </div>
+        </div>
+        <div class="flex items-center space-x-2 mb-6">
+          <div class="w-8 h-8 rounded-full overflow-hidden">
+            <img
+              [src]="AuthorImage"
+              alt="Suggested blog"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="text-gray-300 text-sm">
+            Title - something that is kinda long to be honest
+          </div>
+        </div>
+        <div class="flex items-center space-x-2 mb-6">
+          <div class="w-8 h-8 rounded-full overflow-hidden">
+            <img
+              [src]="AuthorImage"
+              alt="Suggested blog"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="text-gray-300 text-sm">
+            Title - something that is kinda long to be honest
+          </div>
+        </div>
+        <div class="flex items-center space-x-2 mb-6">
+          <div class="w-8 h-8 rounded-full overflow-hidden">
+            <img
+              [src]="AuthorImage"
+              alt="Suggested blog"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="text-gray-300 text-sm">
+            Title - something that is kinda long to be honest
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w-1/3 p-5">
+      <div class="bg-[var(--font-color)] rounded-[10px] p-4 mb-5">
+        <!-- Author -->
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2">
+            <div class="w-10 h-10 rounded-full overflow-hidden">
+              <img
+                [src]="AuthorImage"
+                alt="Author avatar"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="text-[17px]">
+              <div class="font-bold text-white">author</div>
+              <div class="text-gray-400 text-sm"><code>&#64;</code>nametag</div>
+            </div>
+          </div>
+          <button
+            class="shine-button bg-white text-[var(--main-theme)] px-4 py-1 rounded-full text-sm font-bold"
+          >
+            FOLLOW
+          </button>
+        </div>
+      </div>
+
+      <!-- Suggestion -->
+      <div class="bg-[var(--font-color)] rounded-[10px] p-4">
+        <h3 class="text-white font-bold mb-2 text-[20px]">You may like</h3>
+        <div class="space-y-2 text-[15px]">
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-full overflow-hidden">
+              <img
+                [src]="AuthorImage"
+                alt="Suggested article"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="text-gray-300 text-sm">
+              Title - something that is kinda long to be honest
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-full overflow-hidden">
+              <img
+                [src]="AuthorImage"
+                alt="Suggested article"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="text-gray-300 text-sm">
+              Title - something that is kinda long to be honest
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-full overflow-hidden">
+              <img
+                [src]="AuthorImage"
+                alt="Suggested article"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div class="text-gray-300 text-sm">
+              Title - something that is kinda long to be honest
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

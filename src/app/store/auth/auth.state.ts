@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { ApiService } from '../../../service/api.service';
+import { ApiService } from '../../service/api.service';
 import { tap } from 'rxjs';
 import { AuthAction } from './auth.action';
 import { NzMessageService } from 'ng-zorro-antd/message';

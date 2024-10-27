@@ -74,6 +74,16 @@
   
 }
 
+.TagSelect{
+  .ant-select-close-icon, 
+  .anticon-close-circle{
+    color:white !important
+  }
+  .ant-select-clear{
+    background-color: transparent !important;
+}
+}
+
 
 .shine-button {
   position: relative;

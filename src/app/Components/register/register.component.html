@@ -1,7 +1,7 @@
 <div class="min-h-screen flex justify-center">
   <div class="rounded-lg flex w-[100vw]">
     <!-- Left side: Form -->
-    <div class="w-1/2 p-[2%]">
+    <div class="w-1/2 pt-[2%] px-[5%]">
       <!-- Welcome Section -->
       <div class="mb-24">
         <h2 class="text-5xl font-bold text-[--font-color] tracking-widest">
@@ -69,7 +69,9 @@
                     registerForm.get('email')?.dirty)
                 "
               >
-                <p class="text-red-300 text-xl pl-2">Invalid email format</p>
+                <p class="text-red-300 text-xl pl-2 absolute">
+                  Invalid email format
+                </p>
               </div>
             </div>
           </nz-form-control>
@@ -106,7 +108,7 @@
                     registerForm.get('password')?.dirty)
                 "
               >
-                <p class="text-red-300 text-xl pl-2">
+                <p class="text-red-300 text-xl pl-2 absolute">
                   Password must be at least 8 characters long and include
                   uppercase, lowercase, number, and special character
                 </p>
@@ -146,7 +148,9 @@
                     registerForm.get('confirmPassword')?.dirty)
                 "
               >
-                <p class="text-red-300 text-xl pl-2">Password do not match</p>
+                <p class="text-red-300 text-xl pl-2 absolute">
+                  Password do not match
+                </p>
               </div>
             </div>
           </nz-form-control>

@@ -15,8 +15,8 @@ import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideStore } from '@ngxs/store';
-import { errorInterceptor } from '../interceptors/error.interceptor';
-import { AuthInterceptor } from '../interceptors/auth.interceptor';
+import { errorInterceptor } from './interceptors/error.interceptor';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 registerLocaleData(en);
 

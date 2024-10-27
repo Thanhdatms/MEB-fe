@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Input,
   OnInit,
   Output,
   ViewEncapsulation,
@@ -47,6 +48,8 @@ import { BlogState } from '../../../store/blog/blog.state';
 import { TagsState } from '../../../store/tags/tags.state';
 import { TagsAction } from '../../../store/tags/tags.actions';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { CreateTagComponent } from '../../create-tag/create-tag.component';
 
 @Component({
   selector: 'app-create-blog',
@@ -60,6 +63,8 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
     CommonModule,
     ReactiveFormsModule,
     CKEditorModule,
+    NzModalModule,
+    CreateTagComponent,
   ],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './create-blog.component.html',
@@ -67,7 +72,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 })
 export class CreateBlogComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
-
+  @Input() tagForm: FormGroup;
   title: string = '';
   content: string = '';
   tags: string[] = [];
@@ -75,10 +80,13 @@ export class CreateBlogComponent implements OnInit {
   blog: any;
   form: FormGroup;
   imagePreview: string | ArrayBuffer | null = null;
+  isModalVisible = false;
 
   status$: Observable<boolean>;
+  tagStatus$: Observable<boolean>;
   tags$: Observable<any>;
   private destroy$ = new Subject<void>();
+  private tagCreationSuccess$ = new Subject<void>();
 
   editor = ClassicEditor;
 
@@ -143,13 +151,26 @@ export class CreateBlogComponent implements OnInit {
       file: [null, Validators.required],
     });
 
+    this.tagForm = this.fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+    });
+
     this.status$ = this.store.select(BlogState.status);
+    this.tagStatus$ = this.store.select(TagsState.status);
     this.tags$ = this.store.select(TagsState.tags);
 
     this.status$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
       if (response === true) {
         this.msg.success('Blog created successfully');
         this.onClose();
+      }
+    });
+    this.tagStatus$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
+      if (response === true) {
+        this.msg.success('Tag created successfully');
+        this.tagForm.reset();
+        this.store.dispatch(new TagsAction.GetTags());
       }
     });
   }
@@ -197,6 +218,19 @@ export class CreateBlogComponent implements OnInit {
       };
       reader.readAsDataURL(input.files[0]);
     }
+  }
+
+  openCreateTag() {
+    this.isModalVisible = true;
+  }
+  handleTagCreation(form: any): void {
+    this.isModalVisible = false;
+    this.store.dispatch(new TagsAction.CreateTag(form));
+  }
+
+  handleCancel(): void {
+    console.log('Button cancel clicked!');
+    this.isModalVisible = false;
   }
 
   ngOnDestroy() {

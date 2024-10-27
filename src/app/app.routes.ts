@@ -16,7 +16,8 @@ import { SettingSecurityComponent } from './Components/setting/setting-security/
 import { TagsState } from './store/tags/tags.state';
 import { AuthState } from './store/auth/auth.state';
 import { UserState } from './store/user/user.state';
-import { authGuard, unAuthGuard } from '../guard/auth.guard';
+import { authGuard, unAuthGuard } from './guard/auth.guard';
+import { BlogDetailComponent } from './Components/blog-detail/blog-detail.component';
 
 export const routes: Routes = [
   {
@@ -55,7 +56,16 @@ export const routes: Routes = [
       },
       {
         path: 'blog',
-        component: BlogListComponent,
+        children: [
+          {
+            path: '',
+            component: BlogListComponent,
+          },
+          {
+            path: ':id',
+            component: BlogDetailComponent,
+          },
+        ],
       },
       {
         path: 'profile',

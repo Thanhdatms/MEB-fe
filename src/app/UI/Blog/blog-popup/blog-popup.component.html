@@ -50,7 +50,7 @@
                   nz-icon
                   nzType="caret-up"
                   nzTheme="outline"
-                  class="text-5xl cursor-pointer"
+                  class="text-5xl cursor-pointer hover:text-green-300"
                   [ngStyle]="{ color: liked ? 'green' : null }"
                   (click)="onLike()"
                 ></span>
@@ -61,14 +61,17 @@
                   nz-icon
                   nzType="caret-down"
                   nzTheme="outline"
-                  class="text-5xl cursor-pointer"
+                  class="text-5xl cursor-pointer hover:text-red-400"
                   [ngStyle]="{ color: disliked ? 'red' : null }"
                   (click)="onDislike()"
                 ></span>
                 <span>6.9M</span>
               </div>
             </div>
-            <button class="flex items-center space-x-1">
+            <button
+              class="flex items-center space-x-1 hover:text-yellow-400"
+              (click)="onBookMark()"
+            >
               <div>
                 <span
                   nz-icon
@@ -78,11 +81,20 @@
                   [ngStyle]="{
                     color: isBookmarked ? 'yellow' : null,
                   }"
-                  (click)="onBookMark()"
                 ></span>
               </div>
               <span>Bookmark</span>
             </button>
+            <div class="flex items-center space-x-1 hover:text-violet-400">
+              <span
+                nz-icon
+                nzType="copy"
+                nzTheme="outline"
+                class="text-3xl cursor-pointer"
+                (click)="copyToClipboard()"
+              ></span>
+              <span>Copy link</span>
+            </div>
           </div>
           <!-- Comment -->
           <div
@@ -271,25 +283,17 @@
             </div>
           </div>
 
-          <div class="bg-[var(--font-color)] rounded-[10px] p-4 mb-5">
-            <h3 class="text-white font-bold mb-2 text-[20px]">Share to</h3>
-            <div class="flex text-2xl space-x-4">
-              <button class="text-gray-400 hover:text-white">
-                <span nz-icon nzType="link" nzTheme="outline"></span>
-              </button>
-              <button class="text-gray-400 hover:text-white">
-                <span nz-icon nzType="facebook" nzTheme="outline"></span>
-              </button>
-              <button class="text-gray-400 hover:text-white">
-                <span nz-icon nzType="twitter" nzTheme="outline"></span>
-              </button>
-              <button class="text-gray-400 hover:text-white">
-                <span nz-icon nzType="instagram" nzTheme="outline"></span>
-              </button>
-              <button class="text-gray-400 hover:text-white">
-                <span nz-icon nzType="reddit" nzTheme="outline"></span>
-              </button>
-            </div>
+          <div
+            class="bg-[var(--font-color)] rounded-[10px] p-4 mb-5 flex justify-center items-center gap-3 hover:bg-[var(--main-theme)] cursor-pointer duration-200"
+            [routerLink]="['/blog', article.id]"
+          >
+            <div class="text-white font-bold text-[20px]">Open blog</div>
+            <span
+              nz-icon
+              nzType="export"
+              nzTheme="outline"
+              class="text-[20px] text-white"
+            ></span>
           </div>
           <!-- Suggestion -->
           <div class="bg-[var(--font-color)] rounded-[10px] p-4">

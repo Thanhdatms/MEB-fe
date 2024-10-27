@@ -18,123 +18,141 @@
         >About</span
       >
     </div>
-    <div class="gap-x-10 flex items-center justify-between">
-      <div
-        class="shine-button bg-[--main-theme] text-white w-48 flex items-center justify-center h-10 px-5 py-2 rounded-xl font-bold"
-        (click)="openCreatePopup()"
-      >
-        SHARE SOMETHING
-      </div>
-      <ng-container *ngFor="let item of navbarItems">
-        @if (item.icon === "user") {
-          <div
-            nz-dropdown
-            nzTrigger="hover"
-            [nzDropdownMenu]="menu"
-            nzPlacement="bottomCenter"
-          >
-            <span
-              nz-icon
-              [nzType]="item.icon"
-              nzTheme="outline"
-              class="text-3xl text-[--main-theme] cursor-pointer"
-            ></span>
-          </div>
-          <nz-dropdown-menu #menu>
-            <ul
-              class="text-[--font-color] text-xl bg-[--side-color] p-4 rounded-xl shadow-lg w-52"
+    <div *ngIf="isLogin">
+      <div class="gap-x-10 flex items-center justify-between">
+        <div
+          class="shine-button bg-[--main-theme] text-white w-48 flex items-center justify-center h-10 px-5 py-2 rounded-xl font-bold"
+          (click)="openCreatePopup()"
+        >
+          SHARE SOMETHING
+        </div>
+        <ng-container *ngFor="let item of navbarItems">
+          @if (item.icon === "user") {
+            <div
+              nz-dropdown
+              nzTrigger="hover"
+              [nzDropdownMenu]="menu"
+              nzPlacement="bottomCenter"
             >
-              <li class="mb-4">
-                <div
-                  class="flex items-center bg-white rounded-lg p-2"
-                  style="box-shadow: 0 5px 5px 0 black"
-                >
-                  <div class="w-12 h-12 rounded-full overflow-hidden mr-3">
-                    <img
-                      src="./sample-logo.jpg"
-                      alt="User"
-                      class="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div>
-                    <div class="font-bold">Username</div>
-                    <div class="text-sm text-gray-500">
-                      <code>&#64;</code>nametag
+              <span
+                nz-icon
+                [nzType]="item.icon"
+                nzTheme="outline"
+                class="text-3xl text-[--main-theme] cursor-pointer"
+              ></span>
+            </div>
+            <nz-dropdown-menu #menu>
+              <ul
+                class="text-[--font-color] text-xl bg-[--side-color] p-4 rounded-xl shadow-lg w-52"
+              >
+                <li class="mb-4">
+                  <div
+                    class="flex items-center bg-white rounded-lg p-2"
+                    style="box-shadow: 0 5px 5px 0 black"
+                  >
+                    <div class="w-12 h-12 rounded-full overflow-hidden mr-3">
+                      <img
+                        src="./sample-logo.jpg"
+                        alt="User"
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <div class="font-bold">Username</div>
+                      <div class="text-sm text-gray-500">
+                        <code>&#64;</code>nametag
+                      </div>
                     </div>
                   </div>
-                </div>
-              </li>
-              <li
-                nz-menu-item
-                class="flex text-lg items-center py-2 hover:text-white hover:bg-[var(--main-theme)] rounded-lg font-bold"
-                routerLink="/profile"
-              >
-                <span
-                  nz-icon
-                  nzType="user"
-                  nzTheme="outline"
-                  class="mr-3"
-                ></span>
-                Profile
-              </li>
-              <li
-                nz-menu-item
-                class="flex text-lg items-center py-2 hover:text-white hover:bg-[var(--main-theme)] rounded-lg font-bold"
-              >
-                <span
-                  nz-icon
-                  nzType="book"
-                  nzTheme="outline"
-                  class="mr-3"
-                ></span>
-                Bookmark
-              </li>
-              <li
-                nz-menu-item
-                class="flex text-lg items-center py-2 hover:text-white hover:bg-[var(--main-theme)] rounded-lg font-bold"
-              >
-                <span
-                  nz-icon
-                  nzType="code"
-                  nzTheme="outline"
-                  class="mr-3"
-                ></span>
-                Codespace
-              </li>
-              <li
-                nz-menu-item
-                class="flex text-lg items-center py-2 hover:text-white hover:bg-[var(--main-theme)] rounded-lg font-bold"
-                routerLink="/setting"
-              >
-                <span
-                  nz-icon
-                  nzType="setting"
-                  nzTheme="outline"
-                  class="mr-3"
-                ></span>
-                Setting
-              </li>
-              <li class="mt-4">
-                <button
-                  (click)="onLogout()"
-                  class="w-full text-lg bg-[var(--main-theme)] text-white py-2 rounded-lg font-bold"
+                </li>
+                <li
+                  nz-menu-item
+                  class="flex text-lg items-center py-2 hover:text-white hover:bg-[var(--main-theme)] rounded-lg font-bold"
+                  routerLink="/profile"
                 >
-                  LOGOUT
-                </button>
-              </li>
-            </ul>
-          </nz-dropdown-menu>
-        } @else {
-          <div [routerLink]="item.path">
-            <span
-              nz-icon
-              [nzType]="item.icon"
-              nzTheme="outline"
-              class="text-3xl text-[--main-theme] cursor-pointer"
-            ></span>
-          </div>
-        }
-      </ng-container>
+                  <span
+                    nz-icon
+                    nzType="user"
+                    nzTheme="outline"
+                    class="mr-3"
+                  ></span>
+                  Profile
+                </li>
+                <li
+                  nz-menu-item
+                  class="flex text-lg items-center py-2 hover:text-white hover:bg-[var(--main-theme)] rounded-lg font-bold"
+                >
+                  <span
+                    nz-icon
+                    nzType="book"
+                    nzTheme="outline"
+                    class="mr-3"
+                  ></span>
+                  Bookmark
+                </li>
+                <li
+                  nz-menu-item
+                  class="flex text-lg items-center py-2 hover:text-white hover:bg-[var(--main-theme)] rounded-lg font-bold"
+                >
+                  <span
+                    nz-icon
+                    nzType="code"
+                    nzTheme="outline"
+                    class="mr-3"
+                  ></span>
+                  Codespace
+                </li>
+                <li
+                  nz-menu-item
+                  class="flex text-lg items-center py-2 hover:text-white hover:bg-[var(--main-theme)] rounded-lg font-bold"
+                  routerLink="/setting"
+                >
+                  <span
+                    nz-icon
+                    nzType="setting"
+                    nzTheme="outline"
+                    class="mr-3"
+                  ></span>
+                  Setting
+                </li>
+                <li class="mt-4">
+                  <button
+                    (click)="onLogout()"
+                    class="w-full text-lg bg-[var(--main-theme)] text-white py-2 rounded-lg font-bold"
+                  >
+                    LOGOUT
+                  </button>
+                </li>
+              </ul>
+            </nz-dropdown-menu>
+          } @else {
+            <div [routerLink]="item.path">
+              <span
+                nz-icon
+                [nzType]="item.icon"
+                nzTheme="outline"
+                class="text-3xl text-[--main-theme] cursor-pointer"
+              ></span>
+            </div>
+          }
+        </ng-container>
+      </div>
+    </div>
+    <div *ngIf="!isLogin">
+      <div class="gap-x-4 flex items-center justify-between">
+        <div
+          class="bg-white text-[--main-theme] w-32 flex items-center justify-center h-10 px-5 py-2 rounded-xl font-bold border-[--main-theme] border-2 cursor-pointer"
+          routerLink="/auth/register"
+        >
+          REGISTER
+        </div>
+        <div
+          class="shine-button bg-[--main-theme] text-white w-32 flex items-center justify-center h-10 px-5 py-2 rounded-xl font-bold"
+          routerLink="/auth/login"
+        >
+          LOGIN
+        </div>
+      </div>
     </div>
   </div>
 </div>

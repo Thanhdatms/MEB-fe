@@ -1,7 +1,7 @@
 // src/store/blogs.state.ts
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { BlogAction } from './blog.action';
-import { ApiService } from '../../../service/api.service';
+import { ApiService } from '../../service/api.service';
 import { Injectable } from '@angular/core';
 import { catchError, tap, throwError } from 'rxjs';
 
@@ -17,6 +17,7 @@ export interface Blog {
 
 export interface BlogStateModel {
   blogs: Blog[];
+  blog: Blog | null;
   status: boolean;
 }
 
@@ -24,6 +25,7 @@ export interface BlogStateModel {
   name: 'blogs',
   defaults: {
     blogs: [],
+    blog: null,
     status: false,
   },
 })
@@ -38,6 +40,11 @@ export class BlogState {
   @Selector()
   static status({ status }: BlogStateModel): boolean {
     return status;
+  }
+
+  @Selector()
+  static blog({ blog }: BlogStateModel) {
+    return blog;
   }
 
   @Action(BlogAction.GetBlogs)
@@ -68,6 +75,21 @@ export class BlogState {
         }),
         catchError((error) => {
           return throwError(error);
+        }),
+      )
+      .subscribe();
+  }
+
+  @Action(BlogAction.GetBlogById)
+  getBlogById(
+    ctx: StateContext<BlogStateModel>,
+    action: BlogAction.GetBlogById,
+  ) {
+    this.apiService.blog
+      .getBlogById(action.payload)
+      .pipe(
+        tap((response: any) => {
+          ctx.patchState({ blog: response.result });
         }),
       )
       .subscribe();
