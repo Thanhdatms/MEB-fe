@@ -168,9 +168,26 @@
       type="text"
       placeholder="Search"
       class="w-[600px] h-10 rounded-full px-5 py-2 bg-[--side-color] pl-10 focus:outline-none placeholder:text-[--font-color]"
+      (input)="onSearch($event)"
     />
+    <div
+      *ngIf="filteredBlogs.length > 0 && searchTerm"
+      class="absolute z-10 w-full bg-[--font-color] shadow-lg rounded-lg mt-2"
+    >
+      <ng-container *ngFor="let blog of filteredBlogs">
+        <div
+          class="p-3 hover:bg-[--main-theme] hover:text-white hover:rounded-lg cursor-pointer"
+          (click)="selectBlog(blog)"
+        >
+          <h3 class="text-base font-semibold text-white hover:text-white">
+            {{ blog.title }}
+          </h3>
+        </div>
+      </ng-container>
+    </div>
   </div>
 </div>
+
 <router-outlet></router-outlet>
 
 <app-create-blog *ngIf="isCreatePopupVisible" (close)="closeCreatePopup()">

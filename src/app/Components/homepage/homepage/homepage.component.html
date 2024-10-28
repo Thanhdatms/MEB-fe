@@ -1,91 +1,150 @@
 <div class="min-h-screen">
   <!-- Header section with user greeting -->
-  <div [style.background-image]="headerImage"
-       class="h-[250px] bg-gradient-to-r from-[var(--main-theme)] to-[var(--secondary-theme)] bg-cover bg-center bg-no-repeat">
-  </div>
+  <div
+    [style.background-image]="headerImage"
+    class="h-[250px] bg-gradient-to-r from-[var(--main-theme)] to-[var(--secondary-theme)] bg-cover bg-center bg-no-repeat"
+  ></div>
 
   <div class="container mx-auto pl-10 py-8">
     <!-- Featured/Latest section -->
     <section class="mb-12">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold text-[var(--font-color)]">FEATURED/ LATEST</h2>
-        <a href="#" class="underline text-xl text-[var(--font-color)]" routerLink="/blog">See more</a>
+        <h2 class="text-2xl font-bold text-[var(--font-color)]">
+          FEATURED/ LATEST
+        </h2>
+        <a
+          href="#"
+          class="underline text-xl text-[var(--font-color)]"
+          routerLink="/blog"
+          >See more</a
+        >
       </div>
-      <div *ngIf="!loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-items-center">
+      <div
+        *ngIf="!loading"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-items-center"
+      >
         <!-- Use the BlogCardComponent -->
         <app-blog-card
-          *ngFor="let article of (blog$ | async)?.slice()?.reverse() | slice:0:4"
+          *ngFor="
+            let article of (blog$ | async)?.slice()?.reverse() | slice: 0 : 4
+          "
           [article]="article"
-
         ></app-blog-card>
       </div>
     </section>
 
-    <div class=" mx-10 mt-8">
+    <div class="mx-10 mt-8">
       <!-- Title -->
       <h1 class="text-3xl font-bold text-center mb-10">WEEKLY LEADERBOARD</h1>
-    
+
       <!-- Podium for top 3 users -->
-      <div class="flex justify-center items-end space-x-20 bg-[var(--main-theme)] rounded-t-xl border border-gray-500">
+      <div
+        class="flex justify-center items-end space-x-20 bg-[var(--main-theme)] rounded-t-xl border border-gray-500"
+      >
         <!-- Second place -->
         <div class="w-48">
           <p class="text-center text-lg font-semibold mb-16">Username</p>
-          <div class="bg-[var(--secondary-theme)] rounded-t-lg h-40 flex items-center justify-center relative  ">
-            <img src="https://via.placeholder.com/80" alt="Username" class="absolute -top-14 rounded-full border-4 border-white w-32 h-32 object-cover">
+          <div
+            class="bg-[var(--secondary-theme)] rounded-t-lg h-40 flex items-center justify-center relative"
+          >
+            <img
+              src="https://via.placeholder.com/80"
+              alt="Username"
+              class="absolute -top-14 rounded-full border-4 border-white w-32 h-32 object-cover"
+            />
           </div>
-          
         </div>
         <!-- First place -->
         <div class="w-48">
           <p class="text-center text-lg font-semibold mb-16 mt-4">Username</p>
-          <div class=" bg-[var(--side-color)] rounded-t-lg h-56 flex items-center justify-center relative ">
-            <img src="https://via.placeholder.com/80" alt="Username" class="absolute -top-14 rounded-full border-4 border-white w-32 h-32 object-cover">
+          <div
+            class="bg-[var(--side-color)] rounded-t-lg h-56 flex items-center justify-center relative"
+          >
+            <img
+              src="https://via.placeholder.com/80"
+              alt="Username"
+              class="absolute -top-14 rounded-full border-4 border-white w-32 h-32 object-cover"
+            />
           </div>
-          
         </div>
         <!-- Third place -->
         <div class="w-48">
           <p class="text-center text-lg font-semibold mb-16">Username</p>
-          <div class="bg-[var(--font-color)] rounded-t-lg h-32 flex items-center justify-center relative ">
-            <img src="https://via.placeholder.com/80" alt="Username" class="absolute -top-14 rounded-full border-4 border-white w-32 h-32 object-cover">
+          <div
+            class="bg-[var(--font-color)] rounded-t-lg h-32 flex items-center justify-center relative"
+          >
+            <img
+              src="https://via.placeholder.com/80"
+              alt="Username"
+              class="absolute -top-14 rounded-full border-4 border-white w-32 h-32 object-cover"
+            />
           </div>
-          
         </div>
       </div>
-    
+
       <!-- Leaderboard for the rest of the users -->
-      <div class=" bg-white p-4 rounded-b-lg border border-gray ">
+      <div class="bg-white p-4 rounded-b-lg border-2 border-gray px-36">
         <!-- User entry -->
-        <div class="flex items-center p-2 bg-[var(--main-theme)] text-white rounded-lg mb-2 ">
-          <img src="https://via.placeholder.com/50" alt="Username" class="rounded-full w-10 h-10 border-2 border-cyan-300">
+        <div
+          class="flex items-center p-2 bg-[var(--main-theme)] text-white rounded-lg mb-2"
+        >
+          <img
+            src="https://via.placeholder.com/50"
+            alt="Username"
+            class="rounded-full w-10 h-10 border-2 border-cyan-300"
+          />
           <div class="ml-4">
             <p class="font-bold">Username</p>
             <p>⭐⭐⭐⭐⭐</p>
           </div>
         </div>
-        <div class="flex items-center p-2 bg-[var(--main-theme)] text-white rounded-lg mb-2">
-          <img src="https://via.placeholder.com/50" alt="Username" class="rounded-full w-10 h-10 border-2 border-cyan-300">
+        <div
+          class="flex items-center p-2 bg-[var(--main-theme)] text-white rounded-lg mb-2"
+        >
+          <img
+            src="https://via.placeholder.com/50"
+            alt="Username"
+            class="rounded-full w-10 h-10 border-2 border-cyan-300"
+          />
           <div class="ml-4">
             <p class="font-bold">Username</p>
             <p>⭐⭐⭐⭐⭐</p>
           </div>
         </div>
-        <div class="flex items-center p-2 bg-[var(--main-theme)] text-white rounded-lg mb-2">
-          <img src="https://via.placeholder.com/50" alt="Username" class="rounded-full w-10 h-10 border-2 border-cyan-300">
+        <div
+          class="flex items-center p-2 bg-[var(--main-theme)] text-white rounded-lg mb-2"
+        >
+          <img
+            src="https://via.placeholder.com/50"
+            alt="Username"
+            class="rounded-full w-10 h-10 border-2 border-cyan-300"
+          />
           <div class="ml-4">
             <p class="font-bold">Username</p>
             <p>⭐⭐⭐⭐⭐</p>
           </div>
         </div>
-        <div class="flex items-center p-2 bg-[var(--main-theme)] text-white rounded-lg mb-2">
-          <img src="https://via.placeholder.com/50" alt="Username" class="rounded-full w-10 h-10 border-2 border-cyan-300">
+        <div
+          class="flex items-center p-2 bg-[var(--main-theme)] text-white rounded-lg mb-2"
+        >
+          <img
+            src="https://via.placeholder.com/50"
+            alt="Username"
+            class="rounded-full w-10 h-10 border-2 border-cyan-300"
+          />
           <div class="ml-4">
             <p class="font-bold">Username</p>
             <p>⭐⭐⭐⭐⭐</p>
           </div>
         </div>
-        <div class="flex items-center p-2 bg-[var(--main-theme)] text-white rounded-lg mb-2">
-          <img src="https://via.placeholder.com/50" alt="Username" class="rounded-full w-10 h-10 border-2 border-cyan-300">
+        <div
+          class="flex items-center p-2 bg-[var(--main-theme)] text-white rounded-lg mb-2"
+        >
+          <img
+            src="https://via.placeholder.com/50"
+            alt="Username"
+            class="rounded-full w-10 h-10 border-2 border-cyan-300"
+          />
           <div class="ml-4">
             <p class="font-bold">Username</p>
             <p>⭐⭐⭐⭐⭐</p>
@@ -93,7 +152,5 @@
         </div>
       </div>
     </div>
-    
   </div>
-
 </div>

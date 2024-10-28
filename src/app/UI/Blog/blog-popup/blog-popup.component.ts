@@ -5,11 +5,12 @@ import { ApiService } from '../../../service/api.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { BlogDetailComponent } from '../../../Components/blog-detail/blog-detail.component';
 
 @Component({
   selector: 'app-blog-popup',
   standalone: true,
-  imports: [CommonModule, NzIconModule, RouterLink],
+  imports: [CommonModule, NzIconModule, RouterLink, BlogDetailComponent],
   templateUrl: './blog-popup.component.html',
   styleUrl: './blog-popup.component.scss',
 })
