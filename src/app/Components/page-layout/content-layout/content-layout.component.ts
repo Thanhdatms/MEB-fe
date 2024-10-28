@@ -9,7 +9,7 @@ import { Store } from '@ngxs/store';
 import { BlogAction } from '../../../store/blog/blog.action';
 import { CreateBlogComponent } from '../../../UI/createBlog/create-blog/create-blog.component';
 import { AuthAction } from '../../../store/auth/auth.action';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest, map } from 'rxjs';
 import { AuthState } from '../../../store/auth/auth.state';
 import { CookieService } from 'ngx-cookie-service';
 import { Blog, BlogState } from '../../../store/blog/blog.state';
@@ -32,7 +32,10 @@ export class ContentLayoutComponent {
   isCreatePopupVisible = false;
 
   isLogin = false;
-  blog$: Observable<Blog[]>;
+  blogs: Blog[] = [];
+  filteredBlogs: Blog[] = [];
+  searchTerm: string = '';
+  searching = false;
 
   navbarItems = [
     { icon: 'bell', path: '/noti' },
@@ -45,7 +48,10 @@ export class ContentLayoutComponent {
     private router: Router,
     private cookieService: CookieService,
   ) {
-    this.blog$ = this.store.select(BlogState.blogs);
+    this.store.select(BlogState.blogs).subscribe((blogs) => {
+      this.blogs = blogs;
+      this.filteredBlogs = blogs;
+    });
     this.store.dispatch(new BlogAction.GetBlogs());
     const token = this.cookieService.get('authToken');
     if (token) this.isLogin = true;
@@ -58,8 +64,21 @@ export class ContentLayoutComponent {
     this.isCreatePopupVisible = false;
   }
 
+  onSearch(event: any) {
+    const inputElement = event.target as HTMLInputElement;
+    this.searchTerm = inputElement.value;
+    this.filteredBlogs = this.blogs.filter((blog) =>
+      blog.title.toLowerCase().includes(this.searchTerm.toLowerCase()),
+    );
+  }
+
   onLogout() {
     this.store.dispatch(new AuthAction.Logout());
     this.router.navigate(['/auth']);
+  }
+
+  selectBlog(blog: Blog) {
+    this.router.navigate(['/blog', blog.id]);
+    this.searchTerm = '';
   }
 }

@@ -58,7 +58,7 @@
         <div class="flex items-center space-x-1 hover:text-violet-400">
           <span
             nz-icon
-            nzType="copy"
+            nzType="link"
             nzTheme="outline"
             class="text-3xl cursor-pointer"
             (click)="copyToClipboard()"
@@ -249,6 +249,19 @@
             FOLLOW
           </button>
         </div>
+      </div>
+      <div
+        class="bg-[var(--font-color)] rounded-[10px] p-4 mb-5 flex justify-center items-center gap-3 hover:bg-[var(--main-theme)] cursor-pointer duration-200"
+        [routerLink]="['/blog', blog.id]"
+        *ngIf="isPopup"
+      >
+        <div class="text-white font-bold text-[20px]">Open blog</div>
+        <span
+          nz-icon
+          nzType="export"
+          nzTheme="outline"
+          class="text-[20px] text-white"
+        ></span>
       </div>
 
       <!-- Suggestion -->
