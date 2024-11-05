@@ -1,1 +1,0 @@
-const FILE_SIZE_MAX = 1 //1MB

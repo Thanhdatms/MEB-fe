@@ -107,14 +107,20 @@
             >
               CREATE
             </button>
-            <button
+            <div class="flex items-center justify-center">
+              
+              <button
               (click)="onSubmit()"
               *ngIf="!form.invalid"
               [disabled]="form.invalid"
               class="shine-button bg-[--main-theme] text-white w-32 flex items-center justify-center h-10 rounded-xl font-bold"
+              [ngStyle]="{'background-color': isLoading ? 'darkgray' : 'var(--main-theme)','cursor': isLoading ? 'not-allowed' : 'pointer'}"
             >
+            <span nz-icon nzType="loading" *ngIf="isLoading" nzTheme="outline" class="pr-3 text-xl"></span>
               CREATE
             </button>
+            </div>
+            
           </div>
         </div>
       </form>

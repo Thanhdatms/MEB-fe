@@ -26,6 +26,7 @@
     "@ckeditor/ckeditor5-font": "^43.2.0",
     "@ngrx/store": "^18.1.0",
     "@ngrx/store-devtools": "^18.1.0",
+    "@ngxs/devtools-plugin": "^18.1.4",
     "@ngxs/store": "^18.1.1",
     "angular-quokka-plugin": "^1.0.1",
     "ckeditor5": "^43.2.0",
@@ -33,7 +34,9 @@
     "ng-zorro-antd": "^18.1.1",
     "ngx-cookie-service": "^18.0.0",
     "ngx-quill": "^26.0.8",
+    "ngxs-reset-plugin": "^4.0.0",
     "quill": "^2.0.2",
+    "redux-devtools-extension": "^2.13.9",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
