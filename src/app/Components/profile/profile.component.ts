@@ -1,71 +1,59 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { BlogCardComponent } from '../../UI/Blog/blog-card/blog-card.component';
 import { SideBarComponent } from '../../UI/side-bar/side-bar.component';
+import { Observable } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { UserState } from '../../store/user/user.state';
+import { Blog, BlogState } from '../../store/blog/blog.state';
+import { BlogAction } from '../../store/blog/blog.action';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { UserAction } from '../../store/user/user.action';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [
-    CommonModule,
-    BlogCardComponent,
-    SideBarComponent
-  ],
+  imports: [CommonModule, BlogCardComponent, SideBarComponent, RouterLink],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss'
+  styleUrl: './profile.component.scss',
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
+  user$: Observable<any>;
+  userId: string = '';
+  userName: string | null = null;
+  userBlog$: Observable<Blog[]>;
+  isProfile: boolean = false;
+  constructor(
+    private _store: Store,
+    private _route: ActivatedRoute,
+  ) {
+    this.user$ = this._store.select(UserState.user);
+    this.userBlog$ = this._store.select(BlogState.userBlog);
+    this.user$.subscribe((user) => {
+      this.userName = user.username;
+      console.log(this.userName);
+    });
+    _route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (id) {
+        console.log('id', id);
+        this._store.dispatch(new UserAction.getUserById(id));
+        // if (this.userName)
 
-  articles = [
-    {
-      title: "Web Development Best Practices",
-      author: "Sarah Williams",
-      date: "20/12/2024",
-      upvotes: 100,
-      tags: ["others"],
-    },
-    {
-      title: "Web Development Best Practices",
-      author: "Sarah Williams",
-      date: "20/12/2024",
-      upvotes: 100,
-      tags: ["others"],
-    },
-    {
-      title: "Web Development Best Practices",
-      author: "Sarah Williams",
-      date: "20/12/2024",
-      upvotes: 100,
-      tags: ["others"],
-    },
-    {
-      title: "Web Development Best Practices",
-      author: "Sarah Williams",
-      date: "20/12/2024",
-      upvotes: 100,
-      tags: ["others"],
-    },
-    {
-      title: "Web Development Best Practices",
-      author: "Sarah Williams",
-      date: "20/12/2024",
-      upvotes: 100,
-      tags: ["others"],
-    },
-    {
-      title: "Web Development Best Practices",
-      author: "Sarah Williams",
-      date: "20/12/2024",
-      upvotes: 100,
-      tags: ["others"],
-    },
-    {
-      title: "Web Development Best Practices",
-      author: "Sarah Williams",
-      date: "20/12/2024",
-      upvotes: 100,
-      tags: ["others"],
-    },
-  ];
+        this._store.dispatch(new BlogAction.GetBlogByUser(id));
+      } else {
+        this.userId = localStorage.getItem('userId') || '';
+        this.userName = localStorage.getItem('name') || '';
+        this._store.dispatch(new UserAction.getUserById(this.userId));
+        // if (this.userName)
+        this._store.dispatch(new BlogAction.GetBlogByUser(this.userId));
+      }
+    });
+  }
 
+  ngOnInit() {
+    this._route.data.subscribe((data) => {
+      this.isProfile = data['isProfile'];
+    });
+  }
 }

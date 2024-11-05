@@ -4,6 +4,7 @@ import { BlogAction } from './blog.action';
 import { ApiService } from '../../service/api.service';
 import { Injectable } from '@angular/core';
 import { catchError, tap, throwError } from 'rxjs';
+import { User } from '../user/user.state';
 
 export interface Blog {
   id: string;
@@ -13,11 +14,14 @@ export interface Blog {
   tags: string[];
   summary: Text;
   thumbnail: string;
+  createdAt: Date;
+  user: User;
 }
 
 export interface BlogStateModel {
   blogs: Blog[];
   blog: Blog | null;
+  userBlog: Blog[];
   status: boolean;
 }
 
@@ -25,6 +29,7 @@ export interface BlogStateModel {
   name: 'blogs',
   defaults: {
     blogs: [],
+    userBlog: [],
     blog: null,
     status: false,
   },
@@ -38,10 +43,13 @@ export class BlogState {
     return blogs;
   }
   @Selector()
+  static userBlog({ userBlog }: BlogStateModel): Blog[] {
+    return userBlog;
+  }
+  @Selector()
   static status({ status }: BlogStateModel): boolean {
     return status;
   }
-
   @Selector()
   static blog({ blog }: BlogStateModel) {
     return blog;
@@ -54,7 +62,7 @@ export class BlogState {
       .pipe(
         tap((response: any) => {
           const blogs: Blog[] = response.result;
-          ctx.patchState({ blogs });
+          ctx.patchState({ blogs, status: false });
         }),
       )
       .subscribe();
@@ -66,10 +74,8 @@ export class BlogState {
       .createBlog(action.payload)
       .pipe(
         tap((response) => {
-          console.log(response);
           if (response.code === 200) {
             ctx.patchState({ status: true });
-            console.log('patched');
           }
           return ctx.dispatch(new BlogAction.GetBlogs());
         }),
@@ -90,6 +96,21 @@ export class BlogState {
       .pipe(
         tap((response: any) => {
           ctx.patchState({ blog: response.result });
+        }),
+      )
+      .subscribe();
+  }
+
+  @Action(BlogAction.GetBlogByUser)
+  getBlogbyUser(
+    ctx: StateContext<BlogStateModel>,
+    action: BlogAction.GetBlogByUser,
+  ) {
+    this.apiService.blog
+      .getBlogByUser(action.payload)
+      .pipe(
+        tap((response: any) => {
+          ctx.patchState({ userBlog: response.result.blogs });
         }),
       )
       .subscribe();

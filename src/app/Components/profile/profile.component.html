@@ -10,11 +10,11 @@
         class="w-24 h-24 rounded-full"
       />
       <div>
-        <h1 class="text-3xl font-bold text-[var(--font-color)]">Username</h1>
+        <h1 class="text-3xl font-bold text-[var(--font-color)]">{{userName}}</h1>
         <p class="text-gray-600"><code>&#64;</code>nametag</p>
         <p class="text-gray-600">bio- which is long as sh ...see more</p>
       </div>
-      <div class="ml-[20%] gap-x-4 flex font-bold">
+      <div *ngIf="!isProfile" class="ml-[20%] gap-x-4 flex font-bold">
         <button
           class="px-4 py-2 bg-gray-200 text-[var(--font-color)] mr-2 rounded-xl"
         >
@@ -24,6 +24,19 @@
           class="shine-button px-4 py-2 bg-[var(--main-theme)] text-white rounded-xl"
         >
           MESSAGE
+        </button>
+      </div>
+      <div *ngIf="isProfile" class="ml-[20%] gap-x-4 flex font-bold">
+        <button
+          class="shine-button px-4 py-2 bg-[var(--main-theme)] text-white rounded-xl"
+          [routerLink]="['/setting']" 
+        >
+          EDIT PROFILE
+        </button>
+        <button
+          class="shine-button px-4 py-2 bg-[var(--main-theme)] text-white rounded-xl"
+        >
+          INSIGHT
         </button>
       </div>
     </div>
@@ -40,8 +53,8 @@
     <div
       class="grid grid-cols-1 lg:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-6 gap-x-[5vw] gap-y-10"
     >
-      <ng-container *ngFor="let article of articles">
-        <app-blog-card [article]="article"></app-blog-card>
+      <ng-container *ngFor="let blog of userBlog$ | async">
+        <app-blog-card [article]="blog" [userId]="userId" [userName]="userName"></app-blog-card>
       </ng-container>
     </div>
   </div>

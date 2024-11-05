@@ -7,6 +7,7 @@ import { BlogPopupComponent } from '../../../UI/Blog/blog-popup/blog-popup.compo
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Blog } from '../../../store/blog/blog.state';
+import { BlogAction } from '../../../store/blog/blog.action';
 @Component({
   selector: 'app-homepage',
   standalone: true,
@@ -27,6 +28,7 @@ export class HomepageComponent implements OnInit {
     this.blog$.subscribe((articles: Blog[]) => {
       this.loading = false;
     });
+    this.store.dispatch(new BlogAction.GetBlogs());
   }
 
   openPopup(article: any) {

@@ -18,6 +18,8 @@ import { AuthState } from './store/auth/auth.state';
 import { UserState } from './store/user/user.state';
 import { authGuard, unAuthGuard } from './guard/auth.guard';
 import { BlogDetailComponent } from './Components/blog-detail/blog-detail.component';
+import { AdminManagementComponent } from './Components/admin-management/admin-management.component';
+import { UserIdMatchResolver } from './resolver/matchId.resolver';
 
 export const routes: Routes = [
   {
@@ -55,6 +57,10 @@ export const routes: Routes = [
         component: HomepageComponent,
       },
       {
+        path: 'admin-management',
+        component: AdminManagementComponent,
+      },
+      {
         path: 'blog',
         children: [
           {
@@ -68,9 +74,22 @@ export const routes: Routes = [
         ],
       },
       {
+        path: 'user/:id',
+        component: ProfileComponent,
+        resolve: {
+          userIdMatch: UserIdMatchResolver,
+        },
+        data: {
+          isProfile: false,
+        },
+      },
+      {
         path: 'profile',
         canActivate: [authGuard],
         component: ProfileComponent,
+        data: {
+          isProfile: true,
+        },
       },
       {
         path: 'about',
@@ -99,7 +118,7 @@ export const routes: Routes = [
     ],
     providers: [
       importProvidersFrom(
-        NgxsModule.forFeature([BlogState, TagsState, AuthState]),
+        NgxsModule.forFeature([BlogState, TagsState, AuthState, UserState]),
       ),
     ],
   },

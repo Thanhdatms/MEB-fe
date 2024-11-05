@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import {
+  ApplicationRef,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
@@ -13,6 +18,8 @@ import { Observable, combineLatest, map } from 'rxjs';
 import { AuthState } from '../../../store/auth/auth.state';
 import { CookieService } from 'ngx-cookie-service';
 import { Blog, BlogState } from '../../../store/blog/blog.state';
+import { UserState } from '../../../store/user/user.state';
+import { UserAction } from '../../../store/user/user.action';
 
 @Component({
   selector: 'app-content-layout',
@@ -36,6 +43,7 @@ export class ContentLayoutComponent {
   filteredBlogs: Blog[] = [];
   searchTerm: string = '';
   searching = false;
+  userName: string | null = null;
 
   navbarItems = [
     { icon: 'bell', path: '/noti' },
@@ -43,7 +51,6 @@ export class ContentLayoutComponent {
   ];
 
   constructor(
-    private apiService: ApiService,
     private store: Store,
     private router: Router,
     private cookieService: CookieService,
@@ -52,9 +59,15 @@ export class ContentLayoutComponent {
       this.blogs = blogs;
       this.filteredBlogs = blogs;
     });
+
     this.store.dispatch(new BlogAction.GetBlogs());
     const token = this.cookieService.get('authToken');
-    if (token) this.isLogin = true;
+    if (token) {
+      setTimeout(() => {
+        this.userName = localStorage.getItem('name') || '';
+      }, 1000);
+      this.isLogin = true;
+    }
   }
 
   openCreatePopup() {
@@ -75,6 +88,7 @@ export class ContentLayoutComponent {
   onLogout() {
     this.store.dispatch(new AuthAction.Logout());
     this.router.navigate(['/auth']);
+    localStorage.clear();
   }
 
   selectBlog(blog: Blog) {

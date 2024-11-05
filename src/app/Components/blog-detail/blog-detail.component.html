@@ -4,7 +4,9 @@
       <h2 class="text-6xl font-bold mb-2 tracking-wider">
         {{ blog.title }}
       </h2>
-      <p class="text-xl text-gray-600 mb-4"></p>
+      <p class="text-xl text-gray-600 mb-4">
+        {{blogDate}}
+      </p>
       <!-- Content -->
       <div
         *ngIf="blog.thumbnail"
@@ -20,52 +22,11 @@
       <div class="PopUpContent">
         <p class="mb-4 text-lg" [innerHTML]="sanitizedContent"></p>
       </div>
-
-      <div
-        class="bg-[var(--font-color)] text-white text-lg rounded-[10px] p-2 flex justify-between"
-      >
-        <div class="flex items-center space-x-4">
-          <div class="flex justify-center items-center">
-            <span
-              nz-icon
-              nzType="caret-up"
-              nzTheme="outline"
-              class="text-5xl cursor-pointer hover:text-green-300"
-            ></span>
-            <span>6.9M</span>
-          </div>
-          <div class="flex justify-center items-center">
-            <span
-              nz-icon
-              nzType="caret-down"
-              nzTheme="outline"
-              class="text-5xl cursor-pointer hover:text-red-400"
-            ></span>
-            <span>6.9M</span>
-          </div>
-        </div>
-        <button class="flex items-center space-x-1 hover:text-yellow-400">
-          <div>
-            <span
-              nz-icon
-              nzType="book"
-              nzTheme="outline"
-              class="text-3xl cursor-pointer"
-            ></span>
-          </div>
-          <span>Bookmark</span>
-        </button>
-        <div class="flex items-center space-x-1 hover:text-violet-400">
-          <span
-            nz-icon
-            nzType="link"
-            nzTheme="outline"
-            class="text-3xl cursor-pointer"
-            (click)="copyToClipboard()"
-          ></span>
-          <span>Copy link</span>
-        </div>
+      <div *ngIf="isPopup" >
+        <ng-container *ngTemplateOutlet="actionBar"></ng-container>
       </div>
+
+      
       <!-- Comment -->
       <div
         class="bg-[var(--font-color)] text-white text-lg rounded-[10px] p-4 mt-5"
@@ -230,7 +191,7 @@
       <div class="bg-[var(--font-color)] rounded-[10px] p-4 mb-5">
         <!-- Author -->
         <div class="flex items-center justify-between mb-2">
-          <div class="flex items-center space-x-2">
+          <div class="flex items-center space-x-2 cursor-pointer" [routerLink]="['/user', userId]">
             <div class="w-10 h-10 rounded-full overflow-hidden">
               <img
                 [src]="AuthorImage"
@@ -239,7 +200,7 @@
               />
             </div>
             <div class="text-[17px]">
-              <div class="font-bold text-white">author</div>
+              <div class="font-bold text-white">{{userName}}</div>
               <div class="text-gray-400 text-sm"><code>&#64;</code>nametag</div>
             </div>
           </div>
@@ -265,47 +226,83 @@
       </div>
 
       <!-- Suggestion -->
-      <div class="bg-[var(--font-color)] rounded-[10px] p-4">
+      <div class="bg-[var(--font-color)] rounded-[10px] p-4 mb-5">
         <h3 class="text-white font-bold mb-2 text-[20px]">You may like</h3>
         <div class="space-y-2 text-[15px]">
-          <div class="flex items-center space-x-2">
-            <div class="w-8 h-8 rounded-full overflow-hidden">
-              <img
-                [src]="AuthorImage"
-                alt="Suggested article"
-                class="w-full h-full object-cover"
-              />
-            </div>
-            <div class="text-gray-300 text-sm">
-              Title - something that is kinda long to be honest
-            </div>
+          <div *ngFor="let blog of suggestedBlogs | slice:-3"  >
+            <div class="flex items-center space-x-2 cursor-pointer" [routerLink]="['/blog', blog.id]" nz-tooltip [nzTooltipTitle]="blogToolTip" nzTooltipPlacement="right">
+              <div class="w-8 h-8 rounded-full overflow-hidden">
+                <img [src]="blog.thumbnail || AuthorImage" alt="Suggested article" class="w-full h-full object-cover" />
+              </div>
+              <div class="text-gray-300 text-sm truncate-title font-bold"         
+                  [ngStyle]="{ 'max-width': isPopup ? '200px' : '400px' }"
+              >
+                {{ blog.title }}
+              </div>
+              <ng-template #blogToolTip>
+                <div class="text-[15px]">
+                  <div class="text-white font-bold mb-2">{{ blog.title }}</div>
+                  <div class="text-gray-400 text-sm"><code>&#64;</code>nametag</div>
+                </div>
+              </ng-template>
           </div>
-          <div class="flex items-center space-x-2">
-            <div class="w-8 h-8 rounded-full overflow-hidden">
-              <img
-                [src]="AuthorImage"
-                alt="Suggested article"
-                class="w-full h-full object-cover"
-              />
-            </div>
-            <div class="text-gray-300 text-sm">
-              Title - something that is kinda long to be honest
-            </div>
-          </div>
-          <div class="flex items-center space-x-2">
-            <div class="w-8 h-8 rounded-full overflow-hidden">
-              <img
-                [src]="AuthorImage"
-                alt="Suggested article"
-                class="w-full h-full object-cover"
-              />
-            </div>
-            <div class="text-gray-300 text-sm">
-              Title - something that is kinda long to be honest
-            </div>
-          </div>
-        </div>
+           
       </div>
     </div>
-  </div>
+      </div>
+      <div *ngIf="!isPopup" >
+        <ng-container *ngTemplateOutlet="actionBar"></ng-container>
+      </div>
+      
 </div>
+
+<ng-template
+        #actionBar
+      >
+      <div class="bg-[var(--font-color)] text-white text-lg rounded-[10px] p-2 flex justify-between">
+        <div class="flex items-center space-x-4">
+          <div class="flex justify-center items-center">
+            <span
+              nz-icon
+              nzType="caret-up"
+              nzTheme="outline"
+              class="text-5xl cursor-pointer hover:text-green-300"
+            ></span>
+            <span>6.9M</span>
+          </div>
+          <div class="flex justify-center items-center">
+            <span
+              nz-icon
+              nzType="caret-down"
+              nzTheme="outline"
+              class="text-5xl cursor-pointer hover:text-red-400"
+            ></span>
+            <span>6.9M</span>
+          </div>
+        </div>
+        <button class="flex items-center space-x-1 hover:text-yellow-400" (click)="onBookMark()">
+          <div *ngIf="!isBookmarked">
+            <span
+              class="icon-[material-symbols--bookmark-outline] w-11 h-11"
+            >
+            </span>
+          </div>
+          <div *ngIf="isBookmarked">
+            <span class="icon-[material-symbols--bookmark] w-11 h-11" style="color: #facc15;"></span>
+          </div>
+          <span>Bookmark</span>
+        </button>
+       
+
+        <div class="flex items-center space-x-1 hover:text-violet-400">
+          <span
+            nz-icon
+            nzType="link"
+            nzTheme="outline"
+            class="text-3xl cursor-pointer"
+            (click)="copyToClipboard()"
+          ></span>
+          <span>Copy link</span>
+        </div>
+      </div>
+</ng-template>

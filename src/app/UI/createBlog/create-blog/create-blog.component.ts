@@ -50,6 +50,8 @@ import { TagsAction } from '../../../store/tags/tags.actions';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CreateTagComponent } from '../../create-tag/create-tag.component';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-create-blog',
@@ -65,6 +67,8 @@ import { CreateTagComponent } from '../../create-tag/create-tag.component';
     CKEditorModule,
     NzModalModule,
     CreateTagComponent,
+    NzSpinModule,
+    NzIconModule,
   ],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './create-blog.component.html',
@@ -81,6 +85,7 @@ export class CreateBlogComponent implements OnInit {
   form: FormGroup;
   imagePreview: string | ArrayBuffer | null = null;
   isModalVisible = false;
+  isLoading = false;
 
   status$: Observable<boolean>;
   tagStatus$: Observable<boolean>;
@@ -162,6 +167,7 @@ export class CreateBlogComponent implements OnInit {
 
     this.status$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
       if (response === true) {
+        this.isLoading = false;
         this.msg.success('Blog created successfully');
         this.onClose();
       }
@@ -180,11 +186,11 @@ export class CreateBlogComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.form.invalid) {
-      this.msg.error('Please fill in all fields.');
+    if (this.isLoading === true) {
       return;
     }
 
+    this.isLoading = true;
     const formData = new FormData();
     this.blog = {
       title: this.form.value.title,
@@ -229,7 +235,6 @@ export class CreateBlogComponent implements OnInit {
   }
 
   handleCancel(): void {
-    console.log('Button cancel clicked!');
     this.isModalVisible = false;
   }
 
