@@ -18,7 +18,7 @@ import { UserAction } from '../../store/user/user.action';
   styleUrl: './profile.component.scss',
 })
 export class ProfileComponent implements OnInit {
-  user$: Observable<any>;
+  // user$: Observable<any>;
   userId: string = '';
   userName: string | null = null;
   userBlog$: Observable<Blog[]>;
@@ -27,25 +27,17 @@ export class ProfileComponent implements OnInit {
     private _store: Store,
     private _route: ActivatedRoute,
   ) {
-    this.user$ = this._store.select(UserState.user);
     this.userBlog$ = this._store.select(BlogState.userBlog);
-    this.user$.subscribe((user) => {
-      this.userName = user.username;
-      console.log(this.userName);
+    this.userBlog$.subscribe((blogs) => {
+      this.userName = blogs[0]?.user?.username ?? null;
     });
     _route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
         console.log('id', id);
-        this._store.dispatch(new UserAction.getUserById(id));
-        // if (this.userName)
-
         this._store.dispatch(new BlogAction.GetBlogByUser(id));
       } else {
         this.userId = localStorage.getItem('userId') || '';
-        this.userName = localStorage.getItem('name') || '';
-        this._store.dispatch(new UserAction.getUserById(this.userId));
-        // if (this.userName)
         this._store.dispatch(new BlogAction.GetBlogByUser(this.userId));
       }
     });

@@ -4,7 +4,7 @@ import { BlogAction } from './blog.action';
 import { ApiService } from '../../service/api.service';
 import { Injectable } from '@angular/core';
 import { catchError, tap, throwError } from 'rxjs';
-import { User } from '../user/user.state';
+import { User, UserStateModel } from '../user/user.state';
 
 export interface Blog {
   id: string;
@@ -15,14 +15,19 @@ export interface Blog {
   summary: Text;
   thumbnail: string;
   createdAt: Date;
-  user: User;
+  user?: User;
+}
+
+export interface Status {
+  status: boolean;
+  code: number;
 }
 
 export interface BlogStateModel {
   blogs: Blog[];
   blog: Blog | null;
   userBlog: Blog[];
-  status: boolean;
+  status: Status;
 }
 
 @State<BlogStateModel>({
@@ -31,7 +36,10 @@ export interface BlogStateModel {
     blogs: [],
     userBlog: [],
     blog: null,
-    status: false,
+    status: {
+      status: false,
+      code: 0,
+    },
   },
 })
 @Injectable()
@@ -47,7 +55,7 @@ export class BlogState {
     return userBlog;
   }
   @Selector()
-  static status({ status }: BlogStateModel): boolean {
+  static status({ status }: BlogStateModel): Status {
     return status;
   }
   @Selector()
@@ -62,7 +70,7 @@ export class BlogState {
       .pipe(
         tap((response: any) => {
           const blogs: Blog[] = response.result;
-          ctx.patchState({ blogs, status: false });
+          ctx.patchState({ blogs: blogs, status: { status: false, code: 0 } });
         }),
       )
       .subscribe();
@@ -75,7 +83,9 @@ export class BlogState {
       .pipe(
         tap((response) => {
           if (response.code === 200) {
-            ctx.patchState({ status: true });
+            ctx.patchState({ status: { status: true, code: 200 } });
+          } else {
+            ctx.patchState({ status: { status: false, code: response.code } });
           }
           return ctx.dispatch(new BlogAction.GetBlogs());
         }),
@@ -110,7 +120,22 @@ export class BlogState {
       .getBlogByUser(action.payload)
       .pipe(
         tap((response: any) => {
-          ctx.patchState({ userBlog: response.result.blogs });
+          ctx.patchState({
+            userBlog: response.result.blogs.map((blog: Blog) => ({
+              id: blog.id,
+              title: blog.title,
+              status: blog.status,
+              content: blog.content,
+              tags: blog.tags,
+              summary: blog.summary,
+              thumbnail: blog.thumbnail,
+              createdAt: blog.createdAt,
+              user: {
+                id: response.result.id,
+                username: response.result.username,
+              },
+            })),
+          });
         }),
       )
       .subscribe();

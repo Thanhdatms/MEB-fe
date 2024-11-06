@@ -44,7 +44,7 @@ import {
   ImageInsert,
 } from 'ckeditor5';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { BlogState } from '../../../store/blog/blog.state';
+import { BlogState, Status } from '../../../store/blog/blog.state';
 import { TagsState } from '../../../store/tags/tags.state';
 import { TagsAction } from '../../../store/tags/tags.actions';
 import { NzSelectModule } from 'ng-zorro-antd/select';
@@ -87,7 +87,7 @@ export class CreateBlogComponent implements OnInit {
   isModalVisible = false;
   isLoading = false;
 
-  status$: Observable<boolean>;
+  status$: Observable<Status>;
   tagStatus$: Observable<boolean>;
   tags$: Observable<any>;
   private destroy$ = new Subject<void>();
@@ -166,10 +166,13 @@ export class CreateBlogComponent implements OnInit {
     this.tags$ = this.store.select(TagsState.tags);
 
     this.status$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      if (response === true) {
+      if (response.status === true) {
         this.isLoading = false;
         this.msg.success('Blog created successfully');
         this.onClose();
+      }
+      if (response.code !== 200 && response.status === false) {
+        this.isLoading = false;
       }
     });
     this.tagStatus$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
