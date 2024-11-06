@@ -55,6 +55,7 @@
   }
   nz-select-top-control.ant-select-selector{
     background-color: var(--main-theme) !important;; 
+    height:40px;
     border-radius: 12px !important; 
     color:white !important
   }
@@ -74,16 +75,37 @@
   
 }
 
-.TagSelect{
+.OptionSelect{
   .ant-select-close-icon, 
+  .anticon-down,
   .anticon-close-circle{
     color:white !important
   }
   .ant-select-clear{
     background-color: transparent !important;
-}
+  }
+  nz-select-top-control.ant-select-selector{
+    height:40px !important;
+  }
 }
 
+.selected-category{
+  nz-select-top-control.ant-select-selector{
+    // background-color: var(--main-theme) !important;
+    height:40px;
+    border-radius: 12px !important; 
+    color:white !important;
+    // font-weight: bold;
+    
+  }
+  .ant-select-selection-item{
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+  }
+}
 
 .shine-button {
   position: relative;

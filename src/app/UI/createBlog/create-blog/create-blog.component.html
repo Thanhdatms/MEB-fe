@@ -52,10 +52,28 @@
             </div>
           </nz-form-control>
         </nz-form-item>
-
         <nz-form-item>
           <nz-form-control>
-            <div class="flex gap-5 TagSelect">
+            <div class="flex gap-5 OptionSelect Single">
+              <nz-select
+                nzPlaceHolder="Select Category"
+                [(ngModel)]="categories"
+                [nzAllowClear]="true"
+                formControlName="category"
+                [ngClass]="{ 'selected-category': categories, 'default-category': !categories }"
+                >
+                <nz-option
+                  *ngFor="let cate of categories$ | async"
+                  [nzLabel]="cate.title"
+                  [nzValue]="cate.title"
+                ></nz-option>
+              </nz-select>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control>
+            <div class="flex gap-5 OptionSelect">
               <nz-select
                 nzMode="multiple"
                 nzPlaceHolder="Select Tags"
