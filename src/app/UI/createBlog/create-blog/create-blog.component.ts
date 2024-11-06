@@ -52,6 +52,8 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { CreateTagComponent } from '../../create-tag/create-tag.component';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { CategoryState } from '../../../store/category/category.state';
+import { CategorysAction } from '../../../store/category/category.actions';
 
 @Component({
   selector: 'app-create-blog',
@@ -80,6 +82,7 @@ export class CreateBlogComponent implements OnInit {
   title: string = '';
   content: string = '';
   tags: string[] = [];
+  categories: string[] = [];
   uploadedFiles: any[] = [];
   blog: any;
   form: FormGroup;
@@ -90,8 +93,8 @@ export class CreateBlogComponent implements OnInit {
   status$: Observable<Status>;
   tagStatus$: Observable<boolean>;
   tags$: Observable<any>;
+  categories$: Observable<any>;
   private destroy$ = new Subject<void>();
-  private tagCreationSuccess$ = new Subject<void>();
 
   editor = ClassicEditor;
 
@@ -153,6 +156,7 @@ export class CreateBlogComponent implements OnInit {
       title: ['', Validators.required],
       content: ['', Validators.required],
       tags: [[''], Validators.required],
+      category: [[''], Validators.required],
       file: [null, Validators.required],
     });
 
@@ -164,6 +168,7 @@ export class CreateBlogComponent implements OnInit {
     this.status$ = this.store.select(BlogState.status);
     this.tagStatus$ = this.store.select(TagsState.status);
     this.tags$ = this.store.select(TagsState.tags);
+    this.categories$ = this.store.select(CategoryState.categories);
 
     this.status$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
       if (response.status === true) {
@@ -186,6 +191,7 @@ export class CreateBlogComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(new TagsAction.GetTags());
+    this.store.dispatch(new CategorysAction.GetCategory());
   }
 
   onSubmit() {
@@ -199,6 +205,7 @@ export class CreateBlogComponent implements OnInit {
       title: this.form.value.title,
       content: this.form.value.content,
       tags: this.form.value.tags,
+      categoryName: this.form.value.category,
     };
 
     let blogdata = new Blob([JSON.stringify(this.blog)], {

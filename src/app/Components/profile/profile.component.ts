@@ -34,7 +34,6 @@ export class ProfileComponent implements OnInit {
     _route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
-        console.log('id', id);
         this._store.dispatch(new BlogAction.GetBlogByUser(id));
       } else {
         this.userId = localStorage.getItem('userId') || '';

@@ -5,6 +5,7 @@ import { ApiService } from '../../service/api.service';
 import { Injectable } from '@angular/core';
 import { catchError, tap, throwError } from 'rxjs';
 import { User, UserStateModel } from '../user/user.state';
+import { Category } from '../category/category.state';
 
 export interface Blog {
   id: string;
@@ -15,6 +16,7 @@ export interface Blog {
   summary: Text;
   thumbnail: string;
   createdAt: Date;
+  category: Category;
   user?: User;
 }
 
@@ -84,10 +86,11 @@ export class BlogState {
         tap((response) => {
           if (response.code === 200) {
             ctx.patchState({ status: { status: true, code: 200 } });
+            return ctx.dispatch(new BlogAction.GetBlogs());
           } else {
             ctx.patchState({ status: { status: false, code: response.code } });
+            return;
           }
-          return ctx.dispatch(new BlogAction.GetBlogs());
         }),
         catchError((error) => {
           return throwError(error);
@@ -127,6 +130,7 @@ export class BlogState {
               status: blog.status,
               content: blog.content,
               tags: blog.tags,
+              cagtegory: blog.category,
               summary: blog.summary,
               thumbnail: blog.thumbnail,
               createdAt: blog.createdAt,

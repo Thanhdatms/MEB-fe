@@ -20,6 +20,7 @@ import { authGuard, unAuthGuard } from './guard/auth.guard';
 import { BlogDetailComponent } from './Components/blog-detail/blog-detail.component';
 import { AdminManagementComponent } from './Components/admin-management/admin-management.component';
 import { UserIdMatchResolver } from './resolver/matchId.resolver';
+import { CategoryState } from './store/category/category.state';
 
 export const routes: Routes = [
   {
@@ -118,7 +119,13 @@ export const routes: Routes = [
     ],
     providers: [
       importProvidersFrom(
-        NgxsModule.forFeature([BlogState, TagsState, AuthState, UserState]),
+        NgxsModule.forFeature([
+          BlogState,
+          TagsState,
+          AuthState,
+          UserState,
+          CategoryState,
+        ]),
       ),
     ],
   },

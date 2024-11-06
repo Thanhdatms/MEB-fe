@@ -5,23 +5,23 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
+export class CategoriesService {
   private apiUrl: string;
 
   constructor(
     private http: HttpClient,
     @Inject(String) apiUrl: string,
   ) {
-    this.apiUrl = `${apiUrl}/users`;
+    this.apiUrl = `${apiUrl}/categories`;
   }
 
-  getUsers(): Observable<any> {
+  getCategories(): Observable<any> {
     return this.http.get(this.apiUrl);
   }
-  getMe(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/me`);
+  createCategory(tags: any): Observable<any> {
+    return this.http.post(this.apiUrl, tags);
   }
-  getUserById(id: any): Observable<any> {
+  getBlogbyCategory(id: any): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 }

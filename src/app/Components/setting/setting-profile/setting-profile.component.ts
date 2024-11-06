@@ -7,28 +7,20 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 @Component({
   selector: 'app-setting-profile',
   standalone: true,
-  imports: [
-    NzFormModule,
-    ReactiveFormsModule,
-    NzInputModule,
-    NzIconModule
-  ],
+  imports: [NzFormModule, ReactiveFormsModule, NzInputModule, NzIconModule],
   templateUrl: './setting-profile.component.html',
-  styleUrl: './setting-profile.component.scss'
+  styleUrl: './setting-profile.component.scss',
 })
 export class SettingProfileComponent {
-  profileForm: FormGroup 
+  profileForm: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-  ) {
+  constructor(private fb: FormBuilder) {
     this.profileForm = this.fb.group({
       name: [''],
       nameTag: [''],
       bio: [''],
-    })
-   }
-
+    });
+  }
 
   onSubmit() {
     console.log(this.profileForm.value);
