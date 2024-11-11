@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -44,8 +45,8 @@ import {
   ImageInsert,
 } from 'ckeditor5';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { BlogState, Status } from '../../../store/blog/blog.state';
-import { TagsState } from '../../../store/tags/tags.state';
+import { Blog, BlogState, Status } from '../../../store/blog/blog.state';
+import { Tags, TagsState } from '../../../store/tags/tags.state';
 import { TagsAction } from '../../../store/tags/tags.actions';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -79,6 +80,7 @@ import { CategorysAction } from '../../../store/category/category.actions';
 export class CreateBlogComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   @Input() tagForm: FormGroup;
+  @Input() existingBlog?: Blog;
   title: string = '';
   content: string = '';
   tags: string[] = [];
@@ -127,7 +129,6 @@ export class CreateBlogComponent implements OnInit {
       '|',
       'bold',
       'italic',
-      'insertTable',
       '|',
       'link',
       'blockQuote',
@@ -151,11 +152,12 @@ export class CreateBlogComponent implements OnInit {
     private msg: NzMessageService,
     private store: Store,
     private fb: FormBuilder,
+    private cdr: ChangeDetectorRef,
   ) {
     this.form = this.fb.group({
       title: ['', Validators.required],
       content: ['', Validators.required],
-      tags: [[''], Validators.required],
+      tags: [[], Validators.required],
       category: [[''], Validators.required],
       file: [null, Validators.required],
     });
@@ -192,13 +194,31 @@ export class CreateBlogComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(new TagsAction.GetTags());
     this.store.dispatch(new CategorysAction.GetCategory());
+
+    if (this.existingBlog) {
+      let tagsPatch: string[] = [];
+
+      this.existingBlog.tags.forEach((tag: { name: string }) => {
+        tagsPatch.push(tag.name);
+      });
+
+      this.form.patchValue({
+        title: this.existingBlog.title,
+        content: this.existingBlog.content,
+        tags: tagsPatch,
+        category: this.existingBlog.category.title,
+        file: this.existingBlog.thumbnail,
+      });
+      this.imagePreview = this.existingBlog.thumbnail;
+      this.cdr.detectChanges();
+    }
   }
 
   onSubmit() {
     if (this.isLoading === true) {
       return;
     }
-
+    console.log(this.form.value);
     this.isLoading = true;
     const formData = new FormData();
     this.blog = {
@@ -215,7 +235,13 @@ export class CreateBlogComponent implements OnInit {
     formData.append('blog', blogdata);
     formData.append('file', this.uploadedFiles[0]);
 
-    this.store.dispatch(new BlogAction.CreateBlog(formData));
+    if (this.existingBlog) {
+      this.store.dispatch(
+        new BlogAction.UpdateBlog(this.existingBlog.id, formData),
+      );
+    } else {
+      this.store.dispatch(new BlogAction.CreateBlog(formData));
+    }
   }
 
   onFileChange(event: Event) {

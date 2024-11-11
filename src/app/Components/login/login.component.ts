@@ -11,7 +11,7 @@ import {
 import { Store } from '@ngxs/store';
 import { AuthAction } from '../../store/auth/auth.action';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { AuthState } from '../../store/auth/auth.state';
+import { AuthState, loginStatus } from '../../store/auth/auth.state';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { CommonModule } from '@angular/common';
 import { User, UserState } from '../../store/user/user.state';
@@ -33,7 +33,7 @@ export class LoginComponent {
   imagePath = '/sample-bg.png';
   loginForm: FormGroup;
   user$: Observable<User>;
-  status$: Observable<boolean>;
+  status$: Observable<loginStatus>;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -48,11 +48,13 @@ export class LoginComponent {
     });
     this.user$ = this._store.select(UserState.user);
     this.status$ = this._store.select(AuthState.LoginStatus);
-    this.status$.pipe(takeUntil(this.destroy$)).subscribe((status) => {
-      if (status === true) {
+    this.status$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
+      if (response.status === true) {
         this._msg.success('Login successfully');
         this._router.navigate(['/']);
         this._store.dispatch(new UserAction.getMe());
+      } else {
+        this._msg.error(response.message);
       }
     });
     this.user$.subscribe((user) => {

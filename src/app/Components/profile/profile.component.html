@@ -54,7 +54,7 @@
       class="grid grid-cols-1 lg:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-6 gap-x-[5vw] gap-y-10"
     >
       <ng-container *ngFor="let blog of userBlog$ | async">
-        <app-blog-card [article]="blog" [userId]="userId" [userName]="userName"></app-blog-card>
+        <app-blog-card [article]="blog" [userId]="userId" [userName]="userName" [isProfile]="true"></app-blog-card>
       </ng-container>
     </div>
   </div>

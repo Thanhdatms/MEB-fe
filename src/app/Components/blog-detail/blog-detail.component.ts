@@ -10,7 +10,9 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { DateFormatter } from '../../utils/formatDate';
-
+import { environment } from '../../environment/environment';
+import { UserAction } from '../../store/user/user.action';
+import { UserState } from '../../store/user/user.state';
 @Component({
   selector: 'app-blog-detail',
   standalone: true,
@@ -24,11 +26,15 @@ export class BlogDetailComponent implements OnInit {
   AuthorImage = '/sample-logo.jpg';
   blogContent: Text | undefined;
   UserName: string | null = null;
-  UserId: string = '';
+
   sanitizedContent: SafeHtml = '';
   isBookmarked: boolean = false;
   suggestedBlogs: Blog[] = [];
   blogDate: string | null = null;
+  isFollowing: boolean = false;
+  isFollow$: Observable<boolean>;
+  isBookmark$: Observable<boolean>;
+  isSelf: boolean = false;
 
   @Input() blogId: string = '';
   @Input() isPopup: boolean = false;
@@ -44,12 +50,37 @@ export class BlogDetailComponent implements OnInit {
     private formatDate: DateFormatter,
   ) {
     this.blog$ = this.store.select(BlogState.blog);
+    this.isFollow$ = this.store.select(UserState.isFollow);
+    this.isBookmark$ = this.store.select(UserState.isBookmark);
     this.store.select(BlogState.blogs).subscribe((response) => {
       this.suggestedBlogs = response;
     });
+    this.blog$.subscribe((response) => {
+      this.blogId = response?.id ?? '';
+      this.blogContent = response?.content;
+      this.userName = response?.user?.username ?? '';
+      this.userId = response?.user?.id ?? '';
+      this.sanitizedContent = this.sanitizeContent(String(this.blogContent));
+      this.blogDate = this.formatDate.convertDate(String(response?.createdAt));
+      if (this.userId !== '' && this.blogId !== '') {
+        this.store.dispatch(new UserAction.isFollow(this.userId));
+        this.store.dispatch(new UserAction.isBookmark(this.blogId));
+        if (this.userId === localStorage.getItem('userId')) {
+          this.isSelf = true;
+        } else {
+          this.isSelf = false;
+        }
+      }
+    });
+    this.isFollow$.subscribe((response) => {
+      this.isFollowing = response;
+    });
+    this.isBookmark$.subscribe((response) => {
+      console.log(response);
+      this.isBookmarked = response;
+    });
   }
   ngOnInit() {
-    // Subscribe to route changes and fetch new blog data
     if (this.isPopup) {
       this.store.dispatch(new BlogAction.GetBlogById(this.blogId));
     } else {
@@ -60,22 +91,13 @@ export class BlogDetailComponent implements OnInit {
         }
       });
     }
-
-    // Update content when blog data changes
-    this.blog$.subscribe((response) => {
-      this.blogContent = response?.content;
-      this.userName = response?.user?.username ?? '';
-      this.userId = response?.user?.id ?? '';
-      this.sanitizedContent = this.sanitizeContent(String(this.blogContent));
-      this.blogDate = this.formatDate.convertDate(String(response?.createdAt));
-    });
   }
   sanitizeContent(content: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(content);
   }
 
   copyToClipboard() {
-    const url = window.location.href;
+    const url = `${environment.localURL}/blog/${this.blogId}`;
     navigator.clipboard.writeText(url).then(
       () => {
         this.msg.success('Link copied');
@@ -86,8 +108,20 @@ export class BlogDetailComponent implements OnInit {
     );
   }
 
+  onFollow() {
+    if (this.isFollowing) {
+      this.store.dispatch(new UserAction.unfollow(this.userId));
+    } else {
+      this.store.dispatch(new UserAction.follow(this.userId));
+    }
+  }
+
   onBookMark() {
-    this.isBookmarked = !this.isBookmarked;
+    if (this.isBookmarked) {
+      this.store.dispatch(new UserAction.unbookmark(this.blogId));
+    } else {
+      this.store.dispatch(new UserAction.bookmark(this.blogId));
+    }
   }
 
   openBlogPopup(blog: Blog) {

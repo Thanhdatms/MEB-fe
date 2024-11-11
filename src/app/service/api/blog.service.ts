@@ -24,6 +24,10 @@ export class BlogService {
     return this.http.post(this.apiUrl, blog);
   }
 
+  updateBlog(id: any, blog: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, blog);
+  }
+
   getBlogById(id: any): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }

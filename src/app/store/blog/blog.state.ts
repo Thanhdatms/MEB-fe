@@ -12,7 +12,7 @@ export interface Blog {
   title: string;
   status: boolean;
   content: Text;
-  tags: string[];
+  tags: any[];
   summary: Text;
   thumbnail: string;
   createdAt: Date;
@@ -27,6 +27,7 @@ export interface Status {
 
 export interface BlogStateModel {
   blogs: Blog[];
+  bookmarkedBlogs: Blog[];
   blog: Blog | null;
   userBlog: Blog[];
   status: Status;
@@ -36,6 +37,7 @@ export interface BlogStateModel {
   name: 'blogs',
   defaults: {
     blogs: [],
+    bookmarkedBlogs: [],
     userBlog: [],
     blog: null,
     status: {
@@ -63,6 +65,11 @@ export class BlogState {
   @Selector()
   static blog({ blog }: BlogStateModel) {
     return blog;
+  }
+
+  @Selector()
+  static bookmarkedBlogs({ bookmarkedBlogs }: BlogStateModel): Blog[] {
+    return bookmarkedBlogs;
   }
 
   @Action(BlogAction.GetBlogs)
@@ -99,6 +106,27 @@ export class BlogState {
       .subscribe();
   }
 
+  @Action(BlogAction.UpdateBlog)
+  updateBlog(ctx: StateContext<BlogStateModel>, action: BlogAction.UpdateBlog) {
+    return this.apiService.blog
+      .updateBlog(action.id, action.payload)
+      .pipe(
+        tap((response) => {
+          if (response.code === 200) {
+            ctx.patchState({ status: { status: true, code: 200 } });
+            return ctx.dispatch(new BlogAction.GetBlogById(action.id));
+          } else {
+            ctx.patchState({ status: { status: false, code: response.code } });
+            return;
+          }
+        }),
+        catchError((error) => {
+          return throwError(error);
+        }),
+      )
+      .subscribe();
+  }
+
   @Action(BlogAction.GetBlogById)
   getBlogById(
     ctx: StateContext<BlogStateModel>,
@@ -123,6 +151,7 @@ export class BlogState {
       .getBlogByUser(action.payload)
       .pipe(
         tap((response: any) => {
+          console.log(response);
           ctx.patchState({
             userBlog: response.result.blogs.map((blog: Blog) => ({
               id: blog.id,
@@ -130,7 +159,7 @@ export class BlogState {
               status: blog.status,
               content: blog.content,
               tags: blog.tags,
-              cagtegory: blog.category,
+              category: blog.category,
               summary: blog.summary,
               thumbnail: blog.thumbnail,
               createdAt: blog.createdAt,
@@ -139,6 +168,21 @@ export class BlogState {
                 username: response.result.username,
               },
             })),
+          });
+        }),
+      )
+      .subscribe();
+  }
+
+  @Action(BlogAction.GetBlogByUserBookmark)
+  getBlogByUserBookmark(ctx: StateContext<BlogStateModel>) {
+    this.apiService.user
+      .getBookmarks()
+      .pipe(
+        tap((response: any) => {
+          const blogs: Blog[] = response.result.blogs;
+          ctx.patchState({
+            bookmarkedBlogs: blogs,
           });
         }),
       )

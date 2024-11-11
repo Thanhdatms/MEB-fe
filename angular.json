@@ -39,13 +39,20 @@
                 "glob": "**/*",
                 "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
                 "output": "/assets/"
-              }
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/monaco-editor/min",
+                "output": "assets/monaco-editor"
+             }
             ],
             "styles": [
               "src/theme.less",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/ace-builds/src-min-noconflict/ace.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -107,10 +114,13 @@
               "node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
               "node_modules/quill/dist/quill.core.css",
               "node_modules/quill/dist/quill.snow.css",
-              "node_modules/ngx-quill/assets/quil.bubble.css"
+              "node_modules/ngx-quill/assets/quil.bubble.css",
+              "node_modules/ace-builds/src-min-noconflict/theme-monokai.css",
+               "node_modules/codemirror/lib/codemirror.css",
+  "node_modules/codemirror/theme/monokai.css"
             ],
             "scripts": [
-              "./node_modules/quill/dist/quill.min.js"
+              "node_modules/ace-builds/src-min-noconflict/ace.js"
             ]
           }
         }

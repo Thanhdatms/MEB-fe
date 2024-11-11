@@ -37,6 +37,7 @@ import { UserAction } from '../../../store/user/user.action';
 })
 export class ContentLayoutComponent {
   isCreatePopupVisible = false;
+  existingBlog?: Blog;
 
   isLogin = false;
   blogs: Blog[] = [];
@@ -75,6 +76,12 @@ export class ContentLayoutComponent {
   }
   closeCreatePopup() {
     this.isCreatePopupVisible = false;
+    this.existingBlog = undefined;
+  }
+
+  onEditBlog(blog: Blog) {
+    this.existingBlog = blog;
+    this.openCreatePopup();
   }
 
   onSearch(event: any) {
