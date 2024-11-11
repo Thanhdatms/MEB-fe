@@ -6,17 +6,27 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { BlogDetailComponent } from '../../../Components/blog-detail/blog-detail.component';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { Blog } from '../../../store/blog/blog.state';
+import { CreateBlogComponent } from '../../createBlog/create-blog/create-blog.component';
 
 @Component({
   selector: 'app-blog-popup',
   standalone: true,
-  imports: [CommonModule, NzIconModule, RouterLink, BlogDetailComponent],
+  imports: [
+    CommonModule,
+    NzIconModule,
+    BlogDetailComponent,
+    NzDropDownModule,
+    CreateBlogComponent,
+  ],
   templateUrl: './blog-popup.component.html',
   styleUrl: './blog-popup.component.scss',
 })
 export class BlogPopupComponent implements OnInit {
   @Input() article: any;
   @Output() close = new EventEmitter<void>();
+  @Input() isProfile: boolean = false;
 
   AuthorImage = '/sample-logo.jpg';
   ContentImage = '/asset/temp/kda-gg.jpg';
@@ -24,6 +34,7 @@ export class BlogPopupComponent implements OnInit {
   liked: boolean = false;
   disliked: boolean = false;
   isBookmarked: boolean = false;
+  isVisible: boolean = false;
 
   onLike() {
     this.liked = !this.liked;
@@ -66,5 +77,13 @@ export class BlogPopupComponent implements OnInit {
         this.msg.error('Failed to copy link');
       },
     );
+  }
+
+  closePopup() {
+    this.isVisible = false;
+  }
+
+  onEdit() {
+    this.isVisible = true;
   }
 }

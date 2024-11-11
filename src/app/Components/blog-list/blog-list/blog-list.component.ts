@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { CategorysAction } from '../../../store/category/category.actions';
 import { CategoryState } from '../../../store/category/category.state';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-blog-list',
   standalone: true,
@@ -28,19 +30,15 @@ import { CategoryState } from '../../../store/category/category.state';
 })
 export class BlogListComponent implements OnInit {
   selectedArticle: any | null = null;
-  selectedTag: Tags | null = null;
+  selectedTag: string[] = [];
 
   blog$!: Observable<Blog[]>;
   tags$!: Observable<any>;
   blogsByTag$!: Observable<Blog[]>;
-  blogsByCate$!: Observable<Blog[]>;
   loading: boolean = true;
   displayedBlog: Blog[] = [];
-  isCategorySelected: boolean = false;
-  cateSelected: string = '';
   constructor(private store: Store) {
     this.blog$ = this.store.select(BlogState.blogs);
-    this.blogsByCate$ = this.store.select(CategoryState.getBlogByCategory);
     this.tags$ = this.store.select(TagsState.tags);
     this.blogsByTag$ = this.store.select(TagsState.getBlogByTag);
     this.blog$.subscribe((blogs: Blog[]) => {
@@ -52,23 +50,11 @@ export class BlogListComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(new TagsAction.GetTags());
   }
-  onCategorySelected(cate: any) {
-    this.isCategorySelected = true;
-    this.cateSelected = cate.title;
-    this.store.dispatch(new CategorysAction.GetBlogByCategory(cate.id));
-    this.blogsByCate$.subscribe((blog: Blog[]) => {
-      if (blog && blog.length > 0) {
-        this.displayedBlog = blog;
-      } else {
-        this.displayedBlog = [];
-      }
-    });
-  }
 
   filterByTag(tag: Tags | null) {
     if (tag) {
-      this.selectedTag = tag;
-      this.store.dispatch(new TagsAction.GetBlogByTag(tag.id));
+      this.selectedTag.push(tag.id);
+      this.store.dispatch(new TagsAction.GetBlogByTag(this.selectedTag));
       this.blogsByTag$.subscribe((blogs: Blog[]) => {
         if (blogs && blogs.length > 0) {
           this.displayedBlog = blogs;
@@ -78,7 +64,6 @@ export class BlogListComponent implements OnInit {
         this.loading = false;
       });
     } else {
-      // If no tag is selected, display all blogs
       this.blog$.subscribe((blogs: Blog[]) => {
         this.displayedBlog = blogs;
         this.loading = false;

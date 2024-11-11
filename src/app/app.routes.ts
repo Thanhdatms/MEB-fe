@@ -21,6 +21,9 @@ import { BlogDetailComponent } from './Components/blog-detail/blog-detail.compon
 import { AdminManagementComponent } from './Components/admin-management/admin-management.component';
 import { UserIdMatchResolver } from './resolver/matchId.resolver';
 import { CategoryState } from './store/category/category.state';
+import { CodeSpaceComponent } from './Components/code-space/code-space.component';
+import { BookmarkBlogsComponent } from './Components/blog-list/bookmark-blogs/bookmark-blogs.component';
+import { DiscoverBlogsComponent } from './Components/blog-list/discover-blogs/discover-blogs.component';
 
 export const routes: Routes = [
   {
@@ -69,6 +72,20 @@ export const routes: Routes = [
             component: BlogListComponent,
           },
           {
+            path: 'bookmark',
+            canActivate: [authGuard],
+            component: BookmarkBlogsComponent,
+          },
+          {
+            path: 'discover',
+            children: [
+              {
+                path: ':title/:id',
+                component: DiscoverBlogsComponent,
+              },
+            ],
+          },
+          {
             path: ':id',
             component: BlogDetailComponent,
           },
@@ -93,9 +110,14 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'codespace',
+        component: CodeSpaceComponent,
+      },
+      {
         path: 'about',
         component: AboutComponent,
       },
+
       {
         path: 'setting',
         canActivateChild: [authGuard],

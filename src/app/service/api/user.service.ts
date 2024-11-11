@@ -24,4 +24,34 @@ export class UserService {
   getUserById(id: any): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
+
+  getBookmarks(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/bookmarks`);
+  }
+
+  bookmark(id: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/bookmarks/blog/${id}`, {});
+  }
+
+  unbookmark(id: any): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/bookmarks/blog/${id}`);
+  }
+
+  checkFollow(id: any): Observable<any> {
+    return this.http.get(`${this.apiUrl}/followers/user/${id}/is-following`);
+  }
+
+  checkBookmark(id: any): Observable<any> {
+    return this.http.get(`${this.apiUrl}/bookmarks/blog/${id}/is-bookmarked`);
+  }
+
+  follow(targetUserId: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/followers/user`, { targetUserId });
+  }
+
+  unfollow(targetUserId: any): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/followers/user`, {
+      body: { targetUserId },
+    });
+  }
 }

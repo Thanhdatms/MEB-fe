@@ -18,6 +18,7 @@ export class BlogCardComponent implements OnInit {
   @Input() article: any;
   @Input() userId: string | null = null;
   @Input() userName: string | null = null;
+  @Input() isProfile: boolean = false;
   UserName: string = '';
   UserID: string = '';
   date: string = '';

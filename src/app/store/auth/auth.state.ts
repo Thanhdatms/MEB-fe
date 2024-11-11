@@ -5,16 +5,23 @@ import { tap } from 'rxjs';
 import { AuthAction } from './auth.action';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
+export interface loginStatus {
+  status: boolean;
+  message: string;
+}
 export interface AuthStateModel {
   token: string;
-  LoginStatus: boolean;
+  LoginStatus: loginStatus;
   RegisterStatus: boolean;
 }
 @State<AuthStateModel>({
   name: 'auth',
   defaults: {
     token: '',
-    LoginStatus: false,
+    LoginStatus: {
+      status: false,
+      message: '',
+    },
     RegisterStatus: false,
   },
 })
@@ -31,7 +38,7 @@ export class AuthState {
   }
 
   @Selector()
-  static LoginStatus({ LoginStatus }: AuthStateModel): boolean {
+  static LoginStatus({ LoginStatus }: AuthStateModel): loginStatus {
     return LoginStatus;
   }
 
@@ -47,7 +54,7 @@ export class AuthState {
         if (response.code === 200) {
           return ctx.dispatch(new AuthAction.LoginSuccess(response));
         }
-        return;
+        return ctx.dispatch(new AuthAction.LoginFailed(response));
       }),
     );
   }
@@ -58,8 +65,21 @@ export class AuthState {
     action: AuthAction.LoginSuccess,
   ) {
     const token = action.payload.result;
-    ctx.patchState({ token: token, LoginStatus: true });
+    ctx.patchState({
+      token: token,
+      LoginStatus: { status: true, message: '' },
+    });
     this.apiService.auth.setToken(token);
+  }
+
+  @Action(AuthAction.LoginFailed)
+  LoginFailed(
+    ctx: StateContext<AuthStateModel>,
+    action: AuthAction.LoginFailed,
+  ) {
+    ctx.patchState({
+      LoginStatus: { status: false, message: action.payload.message },
+    });
   }
 
   @Action(AuthAction.Register)
@@ -84,7 +104,7 @@ export class AuthState {
 
   @Action(AuthAction.Logout)
   Logout(ctx: StateContext<AuthStateModel>) {
-    ctx.patchState({ token: '', LoginStatus: false });
+    ctx.patchState({ token: '', LoginStatus: { status: false, message: '' } });
     return this.apiService.auth.Logout();
   }
 }

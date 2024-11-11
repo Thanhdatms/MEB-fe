@@ -204,11 +204,23 @@
               <div class="text-gray-400 text-sm"><code>&#64;</code>nametag</div>
             </div>
           </div>
-          <button
-            class="shine-button bg-white text-[var(--main-theme)] px-4 py-1 rounded-full text-sm font-bold"
+          <div *ngIf="!isSelf">
+            <button
+            class="shine-button bg-white text-[var(--main-theme)] px-4 py-1 rounded-full text-base font-bold"
+            *ngIf="!isFollowing"
+            (click)="onFollow()"
           >
             FOLLOW
           </button>
+          <button
+            class="shine-button bg-[var(--main-theme)] text-white px-4 py-1 rounded-full text-base font-bold"
+            *ngIf="isFollowing"
+            (click)="onFollow()"
+          >
+            FOLLOWED
+          </button>
+          </div>
+          
         </div>
       </div>
       <div

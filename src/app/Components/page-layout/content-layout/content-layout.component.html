@@ -93,6 +93,7 @@
                 <li
                   nz-menu-item
                   class="flex text-lg items-center py-2 hover:text-white hover:bg-[var(--main-theme)] rounded-lg font-bold"
+                  routerLink="/codespace"
                 >
                   <span
                     nz-icon
@@ -190,5 +191,8 @@
 
 <router-outlet></router-outlet>
 
-<app-create-blog *ngIf="isCreatePopupVisible" (close)="closeCreatePopup()">
+<app-create-blog 
+  *ngIf="isCreatePopupVisible" 
+  (close)="closeCreatePopup()" 
+  >
 </app-create-blog>
