@@ -1,0 +1,15 @@
+services:
+  mepapp:
+    container_name: mepappcontainer
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mepapp:v1
+    ports:
+      - "80:80"
+    networks:
+      - internalnet
+
+networks:
+  internalnet:
+    driver: bridge
