@@ -3,7 +3,9 @@ name: Publish Docker image
 
 on:
   push:
-    types: ['develop']
+    branches: ['develop']
+  pull_request:
+    branches: ['develop']
 
 jobs:
   push_to_registry:
