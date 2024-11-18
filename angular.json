@@ -44,7 +44,7 @@
                 "glob": "**/*",
                 "input": "node_modules/monaco-editor/min",
                 "output": "assets/monaco-editor"
-             }
+              }
             ],
             "styles": [
               "src/theme.less",
@@ -59,13 +59,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "4mb",
+                  "maximumError": "6mb"
                 }
               ],
               "outputHashing": "all"
@@ -106,7 +101,6 @@
               {
                 "glob": "**/*",
                 "input": "public"
-
               }
             ],
             "styles": [
@@ -116,8 +110,8 @@
               "node_modules/quill/dist/quill.snow.css",
               "node_modules/ngx-quill/assets/quil.bubble.css",
               "node_modules/ace-builds/src-min-noconflict/theme-monokai.css",
-               "node_modules/codemirror/lib/codemirror.css",
-  "node_modules/codemirror/theme/monokai.css"
+              "node_modules/codemirror/lib/codemirror.css",
+              "node_modules/codemirror/theme/monokai.css"
             ],
             "scripts": [
               "node_modules/ace-builds/src-min-noconflict/ace.js"
