@@ -13,6 +13,7 @@ import { DateFormatter } from '../../utils/formatDate';
 import { environment } from '../../environment/environment';
 import { UserAction } from '../../store/user/user.action';
 import { UserState } from '../../store/user/user.state';
+import { Tags } from '../../store/tags/tags.state';
 @Component({
   selector: 'app-blog-detail',
   standalone: true,
@@ -30,6 +31,7 @@ export class BlogDetailComponent implements OnInit {
   sanitizedContent: SafeHtml = '';
   isBookmarked: boolean = false;
   suggestedBlogs: Blog[] = [];
+  blogTags: Tags[] = [];
   blogDate: string | null = null;
   isFollowing: boolean = false;
   isFollow$: Observable<boolean>;
@@ -62,6 +64,7 @@ export class BlogDetailComponent implements OnInit {
       this.userId = response?.user?.id ?? '';
       this.sanitizedContent = this.sanitizeContent(String(this.blogContent));
       this.blogDate = this.formatDate.convertDate(String(response?.createdAt));
+      this.blogTags = response?.tags ?? [];
       if (this.userId !== '' && this.blogId !== '') {
         this.store.dispatch(new UserAction.isFollow(this.userId));
         this.store.dispatch(new UserAction.isBookmark(this.blogId));

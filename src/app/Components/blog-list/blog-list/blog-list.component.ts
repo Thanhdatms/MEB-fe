@@ -51,10 +51,15 @@ export class BlogListComponent implements OnInit {
     this.store.dispatch(new TagsAction.GetTags());
   }
 
-  filterByTag(tag: Tags | null) {
-    if (tag) {
-      this.selectedTag.push(tag.id);
-      this.store.dispatch(new TagsAction.GetBlogByTag(this.selectedTag));
+  filterByTag(tags: Tags[] | null) {
+    if (tags && tags.length > 0) {
+      const firstTagid = tags[0].id;
+      this.selectedTag = tags.map((tag) => tag.id);
+      const payload = {
+        tags: this.selectedTag,
+        tagid: firstTagid,
+      };
+      this.store.dispatch(new TagsAction.GetBlogByTag(payload));
       this.blogsByTag$.subscribe((blogs: Blog[]) => {
         if (blogs && blogs.length > 0) {
           this.displayedBlog = blogs;

@@ -77,11 +77,13 @@ export class TagsState {
     ctx: StateContext<TagsStateModel>,
     action: TagsAction.GetBlogByTag,
   ) {
-    return this.apiService.tags.getBlogbyTag(action.payload).pipe(
-      tap((response) => {
-        const blogs: Blog[] = response.result.blogs;
-        ctx.patchState({ blogByTag: blogs });
-      }),
-    );
+    return this.apiService.tags
+      .getBlogbyTag(action.payload.tags, action.payload.tagid)
+      .pipe(
+        tap((response) => {
+          const blogs: Blog[] = response.result.blogs;
+          ctx.patchState({ blogByTag: blogs });
+        }),
+      );
   }
 }

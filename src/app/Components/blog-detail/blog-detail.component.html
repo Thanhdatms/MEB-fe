@@ -7,6 +7,12 @@
       <p class="text-xl text-gray-600 mb-4">
         {{blogDate}}
       </p>
+      <div class="flex gap-x-3 mb-4">
+        <div *ngFor="let tag of blogTags" class="text-lg font-bold py-1 px-2 rounded-lg text-white bg-[var(--main-theme)] w-auto min-w-5"> 
+          {{tag.name}}  
+        </div>
+      </div>
+     
       <!-- Content -->
       <div
         *ngIf="blog.thumbnail"

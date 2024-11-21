@@ -21,7 +21,12 @@ export class TagsService {
   createTags(tags: any): Observable<any> {
     return this.http.post(this.apiUrl, tags);
   }
-  getBlogbyTag(tags: string[]): Observable<any> {
-    return this.http.post(`${this.apiUrl}/blogs`, { tags });
+  getBlogbyTag(tags: string[], tagid: string): Observable<any> {
+    const body = { tags };
+
+    // Use Angular's HttpClient to send a GET request with the body
+    return this.http.request('GET', `${this.apiUrl}/blogs/${tagid}`, {
+      body: body,
+    });
   }
 }

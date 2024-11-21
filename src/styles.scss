@@ -51,7 +51,8 @@
   .ant-select-selection-item{
     background-color: var(--main-theme) !important;
     font-weight: bold;
-    color:white
+    color:white;
+    border-radius: 10px !important;
   }
   nz-select-top-control.ant-select-selector{
     background-color: var(--main-theme) !important;; 
@@ -73,6 +74,10 @@
     background-color: transparent !important;
 }
   
+}
+
+.ant-select-multiple .ant-select-selection-item-remove{
+  color:white !important;
 }
 
 .OptionSelect{
