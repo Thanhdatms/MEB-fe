@@ -8,13 +8,18 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 export interface User {
   id: string;
   username: string;
+  avatar: string;
+  bio: string;
+  nameTag: string;
 }
 
 export interface UserStateModel {
   user: User;
+  userProfile: User;
   status: boolean;
   isFollow: boolean;
   isBookmark: boolean;
+  updateStatus: boolean;
 }
 @State<UserStateModel>({
   name: 'user',
@@ -22,10 +27,21 @@ export interface UserStateModel {
     user: {
       id: '',
       username: '',
+      avatar: '',
+      bio: '',
+      nameTag: '',
+    },
+    userProfile: {
+      id: '',
+      username: '',
+      avatar: '',
+      bio: '',
+      nameTag: '',
     },
     status: false,
     isFollow: false,
     isBookmark: false,
+    updateStatus: false,
   },
 })
 @Injectable()
@@ -38,6 +54,16 @@ export class UserState {
   @Selector()
   static user({ user }: UserStateModel): any {
     return user;
+  }
+
+  @Selector()
+  static updateStatus({ updateStatus }: UserStateModel): boolean {
+    return updateStatus;
+  }
+
+  @Selector()
+  static userProfile({ userProfile }: UserStateModel): any {
+    return userProfile;
   }
 
   @Selector()
@@ -60,7 +86,7 @@ export class UserState {
     return this.apiService.user.getMe().pipe(
       tap((response) => {
         const user = response.result;
-        ctx.patchState({ user: user });
+        ctx.patchState({ userProfile: user });
       }),
     );
   }
@@ -72,6 +98,20 @@ export class UserState {
     return this.apiService.user.getUserById(action.payload).pipe(
       tap((response) => {
         console.log(response);
+      }),
+    );
+  }
+
+  @Action(UserAction.updateUser)
+  updateUser(ctx: StateContext<UserStateModel>, action: UserAction.updateUser) {
+    return this.apiService.user.updateUser(action.payload).pipe(
+      tap((response) => {
+        if (response.code === 200) {
+          this.msg.success('Profile updated');
+          ctx.patchState({ userProfile: response.result, updateStatus: true });
+        } else {
+          this.msg.error('Please check the profile again');
+        }
       }),
     );
   }

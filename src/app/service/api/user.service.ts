@@ -25,6 +25,10 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 
+  updateUser(payload: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/profiles`, payload);
+  }
+
   getBookmarks(): Observable<any> {
     return this.http.get(`${this.apiUrl}/bookmarks`);
   }

@@ -52,7 +52,7 @@
                   >
                     <div class="w-12 h-12 rounded-full overflow-hidden mr-3">
                       <img
-                        src="./sample-logo.jpg"
+                        [src]="userAvt"
                         alt="User"
                         class="w-full h-full object-cover"
                       />
@@ -60,7 +60,7 @@
                     <div>
                       <div class="font-bold">{{ userName }}</div>
                       <div class="text-sm text-gray-500">
-                        <code>&#64;</code>nametag
+                        <code>&#64;</code>{{ userNameTag }}
                       </div>
                     </div>
                   </div>
