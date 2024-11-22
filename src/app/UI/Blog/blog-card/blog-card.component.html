@@ -1,7 +1,6 @@
 <div
   class="card rounded-3xl border border-gray-300 shadow-md overflow-hidden cursor-pointer lg:w-[24vw] 3xl:w-[17vw] 4xl:w-[10vw] h-auto"
   (click)="openPopup()"
-  
 >
   <div class="card-image h-40 relative z-0">
     <div
@@ -11,11 +10,13 @@
       [style.background-position]="'center'"
     ></div>
   </div>
-  
-  <div class="flex flex-col justify-between h-[180px] py-4 px-2 rounded-t-3xl z-10 bg-white relative -top-6 -mb-4">
+
+  <div
+    class="flex flex-col justify-between h-[180px] py-4 px-2 rounded-t-3xl z-10 bg-white relative -top-6 -mb-4"
+  >
     <div class="flex justify-between">
       <div class="flex flex-wrap gap-2 mb-2">
-        <ng-container *ngFor="let tag of (tags | slice:0:2)">
+        <ng-container *ngFor="let tag of tags | slice: 0 : 2">
           <div
             class="text-xs font-bold py-1 px-2 rounded-lg text-white bg-[var(--main-theme)]"
           >
@@ -23,10 +24,15 @@
           </div>
         </ng-container>
       </div>
-
     </div>
 
-    <h3 class="font-bold mb-1 text-2xl truncate-title" nz-tooltip="{{ article.title }}" nzTooltipPlacement="right">{{ article.title }}</h3>
+    <h3
+      class="font-bold mb-1 text-2xl truncate-title"
+      nz-tooltip="{{ article.title }}"
+      nzTooltipPlacement="right"
+    >
+      {{ article.title }}
+    </h3>
     <div class="flex justify-between">
       <p class="author text-sm mb-2" style="color: var(--font-color)">
         {{ UserName }}
@@ -37,7 +43,7 @@
     </div>
 
     <div
-      class="card-stats flex justify-between text-sm"
+      class="card-stats flex gap-x-5 text-sm"
       style="color: var(--font-color)"
     >
       <span class="views flex items-center text-xl">
@@ -47,7 +53,16 @@
           nzTheme="outline"
           class="text-3xl"
         ></span>
-        <!-- <span class="ml-2">{{ upvotes | number }}</span> -->
+        <span class="ml-2">{{ upvotes | number }}</span>
+      </span>
+      <span class="views flex items-center text-xl">
+        <span
+          nz-icon
+          nzType="caret-down"
+          nzTheme="outline"
+          class="text-3xl"
+        ></span>
+        <span class="ml-2">{{ downvotes | number }}</span>
       </span>
     </div>
   </div>

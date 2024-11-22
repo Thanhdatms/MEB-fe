@@ -6,6 +6,7 @@ import { AuthService } from './auth/auth.service';
 import { UserService } from './api/user.service';
 import { CookieService } from 'ngx-cookie-service';
 import { CategoriesService } from './api/categories.service';
+import { CommentService } from './api/comment.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ export class ApiService {
   public auth: AuthService;
   public user: UserService;
   public category: CategoriesService;
+  public comment: CommentService;
 
   constructor(
     private http: HttpClient,
@@ -28,5 +30,6 @@ export class ApiService {
     this.auth = new AuthService(http, this.apiUrl, cookieService);
     this.user = new UserService(http, this.apiUrl);
     this.category = new CategoriesService(http, this.apiUrl);
+    this.comment = new CommentService(http, this.apiUrl);
   }
 }

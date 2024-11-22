@@ -26,6 +26,8 @@ export class BlogCardComponent implements OnInit {
   tags: Tags[] = [];
   isPopupVisible: boolean = false;
   isBookmarked: boolean = false;
+  upvotes: number = 0;
+  downvotes: number = 0;
 
   constructor(private formatDate: DateFormatter) {}
   ngOnInit(): void {
@@ -38,6 +40,8 @@ export class BlogCardComponent implements OnInit {
       this.UserID = this.article.user.id;
     }
     this.tags = this.article.tags;
+    this.upvotes = this.article.votes.upVote;
+    this.downvotes = this.article.votes.downVote;
   }
 
   get cardBackground(): string {
