@@ -30,6 +30,7 @@ export class ProfileComponent implements OnInit {
     this.userBlog$ = this._store.select(BlogState.userBlog);
     this.userBlog$.subscribe((blogs) => {
       this.userName = blogs[0]?.user?.username ?? null;
+      console.log(blogs);
     });
     _route.paramMap.subscribe((params) => {
       const id = params.get('id');

@@ -8,6 +8,7 @@ export enum Actions {
   IS_BOOKMARK = '[User] is bookmark',
   FOLLOW = '[User] follow',
   UNFOLLOW = '[User] unfollow',
+  CHANGE_PASSWORD = '[User] change password',
 }
 export namespace UserAction {
   export class getAllUser {
@@ -48,6 +49,11 @@ export namespace UserAction {
 
   export class unfollow {
     static type = Actions.UNFOLLOW;
+    constructor(public payload: any) {}
+  }
+
+  export class changePassword {
+    static type = Actions.CHANGE_PASSWORD;
     constructor(public payload: any) {}
   }
 }

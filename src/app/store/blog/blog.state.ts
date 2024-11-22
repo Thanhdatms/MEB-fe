@@ -8,8 +8,8 @@ import { User, UserStateModel } from '../user/user.state';
 import { Category } from '../category/category.state';
 
 export interface Votes {
-  upVotes: number;
-  downVotes: number;
+  upVote: number;
+  downVote: number;
 }
 export interface Blog {
   id: string;
@@ -172,6 +172,7 @@ export class BlogState {
                 id: response.result.id,
                 username: response.result.username,
               },
+              votes: blog.votes,
             })),
           });
         }),

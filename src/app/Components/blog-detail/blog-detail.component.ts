@@ -108,8 +108,8 @@ export class BlogDetailComponent implements OnInit {
       this.sanitizedContent = this.sanitizeContent(String(this.blogContent));
       this.blogDate = this.formatDate.convertDate(String(response?.createdAt));
       this.blogTags = response?.tags ?? [];
-      this.upVotes = response?.votes?.upVotes ?? 0;
-      this.downVotes = response?.votes?.downVotes ?? 0;
+      this.upVotes = response?.votes?.upVote ?? 0;
+      this.downVotes = response?.votes?.downVote ?? 0;
       if (this.isLogin) {
         if (this.userId !== '' && this.blogId !== '') {
           this.store.dispatch(new UserAction.isFollow(this.userId));

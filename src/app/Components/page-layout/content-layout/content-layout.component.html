@@ -58,7 +58,7 @@
                       />
                     </div>
                     <div>
-                      <div class="font-bold">{{userName}}</div>
+                      <div class="font-bold">{{ userName }}</div>
                       <div class="text-sm text-gray-500">
                         <code>&#64;</code>nametag
                       </div>
@@ -81,6 +81,7 @@
                 <li
                   nz-menu-item
                   class="flex text-lg items-center py-2 hover:text-white hover:bg-[var(--main-theme)] rounded-lg font-bold"
+                  routerLink="/blog/bookmark"
                 >
                   <span
                     nz-icon
@@ -191,8 +192,5 @@
 
 <router-outlet></router-outlet>
 
-<app-create-blog 
-  *ngIf="isCreatePopupVisible" 
-  (close)="closeCreatePopup()" 
-  >
+<app-create-blog *ngIf="isCreatePopupVisible" (close)="closeCreatePopup()">
 </app-create-blog>

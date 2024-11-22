@@ -3,6 +3,7 @@ import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { ApiService } from '../../service/api.service';
 import { UserAction } from './user.action';
 import { tap } from 'rxjs';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 export interface User {
   id: string;
@@ -29,7 +30,10 @@ export interface UserStateModel {
 })
 @Injectable()
 export class UserState {
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private msg: NzMessageService,
+  ) {}
 
   @Selector()
   static user({ user }: UserStateModel): any {
@@ -132,5 +136,24 @@ export class UserState {
         }
       }),
     );
+  }
+
+  @Action(UserAction.changePassword)
+  changePassword(
+    ctx: StateContext<UserStateModel>,
+    action: UserAction.changePassword,
+  ) {
+    return this.apiService.user
+      .changePassword(action.payload.oldPassword, action.payload.newPassword)
+      .pipe(
+        tap((response) => {
+          console.log(response);
+          if (response.code == 200) {
+            this.msg.success('Password updated');
+          } else {
+            this.msg.error('Please check the password again');
+          }
+        }),
+      );
   }
 }

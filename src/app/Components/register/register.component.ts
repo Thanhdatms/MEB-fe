@@ -112,13 +112,13 @@ export class RegisterComponent {
     const payload = {
       username: this.registerForm.get('username')?.value,
       email: this.registerForm.get('email')?.value,
-      hashpassword: this.registerForm.get('password')?.value,
+      password: this.registerForm.get('password')?.value,
     };
     this._store.dispatch(
       new AuthAction.Register({
         username: payload.username,
         email: payload.email,
-        hashpassword: payload.hashpassword,
+        password: payload.password,
       }),
     );
   }
