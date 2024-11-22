@@ -6,6 +6,7 @@ import Iconify from '@iconify/tailwind';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { DateFormatter } from '../../../utils/formatDate';
 import { User } from '../../../store/user/user.state';
+import { Tags } from '../../../store/tags/tags.state';
 @Component({
   selector: 'app-blog-card',
   standalone: true,
@@ -22,7 +23,7 @@ export class BlogCardComponent implements OnInit {
   UserName: string = '';
   UserID: string = '';
   date: string = '';
-  tags: string[] = [];
+  tags: Tags[] = [];
   isPopupVisible: boolean = false;
   isBookmarked: boolean = false;
 
@@ -36,25 +37,11 @@ export class BlogCardComponent implements OnInit {
       this.UserName = this.article.user.username;
       this.UserID = this.article.user.id;
     }
+    this.tags = this.article.tags;
   }
 
   get cardBackground(): string {
     return 'url("/asset/blog-card/default.png")';
-  }
-
-  contentTypeColor(tag: string): string {
-    switch (tag) {
-      case 'js':
-        return '#ca8a04'; // Darker amber
-      case 'html':
-        return '#ea580c'; // Darker orange
-      case 'python':
-        return '#2563eb'; // Darker blue
-      case 'css':
-        return '#0ea5e9'; // Darker blue
-      default:
-        return 'var(--main-theme)';
-    }
   }
 
   openPopup() {
