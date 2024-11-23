@@ -5,14 +5,17 @@
         {{ blog.title }}
       </h2>
       <p class="text-xl text-gray-600 mb-4">
-        {{blogDate}}
+        {{ blogDate }}
       </p>
       <div class="flex gap-x-3 mb-4">
-        <div *ngFor="let tag of blogTags" class="text-lg font-bold py-1 px-2 rounded-lg text-white bg-[var(--main-theme)] w-auto min-w-5"> 
-          {{tag.name}}  
+        <div
+          *ngFor="let tag of blogTags"
+          class="text-lg font-bold py-1 px-2 rounded-lg text-white bg-[var(--main-theme)] w-auto min-w-5"
+        >
+          {{ tag.name }}
         </div>
       </div>
-     
+
       <!-- Content -->
       <div
         *ngIf="blog.thumbnail"
@@ -28,176 +31,137 @@
       <div class="PopUpContent">
         <p class="mb-4 text-lg" [innerHTML]="sanitizedContent"></p>
       </div>
-      <div *ngIf="isPopup" >
+      <div *ngIf="isPopup">
         <ng-container *ngTemplateOutlet="actionBar"></ng-container>
       </div>
 
-      
       <!-- Comment -->
       <div
         class="bg-[var(--font-color)] text-white text-lg rounded-[10px] p-4 mt-5"
       >
-        <div
-          class="text-[var(--main-theme)] py-1 rounded-full text-sm font-bold flex justify-between gap-2"
+        <form
+          [formGroup]="commentForm"
+          (ngSubmit)="onComment()"
+          class="py-1 rounded-full text-sm font-bold flex flex-col gap-4"
         >
-          <img
-            [src]="AuthorImage"
-            alt="Suggested blog"
-            class="w-8 h-8 rounded-full object-cover"
-          />
-          <input
-            type="text"
-            placeholder="Write something..."
-            class="bg-transparent border-none text-white focus:outline-none w-full"
-          />
+          <div class="flex gap-5">
+            <textarea
+              formControlName="comment"
+              placeholder="Write something..."
+              rows="3"
+              class="bg-transparent border-none text-white focus:outline-none w-full resize-none"
+            ></textarea>
+          </div>
           <button
-            class="shine-button bg-white text-[var(--main-theme)] px-5 flex items-center justify-center py-1 rounded-full text-sm font-bold"
+            type="submit"
+            class="px-5 flex items-center justify-center py-1 rounded-full text-sm font-bold self-end"
+            [disabled]="commentForm.invalid"
+            [ngClass]="{
+              'shine-button bg-white text-[var(--main-theme)]':
+                !commentForm.invalid,
+              'bg-gray-400 text-gray-200 cursor-not-allowed':
+                commentForm.invalid,
+            }"
           >
             Comment
           </button>
-        </div>
+        </form>
       </div>
       <!-- Comment List-->
-      <div class="bg-[var(--font-color)] rounded-[10px] p-4 mt-5">
-        <div class="flex items-center space-x-2 mb-6">
-          <div class="w-8 h-8 rounded-full overflow-hidden">
-            <img
-              [src]="AuthorImage"
-              alt="Suggested blog"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="text-gray-300 text-sm">
-            Title - something that is kinda long to be honest
-          </div>
-        </div>
-        <div class="flex items-center space-x-2 mb-6">
-          <div class="w-8 h-8 rounded-full overflow-hidden">
-            <img
-              [src]="AuthorImage"
-              alt="Suggested blog"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="text-gray-300 text-sm">
-            Title - something that is kinda long to be honest
-          </div>
-        </div>
-        <div class="flex items-center space-x-2 mb-6">
-          <div class="w-8 h-8 rounded-full overflow-hidden">
-            <img
-              [src]="AuthorImage"
-              alt="Suggested blog"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="text-gray-300 text-sm">
-            Title - something that is kinda long to be honest
-          </div>
-        </div>
-        <div class="flex items-center space-x-2 mb-6">
-          <div class="w-8 h-8 rounded-full overflow-hidden">
-            <img
-              [src]="AuthorImage"
-              alt="Suggested blog"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="text-gray-300 text-sm">
-            Title - something that is kinda long to be honest
-          </div>
-        </div>
-        <div class="flex items-center space-x-2 mb-6">
-          <div class="w-8 h-8 rounded-full overflow-hidden">
-            <img
-              [src]="AuthorImage"
-              alt="Suggested blog"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="text-gray-300 text-sm">
-            Title - something that is kinda long to be honest
-          </div>
-        </div>
-        <div class="flex items-center space-x-2 mb-6">
-          <div class="w-8 h-8 rounded-full overflow-hidden">
-            <img
-              [src]="AuthorImage"
-              alt="Suggested blog"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="text-gray-300 text-sm">
-            Title - something that is kinda long to be honest
-          </div>
-        </div>
-        <div class="flex items-center space-x-2 mb-6">
-          <div class="w-8 h-8 rounded-full overflow-hidden">
-            <img
-              [src]="AuthorImage"
-              alt="Suggested blog"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="text-gray-300 text-sm">
-            Title - something that is kinda long to be honest
-          </div>
-        </div>
-        <div class="flex items-center space-x-2 mb-6">
-          <div class="w-8 h-8 rounded-full overflow-hidden">
-            <img
-              [src]="AuthorImage"
-              alt="Suggested blog"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="text-gray-300 text-sm">
-            Title - something that is kinda long to be honest
+      <ng-container *ngFor="let comment of comments">
+        <div class="bg-[var(--font-color)] rounded-[10px] p-4 mt-5">
+          <div class="space-y-5">
+            <div class="flex justify-between">
+              <div class="flex items-center gap-x-5">
+                <div class="w-8 h-8 rounded-full overflow-hidden">
+                  <img
+                    [src]="AuthorImage"
+                    alt="Suggested blog"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <div class="font-bold text-lg text-white">
+                  {{ comment.user?.username }}
+                </div>
+              </div>
+              <div>
+                <div
+                  *ngIf="comment.user?.id === userId"
+                  class="flex gap-2 text-xl text-white cursor-pointer"
+                >
+                  <span
+                    nz-icon
+                    nzType="edit"
+                    nzTheme="outline"
+                    class="hover:text-yellow-300"
+                    (click)="startEditing(comment.id)"
+                  ></span>
+                  <span
+                    nz-icon
+                    nzType="delete"
+                    nzTheme="outline"
+                    class="hover:text-red-400"
+                    (click)="deleteComment(comment)"
+                  ></span>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="editingCommentId === comment.id; else displayComment">
+              <!-- Edit Form -->
+              <form
+                [formGroup]="editCommentForm"
+                (ngSubmit)="updateComment(comment.id)"
+              >
+                <textarea
+                  formControlName="content"
+                  rows="3"
+                  class="bg-transparent border-none text-white focus:outline-none w-full resize-none"
+                ></textarea>
+                <div class="flex justify-end gap-3 mt-2">
+                  <button
+                    type="button"
+                    class="px-4 py-1 bg-gray-500 text-white rounded"
+                    (click)="cancelEditing()"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    class="px-4 py-1 bg-[var(--main-theme)] text-white rounded"
+                    [disabled]="editCommentForm.invalid"
+                  >
+                    Save
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <ng-template #displayComment>
+              <div
+                class="text-white ml-5 text-base text-wrap break-words whitespace-normal"
+              >
+                {{ comment.content }}
+              </div>
+            </ng-template>
+            <!-- <div
+              *ngIf="comment.update"
+              class="text-sm ml-5 text-white"
+            >
+              (Edited)
+            </div> -->
           </div>
         </div>
-        <div class="flex items-center space-x-2 mb-6">
-          <div class="w-8 h-8 rounded-full overflow-hidden">
-            <img
-              [src]="AuthorImage"
-              alt="Suggested blog"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="text-gray-300 text-sm">
-            Title - something that is kinda long to be honest
-          </div>
-        </div>
-        <div class="flex items-center space-x-2 mb-6">
-          <div class="w-8 h-8 rounded-full overflow-hidden">
-            <img
-              [src]="AuthorImage"
-              alt="Suggested blog"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="text-gray-300 text-sm">
-            Title - something that is kinda long to be honest
-          </div>
-        </div>
-        <div class="flex items-center space-x-2 mb-6">
-          <div class="w-8 h-8 rounded-full overflow-hidden">
-            <img
-              [src]="AuthorImage"
-              alt="Suggested blog"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="text-gray-300 text-sm">
-            Title - something that is kinda long to be honest
-          </div>
-        </div>
-      </div>
+      </ng-container>
     </div>
     <div class="w-1/3 p-5">
       <div class="bg-[var(--font-color)] rounded-[10px] p-4 mb-5">
         <!-- Author -->
         <div class="flex items-center justify-between mb-2">
-          <div class="flex items-center space-x-2 cursor-pointer" [routerLink]="['/user', userId]">
+          <div
+            class="flex items-center space-x-2 cursor-pointer"
+            [routerLink]="['/user', userId]"
+          >
             <div class="w-10 h-10 rounded-full overflow-hidden">
               <img
                 [src]="AuthorImage"
@@ -206,27 +170,26 @@
               />
             </div>
             <div class="text-[17px]">
-              <div class="font-bold text-white">{{userName}}</div>
+              <div class="font-bold text-white">{{ userName }}</div>
               <div class="text-gray-400 text-sm"><code>&#64;</code>nametag</div>
             </div>
           </div>
           <div *ngIf="!isSelf">
             <button
-            class="shine-button bg-white text-[var(--main-theme)] px-4 py-1 rounded-full text-base font-bold"
-            *ngIf="!isFollowing"
-            (click)="onFollow()"
-          >
-            FOLLOW
-          </button>
-          <button
-            class="shine-button bg-[var(--main-theme)] text-white px-4 py-1 rounded-full text-base font-bold"
-            *ngIf="isFollowing"
-            (click)="onFollow()"
-          >
-            FOLLOWED
-          </button>
+              class="shine-button bg-white text-[var(--main-theme)] px-4 py-1 rounded-full text-base font-bold"
+              *ngIf="!isFollowing"
+              (click)="onFollow()"
+            >
+              FOLLOW
+            </button>
+            <button
+              class="shine-button bg-[var(--main-theme)] text-white px-4 py-1 rounded-full text-base font-bold"
+              *ngIf="isFollowing"
+              (click)="onFollow()"
+            >
+              FOLLOWED
+            </button>
           </div>
-          
         </div>
       </div>
       <div
@@ -247,37 +210,48 @@
       <div class="bg-[var(--font-color)] rounded-[10px] p-4 mb-5">
         <h3 class="text-white font-bold mb-2 text-[20px]">You may like</h3>
         <div class="space-y-2 text-[15px]">
-          <div *ngFor="let blog of suggestedBlogs | slice:-3"  >
-            <div class="flex items-center space-x-2 cursor-pointer" [routerLink]="['/blog', blog.id]" nz-tooltip [nzTooltipTitle]="blogToolTip" nzTooltipPlacement="right">
+          <div *ngFor="let blog of suggestedBlogs | slice: -3">
+            <div
+              class="flex items-center space-x-2 cursor-pointer"
+              [routerLink]="['/blog', blog.id]"
+              nz-tooltip
+              [nzTooltipTitle]="blogToolTip"
+              nzTooltipPlacement="right"
+            >
               <div class="w-8 h-8 rounded-full overflow-hidden">
-                <img [src]="blog.thumbnail || AuthorImage" alt="Suggested article" class="w-full h-full object-cover" />
+                <img
+                  [src]="blog.thumbnail || AuthorImage"
+                  alt="Suggested article"
+                  class="w-full h-full object-cover"
+                />
               </div>
-              <div class="text-gray-300 text-sm truncate-title font-bold"         
-                  [ngStyle]="{ 'max-width': isPopup ? '200px' : '400px' }"
+              <div
+                class="text-gray-300 text-sm truncate-title font-bold"
+                [ngStyle]="{ 'max-width': isPopup ? '200px' : '400px' }"
               >
                 {{ blog.title }}
               </div>
               <ng-template #blogToolTip>
                 <div class="text-[15px]">
                   <div class="text-white font-bold mb-2">{{ blog.title }}</div>
-                  <div class="text-gray-400 text-sm"><code>&#64;</code>nametag</div>
+                  <div class="text-gray-400 text-sm">
+                    <code>&#64;</code>nametag
+                  </div>
                 </div>
               </ng-template>
+            </div>
           </div>
-           
+        </div>
       </div>
-    </div>
-      </div>
-      <div *ngIf="!isPopup" >
+      <div *ngIf="!isPopup">
         <ng-container *ngTemplateOutlet="actionBar"></ng-container>
       </div>
-      
-</div>
+    </div>
 
-<ng-template
-        #actionBar
+    <ng-template #actionBar>
+      <div
+        class="bg-[var(--font-color)] text-white text-lg rounded-[10px] p-2 flex justify-between"
       >
-      <div class="bg-[var(--font-color)] text-white text-lg rounded-[10px] p-2 flex justify-between">
         <div class="flex items-center space-x-4">
           <div class="flex justify-center items-center">
             <span
@@ -286,7 +260,7 @@
               nzTheme="outline"
               class="text-5xl cursor-pointer hover:text-green-300"
             ></span>
-            <span>6.9M</span>
+            <span>{{ upVotes }}</span>
           </div>
           <div class="flex justify-center items-center">
             <span
@@ -295,22 +269,25 @@
               nzTheme="outline"
               class="text-5xl cursor-pointer hover:text-red-400"
             ></span>
-            <span>6.9M</span>
+            <span>{{ downVotes }}</span>
           </div>
         </div>
-        <button class="flex items-center space-x-1 hover:text-yellow-400" (click)="onBookMark()">
+        <button
+          class="flex items-center space-x-1 hover:text-yellow-400"
+          (click)="onBookMark()"
+        >
           <div *ngIf="!isBookmarked">
-            <span
-              class="icon-[material-symbols--bookmark-outline] w-11 h-11"
-            >
+            <span class="icon-[material-symbols--bookmark-outline] w-11 h-11">
             </span>
           </div>
           <div *ngIf="isBookmarked">
-            <span class="icon-[material-symbols--bookmark] w-11 h-11" style="color: #facc15;"></span>
+            <span
+              class="icon-[material-symbols--bookmark] w-11 h-11"
+              style="color: #facc15"
+            ></span>
           </div>
           <span>Bookmark</span>
         </button>
-       
 
         <div class="flex items-center space-x-1 hover:text-violet-400">
           <span
@@ -323,4 +300,6 @@
           <span>Copy link</span>
         </div>
       </div>
-</ng-template>
+    </ng-template>
+  </div>
+</div>

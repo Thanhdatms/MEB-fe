@@ -2,12 +2,17 @@ export enum Actions {
   GET_ALL_USER = '[User] Get all user',
   GET_USER_BY_ID = '[User] Get user by id',
   GET_ME = '[User] get user',
+
   BOOKMARK = '[User] bookmark',
   UNBOOKMARK = '[User] unbookmark',
-  IS_FOLLOW = '[User] is follow',
   IS_BOOKMARK = '[User] is bookmark',
+
+  IS_FOLLOW = '[User] is follow',
   FOLLOW = '[User] follow',
   UNFOLLOW = '[User] unfollow',
+
+  CHANGE_PASSWORD = '[User] change password',
+  UPDATE_USER = '[User] update user',
 }
 export namespace UserAction {
   export class getAllUser {
@@ -48,6 +53,16 @@ export namespace UserAction {
 
   export class unfollow {
     static type = Actions.UNFOLLOW;
+    constructor(public payload: any) {}
+  }
+
+  export class changePassword {
+    static type = Actions.CHANGE_PASSWORD;
+    constructor(public payload: any) {}
+  }
+
+  export class updateUser {
+    static type = Actions.UPDATE_USER;
     constructor(public payload: any) {}
   }
 }

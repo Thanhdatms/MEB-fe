@@ -7,6 +7,10 @@ import { catchError, tap, throwError } from 'rxjs';
 import { User, UserStateModel } from '../user/user.state';
 import { Category } from '../category/category.state';
 
+export interface Votes {
+  upVote: number;
+  downVote: number;
+}
 export interface Blog {
   id: string;
   title: string;
@@ -18,6 +22,7 @@ export interface Blog {
   createdAt: Date;
   category: Category;
   user?: User;
+  votes: Votes;
 }
 
 export interface Status {
@@ -167,6 +172,7 @@ export class BlogState {
                 id: response.result.id,
                 username: response.result.username,
               },
+              votes: blog.votes,
             })),
           });
         }),

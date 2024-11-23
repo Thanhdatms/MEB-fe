@@ -18,7 +18,7 @@ import { Observable, combineLatest, map } from 'rxjs';
 import { AuthState } from '../../../store/auth/auth.state';
 import { CookieService } from 'ngx-cookie-service';
 import { Blog, BlogState } from '../../../store/blog/blog.state';
-import { UserState } from '../../../store/user/user.state';
+import { User, UserState } from '../../../store/user/user.state';
 import { UserAction } from '../../../store/user/user.action';
 
 @Component({
@@ -45,6 +45,9 @@ export class ContentLayoutComponent {
   searchTerm: string = '';
   searching = false;
   userName: string | null = null;
+  userAvt: string | null = null;
+  userNameTag: string | null = null;
+  userProfile$: Observable<User>;
 
   navbarItems = [
     { icon: 'bell', path: '/noti' },
@@ -56,6 +59,7 @@ export class ContentLayoutComponent {
     private router: Router,
     private cookieService: CookieService,
   ) {
+    this.userProfile$ = this.store.select(UserState.userProfile);
     this.store.select(BlogState.blogs).subscribe((blogs) => {
       this.blogs = blogs;
       this.filteredBlogs = blogs;
@@ -64,9 +68,15 @@ export class ContentLayoutComponent {
     this.store.dispatch(new BlogAction.GetBlogs());
     const token = this.cookieService.get('authToken');
     if (token) {
-      setTimeout(() => {
-        this.userName = localStorage.getItem('name') || '';
-      }, 1000);
+      this.userProfile$.subscribe((response) => {
+        setTimeout(() => {
+          this.userName = response.username || localStorage.getItem('name');
+          this.userAvt = response.avatar || localStorage.getItem('avatar');
+          this.userNameTag =
+            response.nameTag || localStorage.getItem('nameTag');
+        }, 1000);
+      });
+
       this.isLogin = true;
     }
   }

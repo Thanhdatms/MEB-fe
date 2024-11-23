@@ -46,7 +46,7 @@ export class LoginComponent {
       username: ['', Validators.required],
       password: ['', Validators.required],
     });
-    this.user$ = this._store.select(UserState.user);
+    this.user$ = this._store.select(UserState.userProfile);
     this.status$ = this._store.select(AuthState.LoginStatus);
     this.status$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
       if (response.status === true) {
@@ -60,6 +60,8 @@ export class LoginComponent {
     this.user$.subscribe((user) => {
       localStorage.setItem('name', user.username),
         localStorage.setItem('userId', user.id);
+      localStorage.setItem('avatar', user.avatar);
+      localStorage.setItem('nameTag', user.nameTag);
     });
   }
 

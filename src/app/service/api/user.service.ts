@@ -25,6 +25,10 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 
+  updateUser(payload: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/profiles`, payload);
+  }
+
   getBookmarks(): Observable<any> {
     return this.http.get(`${this.apiUrl}/bookmarks`);
   }
@@ -52,6 +56,13 @@ export class UserService {
   unfollow(targetUserId: any): Observable<any> {
     return this.http.delete(`${this.apiUrl}/followers/user`, {
       body: { targetUserId },
+    });
+  }
+
+  changePassword(oldPassword: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/change-password`, {
+      oldPassword,
+      newPassword,
     });
   }
 }

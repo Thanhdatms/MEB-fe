@@ -4,15 +4,13 @@
   <div class="flex flex-col gap-y-5 w-ful text-xl">
     <!-- User profile header -->
     <div class="flex items-center gap-x-4 w-50%">
-      <img
-        src="./sample-logo.jpg"
-        alt="User profile"
-        class="w-24 h-24 rounded-full"
-      />
+      <img [src]="userAvt" alt="User profile" class="w-24 h-24 rounded-full" />
       <div>
-        <h1 class="text-3xl font-bold text-[var(--font-color)]">{{userName}}</h1>
-        <p class="text-gray-600"><code>&#64;</code>nametag</p>
-        <p class="text-gray-600">bio- which is long as sh ...see more</p>
+        <h1 class="text-3xl font-bold text-[var(--font-color)]">
+          {{ userName }}
+        </h1>
+        <p class="text-gray-600"><code>&#64;</code>{{ userNameTag }}</p>
+        <p class="text-gray-600">{{ userBio }}</p>
       </div>
       <div *ngIf="!isProfile" class="ml-[20%] gap-x-4 flex font-bold">
         <button
@@ -29,7 +27,7 @@
       <div *ngIf="isProfile" class="ml-[20%] gap-x-4 flex font-bold">
         <button
           class="shine-button px-4 py-2 bg-[var(--main-theme)] text-white rounded-xl"
-          [routerLink]="['/setting']" 
+          [routerLink]="['/setting']"
         >
           EDIT PROFILE
         </button>
@@ -54,7 +52,12 @@
       class="grid grid-cols-1 lg:grid-cols-3 3xl:grid-cols-4 4xl:grid-cols-6 gap-x-[5vw] gap-y-10"
     >
       <ng-container *ngFor="let blog of userBlog$ | async">
-        <app-blog-card [article]="blog" [userId]="userId" [userName]="userName" [isProfile]="true"></app-blog-card>
+        <app-blog-card
+          [article]="blog"
+          [userId]="userId"
+          [userName]="userName"
+          [isProfile]="true"
+        ></app-blog-card>
       </ng-container>
     </div>
   </div>

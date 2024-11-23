@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { Observable, takeUntil } from 'rxjs';
+import { Observable, map, take, takeUntil } from 'rxjs';
 import { Blog, BlogState } from '../../store/blog/blog.state';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { BlogAction } from '../../store/blog/blog.action';
@@ -12,12 +12,28 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { DateFormatter } from '../../utils/formatDate';
 import { environment } from '../../environment/environment';
 import { UserAction } from '../../store/user/user.action';
-import { UserState } from '../../store/user/user.state';
+import { User, UserState } from '../../store/user/user.state';
 import { Tags } from '../../store/tags/tags.state';
+import { Comment, CommentsState } from '../../store/comments/comments.state';
+import { CommentsAction } from '../../store/comments/comments.action';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { NzFormModule } from 'ng-zorro-antd/form';
 @Component({
   selector: 'app-blog-detail',
   standalone: true,
-  imports: [CommonModule, NzIconModule, RouterLink, NzToolTipModule],
+  imports: [
+    CommonModule,
+    NzIconModule,
+    RouterLink,
+    NzToolTipModule,
+    NzFormModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './blog-detail.component.html',
   styleUrl: './blog-detail.component.scss',
   providers: [DateFormatter],
@@ -27,16 +43,27 @@ export class BlogDetailComponent implements OnInit {
   AuthorImage = '/sample-logo.jpg';
   blogContent: Text | undefined;
   UserName: string | null = null;
-
+  commentForm: FormGroup;
   sanitizedContent: SafeHtml = '';
   isBookmarked: boolean = false;
   suggestedBlogs: Blog[] = [];
   blogTags: Tags[] = [];
   blogDate: string | null = null;
+  upVotes: number = 0;
+  downVotes: number = 0;
+  isUpvote: boolean = false;
+  isDownvote: boolean = false;
   isFollowing: boolean = false;
+  comments: Comment[] = [];
   isFollow$: Observable<boolean>;
   isBookmark$: Observable<boolean>;
+  comments$: Observable<Comment[]>;
   isSelf: boolean = false;
+  isLogin: boolean = false;
+  userBlogid: string = '';
+  userBlogName: string = '';
+  editingCommentId: string | null = null;
+  editCommentForm: FormGroup;
 
   @Input() blogId: string = '';
   @Input() isPopup: boolean = false;
@@ -50,28 +77,49 @@ export class BlogDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private msg: NzMessageService,
     private formatDate: DateFormatter,
+    private fb: FormBuilder,
   ) {
+    this.userId = localStorage.getItem('userId');
+    this.userName = localStorage.getItem('name');
+    if (this.userId !== '') {
+      this.isLogin = true;
+    }
+
+    this.commentForm = this.fb.group({
+      comment: ['', [Validators.required, Validators.minLength(1)]],
+    });
+    this.editCommentForm = this.fb.group({
+      content: ['', [Validators.required, Validators.minLength(1)]],
+    });
+
     this.blog$ = this.store.select(BlogState.blog);
     this.isFollow$ = this.store.select(UserState.isFollow);
     this.isBookmark$ = this.store.select(UserState.isBookmark);
     this.store.select(BlogState.blogs).subscribe((response) => {
       this.suggestedBlogs = response;
     });
+    this.comments$ = this.store.select(CommentsState.comments);
+
     this.blog$.subscribe((response) => {
       this.blogId = response?.id ?? '';
       this.blogContent = response?.content;
-      this.userName = response?.user?.username ?? '';
-      this.userId = response?.user?.id ?? '';
+      this.userBlogName = response?.user?.username ?? '';
+      this.userBlogid = response?.user?.id ?? '';
       this.sanitizedContent = this.sanitizeContent(String(this.blogContent));
       this.blogDate = this.formatDate.convertDate(String(response?.createdAt));
       this.blogTags = response?.tags ?? [];
-      if (this.userId !== '' && this.blogId !== '') {
-        this.store.dispatch(new UserAction.isFollow(this.userId));
-        this.store.dispatch(new UserAction.isBookmark(this.blogId));
-        if (this.userId === localStorage.getItem('userId')) {
-          this.isSelf = true;
-        } else {
-          this.isSelf = false;
+      this.upVotes = response?.votes?.upVote ?? 0;
+      this.downVotes = response?.votes?.downVote ?? 0;
+      if (this.isLogin) {
+        if (this.userId !== '' && this.blogId !== '') {
+          this.store.dispatch(new UserAction.isFollow(this.userId));
+          this.store.dispatch(new UserAction.isBookmark(this.blogId));
+          this.store.dispatch(new CommentsAction.GetComment(this.blogId));
+          if (this.userBlogid === localStorage.getItem('userId')) {
+            this.isSelf = true;
+          } else {
+            this.isSelf = false;
+          }
         }
       }
     });
@@ -79,9 +127,18 @@ export class BlogDetailComponent implements OnInit {
       this.isFollowing = response;
     });
     this.isBookmark$.subscribe((response) => {
-      console.log(response);
       this.isBookmarked = response;
     });
+    this.comments$.subscribe((response) => {
+      this.comments = response;
+    });
+  }
+  CheckLogin(): boolean {
+    if (!this.isLogin) {
+      this.msg.info('Please login to do action');
+      return false;
+    }
+    return true;
   }
   ngOnInit() {
     if (this.isPopup) {
@@ -112,6 +169,7 @@ export class BlogDetailComponent implements OnInit {
   }
 
   onFollow() {
+    if (!this.CheckLogin()) return;
     if (this.isFollowing) {
       this.store.dispatch(new UserAction.unfollow(this.userId));
     } else {
@@ -120,11 +178,76 @@ export class BlogDetailComponent implements OnInit {
   }
 
   onBookMark() {
+    if (!this.CheckLogin()) return;
     if (this.isBookmarked) {
       this.store.dispatch(new UserAction.unbookmark(this.blogId));
     } else {
       this.store.dispatch(new UserAction.bookmark(this.blogId));
     }
+  }
+
+  onComment(): void {
+    if (!this.CheckLogin()) return;
+    if (this.commentForm.valid) {
+      const content = this.commentForm.value;
+      const payload = {
+        blogId: this.blogId,
+        content: content.comment,
+      };
+
+      this.store.dispatch(new CommentsAction.CreateComment(payload));
+
+      this.commentForm.reset();
+    } else {
+      console.error('Form is invalid');
+    }
+  }
+
+  updateComment(commentId: string): void {
+    if (this.editCommentForm.valid) {
+      const updatedContent = this.editCommentForm.value.content;
+
+      const payload = {
+        commentId,
+        blogId: this.blogId,
+        content: updatedContent,
+      };
+
+      this.store
+        .dispatch(new CommentsAction.UpdateComment(payload))
+        .subscribe(() => {
+          // Update local state or fetch comments again
+          const commentIndex = this.comments.findIndex(
+            (c) => c.id === commentId,
+          );
+          if (commentIndex !== -1) {
+            this.comments[commentIndex].content = updatedContent;
+          }
+          this.cancelEditing();
+        });
+    }
+  }
+  startEditing(commentId: string): void {
+    this.editingCommentId = commentId;
+    const commentToEdit = this.comments.find((c) => c.id === commentId);
+    if (commentToEdit) {
+      this.editCommentForm.patchValue({
+        content: commentToEdit.content,
+      });
+    }
+  }
+
+  cancelEditing(): void {
+    this.editingCommentId = null;
+    this.editCommentForm.reset();
+  }
+
+  deleteComment(comment: Comment): void {
+    const payload = {
+      blogId: this.blogId,
+      commentId: comment.id,
+    };
+    this.store.dispatch(new CommentsAction.DeleteComment(payload));
   }
 
   openBlogPopup(blog: Blog) {

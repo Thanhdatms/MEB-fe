@@ -32,9 +32,8 @@ import { CommonModule } from '@angular/common';
 })
 export class RegisterComponent {
   imagePath = '/sample-bg.png';
-
+  tempAvt = '/temp-avt.jpeg'; // Path to public file in the `assets` folder
   registerForm: FormGroup;
-
   status$: Observable<boolean>;
   private destroy$ = new Subject<void>();
 
@@ -103,24 +102,55 @@ export class RegisterComponent {
         };
   }
 
-  onRegister() {
+  async getFileFromPublicAssets(url: string, fileName: string): Promise<File> {
+    try {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch the image from public assets');
+      }
+
+      const blob = await response.blob();
+      return new File([blob], fileName, { type: blob.type });
+    } catch (error) {
+      console.error('Error fetching the file:', error);
+      throw error;
+    }
+  }
+
+  async onRegister() {
     if (this.registerForm.invalid) {
       this._msg.error('Please ensure the form is filled correctly');
       return;
     }
 
-    const payload = {
-      username: this.registerForm.get('username')?.value,
-      email: this.registerForm.get('email')?.value,
-      hashpassword: this.registerForm.get('password')?.value,
-    };
-    this._store.dispatch(
-      new AuthAction.Register({
-        username: payload.username,
-        email: payload.email,
-        hashpassword: payload.hashpassword,
-      }),
-    );
+    try {
+      // Ensure `tempAvt` is fetched as a file
+      const avatarFile = await this.getFileFromPublicAssets(
+        this.tempAvt,
+        'temp-avt.jpeg',
+      );
+      if (avatarFile) {
+        const formData = new FormData();
+        let user = {
+          username: this.registerForm.get('username')?.value,
+          email: this.registerForm.get('email')?.value,
+          password: this.registerForm.get('password')?.value,
+          nameTag: this.registerForm.get('username')?.value,
+        };
+        let userPayload = new Blob([JSON.stringify(user)], {
+          type: 'application/json',
+        });
+        formData.append('user', userPayload);
+        formData.append('file', avatarFile);
+
+        // Dispatch the FormData payload
+        this._store.dispatch(new AuthAction.Register(formData));
+      }
+    } catch (error) {
+      this._msg.error('Failed to load default avatar');
+      console.error('Error in registration process:', error);
+    }
   }
 
   ngOnDestroy() {
