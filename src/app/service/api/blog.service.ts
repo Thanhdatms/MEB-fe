@@ -37,6 +37,6 @@ export class BlogService {
   }
 
   getTest(){
-    return ""
+    return "Hello"
   }
 }
