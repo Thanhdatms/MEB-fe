@@ -35,4 +35,8 @@ export class BlogService {
   getBlogByUser(id: any): Observable<any> {
     return this.http.get(`${this.userApiUrl}/users/${id}/blogs`);
   }
+
+  getTest(){
+    return ""
+  }
 }
