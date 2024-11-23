@@ -36,3 +36,22 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+  
+  deploy:
+    needs: push_to_registry
+    runs-on: self-hosted
+    steps:
+      - name: Pull new Docker image
+        run: sudo docker pull dangthanhdatuit/mep-fe:develop
+
+      - name: Stop and remove existing container
+        run: |
+          if sudo docker ps -q --filter "name=mep-fe"; then
+            sudo docker stop mep-fe && sudo docker rm mep-fe
+          fi
+
+      - name: Start new container
+        run: sudo docker run -d --name mep-fe -p 4200:80 dangthanhdatuit/mep-fe:develop
+
+      - name: Restart NGINX
+        run: sudo systemctl restart nginx
