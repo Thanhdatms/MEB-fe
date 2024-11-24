@@ -21,8 +21,8 @@ export class UserService {
   getMe(): Observable<any> {
     return this.http.get(`${this.apiUrl}/me`);
   }
-  getUserById(id: any): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
+  getUserByTag(tag: any): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${tag}`);
   }
 
   updateUser(payload: any): Observable<any> {

@@ -94,7 +94,7 @@ export const routes: Routes = [
         ],
       },
       {
-        path: 'user/:id',
+        path: 'user/:nametag',
         component: ProfileComponent,
         resolve: {
           userIdMatch: UserIdMatchResolver,

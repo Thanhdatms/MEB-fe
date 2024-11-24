@@ -16,6 +16,7 @@ export interface User {
 export interface UserStateModel {
   user: User;
   userProfile: User;
+  userBlog: User;
   status: boolean;
   isFollow: boolean;
   isBookmark: boolean;
@@ -32,6 +33,13 @@ export interface UserStateModel {
       nameTag: '',
     },
     userProfile: {
+      id: '',
+      username: '',
+      avatar: '',
+      bio: '',
+      nameTag: '',
+    },
+    userBlog: {
       id: '',
       username: '',
       avatar: '',
@@ -67,6 +75,11 @@ export class UserState {
   }
 
   @Selector()
+  static userBlog({ userBlog }: UserStateModel): any {
+    return userBlog;
+  }
+
+  @Selector()
   static status({ status }: UserStateModel): boolean {
     return status;
   }
@@ -90,14 +103,14 @@ export class UserState {
       }),
     );
   }
-  @Action(UserAction.getUserById)
-  getUserbyId(
+  @Action(UserAction.getUserbyNameTag)
+  getUserbyNameTag(
     ctx: StateContext<UserStateModel>,
-    action: UserAction.getUserById,
+    action: UserAction.getUserbyNameTag,
   ) {
-    return this.apiService.user.getUserById(action.payload).pipe(
+    return this.apiService.user.getUserByTag(action.payload).pipe(
       tap((response) => {
-        console.log(response);
+        ctx.patchState({ userBlog: response.result });
       }),
     );
   }

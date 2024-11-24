@@ -12,6 +12,7 @@ export interface Comment {
   user?: {
     id: string;
     username: string;
+    avatar: string;
   };
   update: boolean;
 }

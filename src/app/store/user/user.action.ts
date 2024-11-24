@@ -1,6 +1,6 @@
 export enum Actions {
   GET_ALL_USER = '[User] Get all user',
-  GET_USER_BY_ID = '[User] Get user by id',
+  GET_USER_BY_TAG = '[User] Get user by nametag',
   GET_ME = '[User] get user',
 
   BOOKMARK = '[User] bookmark',
@@ -18,8 +18,8 @@ export namespace UserAction {
   export class getAllUser {
     static type = Actions.GET_ALL_USER;
   }
-  export class getUserById {
-    static type = Actions.GET_USER_BY_ID;
+  export class getUserbyNameTag {
+    static type = Actions.GET_USER_BY_TAG;
     constructor(public payload: any) {}
   }
 

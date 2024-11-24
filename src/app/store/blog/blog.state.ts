@@ -215,7 +215,7 @@ export class BlogState {
       .pipe(
         tap((response: any) => {
           if (response.code === 200) {
-            // ctx.patchState({ voteStatus: response.result });
+            ctx.patchState({ voteStatus: response.result.voteType });
             // console.log(response);
           }
         }),

@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Store } from '@ngxs/store';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { Observable, map, take, takeUntil } from 'rxjs';
@@ -40,7 +47,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 })
 export class BlogDetailComponent implements OnInit {
   blog$: Observable<Blog | null>;
-  AuthorImage = '/sample-logo.jpg';
+  AuthorImage: string = '';
   blogContent: Text | undefined;
   UserName: string | null = null;
   commentForm: FormGroup;
@@ -67,6 +74,7 @@ export class BlogDetailComponent implements OnInit {
   userNameTag: string = '';
   editingCommentId: string | null = null;
   editCommentForm: FormGroup;
+  userBlogProfile$: Observable<User>;
 
   @Input() blogId: string = '';
   @Input() isPopup: boolean = false;
@@ -81,9 +89,8 @@ export class BlogDetailComponent implements OnInit {
     private msg: NzMessageService,
     private formatDate: DateFormatter,
     private fb: FormBuilder,
+    private cdr: ChangeDetectorRef,
   ) {
-    // this.userId = localStorage.getItem('userId');
-    // this.userName = localStorage.getItem('name');
     if (this.userId !== '') {
       this.isLogin = true;
     }
@@ -103,6 +110,7 @@ export class BlogDetailComponent implements OnInit {
     });
     this.comments$ = this.store.select(CommentsState.comments);
     this.voteStatus$ = this.store.select(BlogState.voteStatus);
+    this.userBlogProfile$ = this.store.select(UserState.userBlog);
 
     this.blog$.subscribe((response) => {
       this.blogId = response?.id ?? '';
@@ -115,6 +123,8 @@ export class BlogDetailComponent implements OnInit {
       this.blogTags = response?.tags ?? [];
       this.upVotes = response?.votes?.upVote ?? 0;
       this.downVotes = response?.votes?.downVote ?? 0;
+      if (this.userNameTag)
+        this.store.dispatch(new UserAction.getUserbyNameTag(this.userNameTag));
       if (this.isLogin) {
         if (this.userId !== '' && this.blogId !== '') {
           this.store.dispatch(new UserAction.isFollow(this.userBlogid));
@@ -139,7 +149,13 @@ export class BlogDetailComponent implements OnInit {
       this.comments = response;
     });
     this.voteStatus$.subscribe((response) => {
-      this.currentVoteType = response;
+      if (response) {
+        this.currentVoteType = response;
+      }
+    });
+    this.userBlogProfile$.subscribe((response) => {
+      this.AuthorImage = response.avatar;
+      this.UserName = response.username;
     });
   }
   CheckLogin(): boolean {
