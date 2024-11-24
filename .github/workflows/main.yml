@@ -44,7 +44,7 @@ jobs:
         run: sudo docker pull dangthanhdatuit/mep-fe:latest
         
       - name: Delete old container
-        run: docker rm -f mep-fe
+        run: sudo docker rm -f mep-fe
       - name: Start new container
         run: sudo docker run -d --name mep-fe -p 4200:80 dangthanhdatuit/mep-fe:latest 
 
