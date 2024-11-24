@@ -65,4 +65,8 @@ export class UserService {
       newPassword,
     });
   }
+
+  getUserStats(userId: any): Observable<any> {
+    return this.http.get(`${this.apiUrl}/stats/${userId}`);
+  }
 }

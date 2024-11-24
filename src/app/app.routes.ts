@@ -25,6 +25,7 @@ import { CodeSpaceComponent } from './Components/code-space/code-space.component
 import { BookmarkBlogsComponent } from './Components/blog-list/bookmark-blogs/bookmark-blogs.component';
 import { DiscoverBlogsComponent } from './Components/blog-list/discover-blogs/discover-blogs.component';
 import { CommentsState } from './store/comments/comments.state';
+import { UserStatsState } from './store';
 
 export const routes: Routes = [
   {
@@ -149,6 +150,7 @@ export const routes: Routes = [
           UserState,
           CategoryState,
           CommentsState,
+          UserStatsState,
         ]),
       ),
     ],
