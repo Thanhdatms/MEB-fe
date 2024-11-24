@@ -9,6 +9,7 @@ import { Blog, BlogState } from '../../store/blog/blog.state';
 import { BlogAction } from '../../store/blog/blog.action';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { UserAction } from '../../store/user/user.action';
+import { UserStats, UserStatsAction, UserStatsState } from '../../store';
 
 @Component({
   selector: 'app-profile',
@@ -27,6 +28,9 @@ export class ProfileComponent implements OnInit {
   userAvt: string = '';
   userNameTag: string = '';
   userProfile$: Observable<User>;
+  followers: number = 0;
+  following: number = 0;
+  posts: number = 0;
   constructor(
     private _store: Store,
     private _route: ActivatedRoute,
@@ -48,6 +52,12 @@ export class ProfileComponent implements OnInit {
       this.userNameTag =
         response.nameTag || localStorage.getItem('nameTag') || '';
       this.userBio = response.bio || localStorage.getItem('bio') || '';
+    });
+    this._store.dispatch(new UserStatsAction.getUserStats(this.userId));
+    this._store.select(UserStatsState.userStats).subscribe((stats) => {
+      this.followers = stats.followers;
+      this.following = stats.following;
+      this.posts = stats.pots;
     });
   }
 
