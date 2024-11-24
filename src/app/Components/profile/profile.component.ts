@@ -57,7 +57,7 @@ export class ProfileComponent implements OnInit {
     this._store.select(UserStatsState.userStats).subscribe((stats) => {
       this.followers = stats.followers;
       this.following = stats.following;
-      this.posts = stats.pots;
+      this.posts = stats.posts;
     });
   }
 

@@ -13,6 +13,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { CategorysAction } from '../../../store/category/category.actions';
 import { CategoryState } from '../../../store/category/category.state';
 import { Router } from '@angular/router';
+import { BlogAction } from '../../../store/blog/blog.action';
 
 @Component({
   selector: 'app-blog-list',
@@ -76,11 +77,12 @@ export class BlogListComponent implements OnInit {
     }
   }
 
-  openPopup(article: any) {
-    this.selectedArticle = article;
-  }
+  // openPopup(article: any) {
+  //   this.selectedArticle = article;
+  // }
 
-  closePopup() {
-    this.selectedArticle = null;
-  }
+  // closePopup() {
+  //   this.selectedArticle = null;
+  //   this.store.dispatch(new BlogAction.GetBlogs());
+  // }
 }

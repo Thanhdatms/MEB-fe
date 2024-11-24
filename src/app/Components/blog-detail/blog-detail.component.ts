@@ -57,18 +57,21 @@ export class BlogDetailComponent implements OnInit {
   comments: Comment[] = [];
   isFollow$: Observable<boolean>;
   isBookmark$: Observable<boolean>;
+  voteStatus$: Observable<string>;
+  currentVoteType: string = '';
   comments$: Observable<Comment[]>;
   isSelf: boolean = false;
   isLogin: boolean = false;
   userBlogid: string = '';
   userBlogName: string = '';
+  userNameTag: string = '';
   editingCommentId: string | null = null;
   editCommentForm: FormGroup;
 
   @Input() blogId: string = '';
   @Input() isPopup: boolean = false;
   @Input() userId: string | null = null;
-  @Input() userName: string | null = null;
+  // @Input() userName: string | null = null;
   @Output() openPopup = new EventEmitter<Blog>();
 
   constructor(
@@ -79,8 +82,8 @@ export class BlogDetailComponent implements OnInit {
     private formatDate: DateFormatter,
     private fb: FormBuilder,
   ) {
-    this.userId = localStorage.getItem('userId');
-    this.userName = localStorage.getItem('name');
+    // this.userId = localStorage.getItem('userId');
+    // this.userName = localStorage.getItem('name');
     if (this.userId !== '') {
       this.isLogin = true;
     }
@@ -99,11 +102,13 @@ export class BlogDetailComponent implements OnInit {
       this.suggestedBlogs = response;
     });
     this.comments$ = this.store.select(CommentsState.comments);
+    this.voteStatus$ = this.store.select(BlogState.voteStatus);
 
     this.blog$.subscribe((response) => {
       this.blogId = response?.id ?? '';
       this.blogContent = response?.content;
       this.userBlogName = response?.user?.username ?? '';
+      this.userNameTag = response?.user?.nameTag ?? '';
       this.userBlogid = response?.user?.id ?? '';
       this.sanitizedContent = this.sanitizeContent(String(this.blogContent));
       this.blogDate = this.formatDate.convertDate(String(response?.createdAt));
@@ -112,9 +117,10 @@ export class BlogDetailComponent implements OnInit {
       this.downVotes = response?.votes?.downVote ?? 0;
       if (this.isLogin) {
         if (this.userId !== '' && this.blogId !== '') {
-          this.store.dispatch(new UserAction.isFollow(this.userId));
+          this.store.dispatch(new UserAction.isFollow(this.userBlogid));
           this.store.dispatch(new UserAction.isBookmark(this.blogId));
           this.store.dispatch(new CommentsAction.GetComment(this.blogId));
+          this.store.dispatch(new BlogAction.GetVoteByBlog(this.blogId));
           if (this.userBlogid === localStorage.getItem('userId')) {
             this.isSelf = true;
           } else {
@@ -131,6 +137,9 @@ export class BlogDetailComponent implements OnInit {
     });
     this.comments$.subscribe((response) => {
       this.comments = response;
+    });
+    this.voteStatus$.subscribe((response) => {
+      this.currentVoteType = response;
     });
   }
   CheckLogin(): boolean {
@@ -171,9 +180,9 @@ export class BlogDetailComponent implements OnInit {
   onFollow() {
     if (!this.CheckLogin()) return;
     if (this.isFollowing) {
-      this.store.dispatch(new UserAction.unfollow(this.userId));
+      this.store.dispatch(new UserAction.unfollow(this.userBlogid));
     } else {
-      this.store.dispatch(new UserAction.follow(this.userId));
+      this.store.dispatch(new UserAction.follow(this.userBlogid));
     }
   }
 
@@ -184,6 +193,20 @@ export class BlogDetailComponent implements OnInit {
     } else {
       this.store.dispatch(new UserAction.bookmark(this.blogId));
     }
+  }
+
+  onVote(voteType: string) {
+    if (!this.CheckLogin()) return;
+    if (this.currentVoteType == voteType) {
+      this.currentVoteType = '';
+      return this.store.dispatch(new BlogAction.UnvoteBlog(this.blogId));
+    }
+    this.currentVoteType = voteType;
+    const payload = {
+      blogId: this.blogId,
+      voteType,
+    };
+    return this.store.dispatch(new BlogAction.VoteBlog(payload));
   }
 
   onComment(): void {

@@ -5,6 +5,9 @@ export enum Actions {
   GET_BLOG_BY_ID = '[Blog] get blog by id',
   GET_BLOG_BY_USER = '[Blog] get blog by user',
   GET_BLOG_BY_USER_BOOKMARK = '[Blog] get blog by user bookmark',
+  CHECK_USER_VOTE = '[Blog] check user vote in blog',
+  VOTE_BLOG = '[Blog] vote blog',
+  UNVOTE_BLOG = '[Blog] unvote blog',
 }
 export namespace BlogAction {
   export class GetBlogs {
@@ -33,5 +36,18 @@ export namespace BlogAction {
 
   export class GetBlogByUserBookmark {
     static type = Actions.GET_BLOG_BY_USER_BOOKMARK;
+  }
+
+  export class GetVoteByBlog {
+    static type = Actions.CHECK_USER_VOTE;
+    constructor(public payload: any) {}
+  }
+  export class VoteBlog {
+    static type = Actions.VOTE_BLOG;
+    constructor(public payload: any) {}
+  }
+  export class UnvoteBlog {
+    static type = Actions.UNVOTE_BLOG;
+    constructor(public payload: any) {}
   }
 }

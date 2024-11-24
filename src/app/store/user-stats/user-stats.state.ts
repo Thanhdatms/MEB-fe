@@ -9,7 +9,7 @@ export interface UserStats {
   id: string;
   followers: number;
   following: number;
-  pots: number;
+  posts: number;
 }
 
 export interface UserStatsStateModel {
@@ -22,7 +22,7 @@ export interface UserStatsStateModel {
       id: '',
       followers: 0,
       following: 0,
-      pots: 0,
+      posts: 0,
     },
   },
 })
@@ -39,15 +39,19 @@ export class UserStatsState {
   }
 
   @Action(UserStatsAction.getUserStats)
-  getUserStats(ctx: StateContext<UserStatsStateModel>, action: UserStatsAction.getUserStats) {
+  getUserStats(
+    ctx: StateContext<UserStatsStateModel>,
+    action: UserStatsAction.getUserStats,
+  ) {
     return this.apiService.user.getUserStats(action.payload).pipe(
       tap((response) => {
-        if(response.code == 200) {
-            ctx.patchState({ userStats: response.result });
-            this.msg.success('User Stats fetched successfully');
+        if (response.code == 200) {
+          ctx.patchState({ userStats: response.result });
+          // this.msg.success('User Stats fetched successfully');
         } else {
-            this.msg.error('Failed to fetch User Stats');
+          // this.msg.error('Failed to fetch User Stats');
         }
-      }));  
-    }
+      }),
+    );
+  }
 }
