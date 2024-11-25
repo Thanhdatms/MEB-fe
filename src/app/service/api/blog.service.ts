@@ -35,7 +35,7 @@ export class BlogService {
   getBlogByUser(id: any): Observable<any> {
     return this.http.get(`${this.userApiUrl}/users/${id}/blogs`);
   }
-
+  
   getBlogVote(blogId: any): Observable<any> {
     return this.http.get(`${this.apiUrl}/${blogId}/user/is-voted`);
   }
@@ -48,6 +48,6 @@ export class BlogService {
   }
 
   unvoteBlog(blogId: any): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${blogId}/user/votes`);
+    return this.http.delete(`${this.apiUrl}/${blogId}/user/votes`); 
   }
 }
