@@ -1,6 +1,6 @@
 export const environment = {
     localURL: 'http://localhost:4200',
-    apiUrl: 'https://yourlove.com',
+    apiUrl: 'https://yourrlove.com',
     // devURL: 'http://localhost:4200',
     production: true,
     cdk_editor_key:
