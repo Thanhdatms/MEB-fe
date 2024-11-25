@@ -1,5 +1,5 @@
 // src/store/blogs.state.ts
-import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { State, Action, StateContext, Selector, Store } from '@ngxs/store';
 import { BlogAction } from './blog.action';
 import { ApiService } from '../../service/api.service';
 import { Injectable } from '@angular/core';
@@ -36,6 +36,7 @@ export interface BlogStateModel {
   blog: Blog | null;
   userBlog: Blog[];
   status: Status;
+  voteStatus: string;
 }
 
 @State<BlogStateModel>({
@@ -49,11 +50,15 @@ export interface BlogStateModel {
       status: false,
       code: 0,
     },
+    voteStatus: '',
   },
 })
 @Injectable()
 export class BlogState {
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private store: Store,
+  ) {}
 
   @Selector()
   static blogs({ blogs }: BlogStateModel): Blog[] {
@@ -75,6 +80,11 @@ export class BlogState {
   @Selector()
   static bookmarkedBlogs({ bookmarkedBlogs }: BlogStateModel): Blog[] {
     return bookmarkedBlogs;
+  }
+
+  @Selector()
+  static voteStatus({ voteStatus }: BlogStateModel): string {
+    return voteStatus;
   }
 
   @Action(BlogAction.GetBlogs)
@@ -190,6 +200,53 @@ export class BlogState {
           ctx.patchState({
             bookmarkedBlogs: blogs,
           });
+        }),
+      )
+      .subscribe();
+  }
+
+  @Action(BlogAction.GetVoteByBlog)
+  getVoteByBlog(
+    ctx: StateContext<BlogStateModel>,
+    action: BlogAction.GetVoteByBlog,
+  ) {
+    this.apiService.blog
+      .getBlogVote(action.payload)
+      .pipe(
+        tap((response: any) => {
+          if (response.code === 200) {
+            ctx.patchState({ voteStatus: response.result.voteType });
+            // console.log(response);
+          }
+        }),
+      )
+      .subscribe();
+  }
+
+  @Action(BlogAction.VoteBlog)
+  voteBlog(ctx: StateContext<BlogStateModel>, action: BlogAction.VoteBlog) {
+    this.apiService.blog
+      .voteBlog(action.payload.blogId, action.payload.voteType)
+      .pipe(
+        tap((response: any) => {
+          if (response.code === 200) {
+            ctx.patchState({ voteStatus: response.result.voteType });
+            ctx.dispatch(new BlogAction.GetBlogById(action.payload.blogId));
+          }
+        }),
+      )
+      .subscribe();
+  }
+
+  @Action(BlogAction.UnvoteBlog)
+  unvoteBlog(ctx: StateContext<BlogStateModel>, action: BlogAction.UnvoteBlog) {
+    this.apiService.blog
+      .unvoteBlog(action.payload)
+      .pipe(
+        tap((response: any) => {
+          if (response.code === 200) {
+            ctx.dispatch(new BlogAction.GetBlogById(action.payload));
+          }
         }),
       )
       .subscribe();

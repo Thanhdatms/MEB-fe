@@ -41,9 +41,11 @@ export class ProfileComponent implements OnInit {
       const id = params.get('id');
       if (id) {
         this._store.dispatch(new BlogAction.GetBlogByUser(id));
+        this._store.dispatch(new UserStatsAction.getUserStats(id));
       } else {
         this.userId = localStorage.getItem('userId') || '';
         this._store.dispatch(new BlogAction.GetBlogByUser(this.userId));
+        this._store.dispatch(new UserStatsAction.getUserStats(this.userId));
       }
     });
     this.userProfile$.subscribe((response) => {
@@ -53,11 +55,11 @@ export class ProfileComponent implements OnInit {
         response.nameTag || localStorage.getItem('nameTag') || '';
       this.userBio = response.bio || localStorage.getItem('bio') || '';
     });
-    this._store.dispatch(new UserStatsAction.getUserStats(this.userId));
+
     this._store.select(UserStatsState.userStats).subscribe((stats) => {
       this.followers = stats.followers;
       this.following = stats.following;
-      this.posts = stats.pots;
+      this.posts = stats.posts;
     });
   }
 

@@ -4,6 +4,7 @@ export enum Actions {
   LOGIN_FAILED = '[Auth] login failed',
   REGISTER = '[Auth] register',
   REGISTER_SUCCESS = '[Auth] register successfully',
+  REGISTER_FAILED = '[Auth] register failed',
   LOGOUT = '[Auth] logout',
 }
 export namespace AuthAction {
@@ -25,6 +26,10 @@ export namespace AuthAction {
   }
   export class RegisterSuccess {
     static type = Actions.REGISTER_SUCCESS;
+    constructor(public payload: any) {}
+  }
+  export class RegisterFailed {
+    static type = Actions.REGISTER_FAILED;
     constructor(public payload: any) {}
   }
 

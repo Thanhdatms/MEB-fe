@@ -75,7 +75,7 @@
               <div class="flex items-center gap-x-5">
                 <div class="w-8 h-8 rounded-full overflow-hidden">
                   <img
-                    [src]="AuthorImage"
+                    [src]="comment.user?.avatar"
                     alt="Suggested blog"
                     class="w-full h-full object-cover"
                   />
@@ -160,7 +160,7 @@
         <div class="flex items-center justify-between mb-2">
           <div
             class="flex items-center space-x-2 cursor-pointer"
-            [routerLink]="['/user', userId]"
+            [routerLink]="['/user', userNameTag]"
           >
             <div class="w-10 h-10 rounded-full overflow-hidden">
               <img
@@ -170,8 +170,10 @@
               />
             </div>
             <div class="text-[17px]">
-              <div class="font-bold text-white">{{ userName }}</div>
-              <div class="text-gray-400 text-sm"><code>&#64;</code>nametag</div>
+              <div class="font-bold text-white">{{ userBlogName }}</div>
+              <div class="text-gray-400 text-sm">
+                <code>&#64;</code>{{ userNameTag }}
+              </div>
             </div>
           </div>
           <div *ngIf="!isSelf">
@@ -259,6 +261,8 @@
               nzType="caret-up"
               nzTheme="outline"
               class="text-5xl cursor-pointer hover:text-green-300"
+              (click)="onVote('UPVOTE')"
+              [ngClass]="{ 'text-green-300': currentVoteType === 'UPVOTE' }"
             ></span>
             <span>{{ upVotes }}</span>
           </div>
@@ -268,6 +272,8 @@
               nzType="caret-down"
               nzTheme="outline"
               class="text-5xl cursor-pointer hover:text-red-400"
+              (click)="onVote('DOWNVOTE')"
+              [ngClass]="{ 'text-red-400': currentVoteType === 'DOWNVOTE' }"
             ></span>
             <span>{{ downVotes }}</span>
           </div>

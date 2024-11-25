@@ -35,8 +35,19 @@ export class BlogService {
   getBlogByUser(id: any): Observable<any> {
     return this.http.get(`${this.userApiUrl}/users/${id}/blogs`);
   }
+  
+  getBlogVote(blogId: any): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${blogId}/user/is-voted`);
+  }
 
-  getTest(){
-    return "Hello"
+  voteBlog(blogId: any, voteType: any): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/${blogId}/user/votes?voteType=${voteType}`,
+      {},
+    );
+  }
+
+  unvoteBlog(blogId: any): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${blogId}/user/votes`); 
   }
 }

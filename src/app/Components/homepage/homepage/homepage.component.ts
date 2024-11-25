@@ -31,11 +31,12 @@ export class HomepageComponent implements OnInit {
     this.store.dispatch(new BlogAction.GetBlogs());
   }
 
-  openPopup(article: any) {
-    this.selectedArticle = article;
-  }
+  // openPopup(article: any) {
+  //   this.selectedArticle = article;
+  // }
 
-  closePopup() {
-    this.selectedArticle = null;
-  }
+  // closePopup() {
+  //   this.selectedArticle = null;
+  //   this.store.dispatch(new BlogAction.GetBlogs());
+  // }
 }

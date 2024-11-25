@@ -89,7 +89,7 @@ export class AuthState {
         if (response.code === 200) {
           return ctx.dispatch(new AuthAction.RegisterSuccess(response));
         }
-        return;
+        return ctx.dispatch(new AuthAction.RegisterFailed(response));
       }),
     );
   }
@@ -100,6 +100,13 @@ export class AuthState {
     action: AuthAction.RegisterSuccess,
   ) {
     ctx.patchState({ RegisterStatus: true });
+  }
+  @Action(AuthAction.RegisterFailed)
+  RegisterFailed(
+    ctx: StateContext<AuthStateModel>,
+    action: AuthAction.RegisterFailed,
+  ) {
+    this.msg.error(action.payload.message);
   }
 
   @Action(AuthAction.Logout)
