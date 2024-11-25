@@ -17,7 +17,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { DateFormatter } from '../../utils/formatDate';
-import { environment } from '../../environment/environment';
+import { environment } from '../../../environments/environment';
 import { UserAction } from '../../store/user/user.action';
 import { User, UserState } from '../../store/user/user.state';
 import { Tags } from '../../store/tags/tags.state';

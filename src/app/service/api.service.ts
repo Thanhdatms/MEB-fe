@@ -7,12 +7,13 @@ import { UserService } from './api/user.service';
 import { CookieService } from 'ngx-cookie-service';
 import { CategoriesService } from './api/categories.service';
 import { CommentService } from './api/comment.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:8080';
+  private apiUrl = environment.apiUrl;
 
   public blog: BlogService;
   public tags: TagsService;
