@@ -75,11 +75,10 @@ export class BlogDetailComponent implements OnInit {
   editingCommentId: string | null = null;
   editCommentForm: FormGroup;
   userBlogProfile$: Observable<User>;
+  userId: string = '';
 
   @Input() blogId: string = '';
   @Input() isPopup: boolean = false;
-  @Input() userId: string | null = null;
-  // @Input() userName: string | null = null;
   @Output() openPopup = new EventEmitter<Blog>();
 
   constructor(
@@ -91,6 +90,7 @@ export class BlogDetailComponent implements OnInit {
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
   ) {
+    this.userId = localStorage.getItem('userId') ?? '';
     if (this.userId !== '') {
       this.isLogin = true;
     }
@@ -123,13 +123,18 @@ export class BlogDetailComponent implements OnInit {
       this.blogTags = response?.tags ?? [];
       this.upVotes = response?.votes?.upVote ?? 0;
       this.downVotes = response?.votes?.downVote ?? 0;
-      if (this.userNameTag)
-        this.store.dispatch(new UserAction.getUserbyNameTag(this.userNameTag));
+      if (this.userNameTag) {
+        const payload = {
+          nameTag: this.userNameTag,
+          type: 'blog',
+        };
+        this.store.dispatch(new UserAction.getUserbyNameTag(payload));
+      }
+
       if (this.isLogin) {
         if (this.userId !== '' && this.blogId !== '') {
           this.store.dispatch(new UserAction.isFollow(this.userBlogid));
           this.store.dispatch(new UserAction.isBookmark(this.blogId));
-          this.store.dispatch(new CommentsAction.GetComment(this.blogId));
           this.store.dispatch(new BlogAction.GetVoteByBlog(this.blogId));
           if (this.userBlogid === localStorage.getItem('userId')) {
             this.isSelf = true;
@@ -138,6 +143,8 @@ export class BlogDetailComponent implements OnInit {
           }
         }
       }
+      if (this.blogId)
+        this.store.dispatch(new CommentsAction.GetComment(this.blogId));
     });
     this.isFollow$.subscribe((response) => {
       this.isFollowing = response;
@@ -240,6 +247,11 @@ export class BlogDetailComponent implements OnInit {
     } else {
       console.error('Form is invalid');
     }
+  }
+  onReport(): void {
+    if (!this.CheckLogin()) return;
+    this.msg.info('Reported');
+    console.log(this.blogId);
   }
 
   updateComment(commentId: string): void {

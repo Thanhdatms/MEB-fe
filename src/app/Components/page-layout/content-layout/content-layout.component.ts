@@ -14,7 +14,7 @@ import { Store } from '@ngxs/store';
 import { BlogAction } from '../../../store/blog/blog.action';
 import { CreateBlogComponent } from '../../../UI/createBlog/create-blog/create-blog.component';
 import { AuthAction } from '../../../store/auth/auth.action';
-import { Observable, combineLatest, map } from 'rxjs';
+import { Observable, Subject, combineLatest, map, takeUntil } from 'rxjs';
 import { AuthState } from '../../../store/auth/auth.state';
 import { CookieService } from 'ngx-cookie-service';
 import { Blog, BlogState } from '../../../store/blog/blog.state';
@@ -48,6 +48,7 @@ export class ContentLayoutComponent {
   userAvt: string | null = null;
   userNameTag: string | null = null;
   userProfile$: Observable<User>;
+  private destroy$ = new Subject<void>();
 
   navbarItems = [
     { icon: 'bell', path: '/noti' },
@@ -59,17 +60,24 @@ export class ContentLayoutComponent {
     private router: Router,
     private cookieService: CookieService,
   ) {
-    this.userProfile$ = this.store.select(UserState.userProfile);
+    this.userProfile$ = this.store.select(UserState.user);
     this.store.select(BlogState.blogs).subscribe((blogs) => {
       this.blogs = blogs;
       this.filteredBlogs = blogs;
     });
 
     this.store.dispatch(new BlogAction.GetBlogs());
+    this.store.dispatch(new UserAction.getMe());
     const token = this.cookieService.get('authToken');
     if (token) {
       this.userProfile$.subscribe((response) => {
         setTimeout(() => {
+          localStorage.setItem('name', response.username);
+          localStorage.setItem('userId', response.id);
+          localStorage.setItem('avatar', response.avatar);
+          localStorage.setItem('nameTag', response.nameTag);
+          localStorage.setItem('bio', response.bio);
+
           this.userName = response.username || localStorage.getItem('name');
           this.userAvt = response.avatar || localStorage.getItem('avatar');
           this.userNameTag =
@@ -104,8 +112,8 @@ export class ContentLayoutComponent {
 
   onLogout() {
     this.store.dispatch(new AuthAction.Logout());
-    this.router.navigate(['/auth']);
-    localStorage.clear();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   selectBlog(blog: Blog) {

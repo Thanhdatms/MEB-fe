@@ -13,16 +13,33 @@
       </div>
       <div class="flex gap-x-5 items-center content-center relative">
         <button nz-button nz-dropdown [nzDropdownMenu]="menu" *ngIf="isProfile">
-          <span nz-icon nzType="more" nzTheme="outline" class="text-4xl text-gray-600 hover:text-gray-800"></span>
+          <span
+            nz-icon
+            nzType="more"
+            nzTheme="outline"
+            class="text-4xl text-gray-600 hover:text-gray-800"
+          ></span>
         </button>
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu class="bg-[var(--font-color)]">
-            <li nz-menu-item class="text-white text-xl hover:bg-[var(--main-theme)]" (click)="onEdit()">
+            <li
+              nz-menu-item
+              class="text-white text-xl hover:bg-[var(--main-theme)]"
+              (click)="onEdit()"
+            >
               <span nz-icon nzType="edit" nzTheme="outline" class="mr-3"></span>
               <span>Edit post</span>
             </li>
-            <li nz-menu-item class="text-white text-xl hover:bg-[var(--main-theme)]">
-              <span nz-icon nzType="delete" nzTheme="outline" class="mr-3"></span>
+            <li
+              nz-menu-item
+              class="text-white text-xl hover:bg-[var(--main-theme)]"
+            >
+              <span
+                nz-icon
+                nzType="delete"
+                nzTheme="outline"
+                class="mr-3"
+              ></span>
               <span>Delete post</span>
             </li>
           </ul>
@@ -39,8 +56,9 @@
     <app-blog-detail [blogId]="article.id" [isPopup]="true"></app-blog-detail>
   </div>
 </div>
-<app-create-blog 
-  *ngIf="isVisible" 
-  (close)="closePopup()" 
-  [existingBlog]="article">
+<app-create-blog
+  *ngIf="isVisible"
+  (close)="closePopup()"
+  [existingBlog]="article"
+>
 </app-create-blog>

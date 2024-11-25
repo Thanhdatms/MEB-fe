@@ -1,9 +1,9 @@
 <div class="flex flex-row pl-5 py-8 gap-x-40">
   <app-side-bar></app-side-bar>
 
-  <div class="flex flex-col gap-y-5 w-ful text-xl">
+  <div class="flex flex-col gap-y-5 w-full text-xl">
     <!-- User profile header -->
-    <div class="flex items-center gap-x-4 w-50%">
+    <div class="flex items-center gap-x-4 w-full">
       <img [src]="userAvt" alt="User profile" class="w-24 h-24 rounded-full" />
       <div>
         <h1 class="text-3xl font-bold text-[var(--font-color)]">
@@ -13,16 +13,30 @@
         <p class="text-gray-600">{{ userBio }}</p>
       </div>
       <div *ngIf="!isProfile" class="ml-[20%] gap-x-4 flex font-bold">
-        <button
+        <!-- <button
           class="px-4 py-2 bg-gray-200 text-[var(--font-color)] mr-2 rounded-xl"
         >
           FOLLOWED
+        </button> -->
+        <button
+          class="shine-button bg-white text-[var(--main-theme)] px-4 py-1 rounded-xl font-bold border border-[var(--font-color)]"
+          *ngIf="!isFollowing"
+          (click)="onFollow()"
+        >
+          FOLLOW
         </button>
         <button
+          class="shine-button bg-[var(--main-theme)] text-white px-4 py-1 rounded-xl font-bold"
+          *ngIf="isFollowing"
+          (click)="onFollow()"
+        >
+          FOLLOWED
+        </button>
+        <!-- <button
           class="shine-button px-4 py-2 bg-[var(--main-theme)] text-white rounded-xl"
         >
           MESSAGE
-        </button>
+        </button> -->
       </div>
       <div *ngIf="isProfile" class="ml-[20%] gap-x-4 flex font-bold">
         <button
@@ -41,9 +55,15 @@
 
     <!-- User stats -->
     <div class="flex gap-x-8 text-xl text-[var(--font-color)]">
-      <div><span class="font-bold">{{ posts }}</span> Posts</div>
-      <div><span class="font-bold">{{ following }}</span> Following </div>
-      <div><span class="font-bold">{{ followers }}</span> Followers </div>
+      <div>
+        <span class="font-bold">{{ posts }}</span> Posts
+      </div>
+      <div>
+        <span class="font-bold">{{ following }}</span> Following
+      </div>
+      <div>
+        <span class="font-bold">{{ followers }}</span> Followers
+      </div>
     </div>
     <div></div>
     <!-- User's blogs -->

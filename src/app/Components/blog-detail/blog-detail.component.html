@@ -237,7 +237,7 @@
                 <div class="text-[15px]">
                   <div class="text-white font-bold mb-2">{{ blog.title }}</div>
                   <div class="text-gray-400 text-sm">
-                    <code>&#64;</code>nametag
+                    <code>&#64;</code>{{ blog.user?.nameTag }}
                   </div>
                 </div>
               </ng-template>
@@ -292,7 +292,7 @@
               style="color: #facc15"
             ></span>
           </div>
-          <span>Bookmark</span>
+          <span *ngIf="isPopup">Bookmark</span>
         </button>
 
         <div class="flex items-center space-x-1 hover:text-violet-400">
@@ -303,7 +303,17 @@
             class="text-3xl cursor-pointer"
             (click)="copyToClipboard()"
           ></span>
-          <span>Copy link</span>
+          <span *ngIf="isPopup">Copy link</span>
+        </div>
+        <div class="flex items-center space-x-1 hover:text-orange-500">
+          <span
+            nz-icon
+            nzType="flag"
+            nzTheme="outline"
+            class="text-3xl cursor-pointer"
+            (click)="onReport()"
+          ></span>
+          <span *ngIf="isPopup">Report</span>
         </div>
       </div>
     </ng-template>
