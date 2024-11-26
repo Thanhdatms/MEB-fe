@@ -51,7 +51,8 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/ace-builds/src-min-noconflict/ace.js"
+              "node_modules/ace-builds/src-min-noconflict/ace.js",
+              "node_modules/jquery/dist/jquery.min.js"
             ]
           },
           "configurations": {

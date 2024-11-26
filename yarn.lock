@@ -5671,6 +5671,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jquery@npm:^1":
+  version: 1.10.45
+  resolution: "@types/jquery@npm:1.10.45"
+  checksum: 10c0/0b0cfac450180025a61d8dbaef94447c7af646953eb3e5c27ce21d4f81d795563ad2d92a1efbe10fc1af65f7dfa3f1b31531b2996dd8286e9acab46bc43eb6c1
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:^7.0.8, @types/json-schema@npm:^7.0.9":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
@@ -8971,6 +8978,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jquery@npm:1.12.4":
+  version: 1.12.4
+  resolution: "jquery@npm:1.12.4"
+  checksum: 10c0/0a5f36c3d38aed8ad410b3157311136d807e0ddaf8c33e2bf717639918b97a6ff0091657fe8bf06c910ad8f756eaad0d4f3e438a08920f466e22d0eb55ae3722
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -9560,6 +9574,7 @@ __metadata:
     "@ngxs/store": "npm:^18.1.1"
     "@types/codemirror": "npm:^5.60.15"
     "@types/jasmine": "npm:~5.1.0"
+    "@types/jquery": "npm:^1"
     ace-builds: "npm:^1.36.4"
     angular-quokka-plugin: "npm:^1.0.1"
     autoprefixer: "npm:^10.4.20"
@@ -9567,6 +9582,7 @@ __metadata:
     ckeditor5-premium-features: "npm:^43.2.0"
     codemirror: "npm:^6.0.1"
     jasmine-core: "npm:~5.2.0"
+    jquery: "npm:1.12.4"
     karma: "npm:~6.4.0"
     karma-chrome-launcher: "npm:~3.2.0"
     karma-coverage: "npm:~2.2.0"

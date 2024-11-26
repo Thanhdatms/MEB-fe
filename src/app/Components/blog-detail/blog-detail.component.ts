@@ -30,6 +30,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { ReportBlogComponent } from '../../UI/report-blog/report-blog.component';
 @Component({
   selector: 'app-blog-detail',
   standalone: true,
@@ -40,12 +42,15 @@ import { NzFormModule } from 'ng-zorro-antd/form';
     NzToolTipModule,
     NzFormModule,
     ReactiveFormsModule,
+    NzModalModule,
+    ReportBlogComponent,
   ],
   templateUrl: './blog-detail.component.html',
   styleUrl: './blog-detail.component.scss',
   providers: [DateFormatter],
 })
 export class BlogDetailComponent implements OnInit {
+  @Input() reportForm: FormGroup;
   blog$: Observable<Blog | null>;
   AuthorImage: string = '';
   blogContent: Text | undefined;
@@ -76,6 +81,7 @@ export class BlogDetailComponent implements OnInit {
   editCommentForm: FormGroup;
   userBlogProfile$: Observable<User>;
   userId: string = '';
+  isModalVisible = false;
 
   @Input() blogId: string = '';
   @Input() isPopup: boolean = false;
@@ -88,8 +94,11 @@ export class BlogDetailComponent implements OnInit {
     private msg: NzMessageService,
     private formatDate: DateFormatter,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef,
   ) {
+    this.reportForm = this.fb.group({
+      description: ['', Validators.required],
+    });
+
     this.userId = localStorage.getItem('userId') ?? '';
     if (this.userId !== '') {
       this.isLogin = true;
@@ -250,8 +259,6 @@ export class BlogDetailComponent implements OnInit {
   }
   onReport(): void {
     if (!this.CheckLogin()) return;
-    this.msg.info('Reported');
-    console.log(this.blogId);
   }
 
   updateComment(commentId: string): void {
@@ -303,5 +310,16 @@ export class BlogDetailComponent implements OnInit {
 
   openBlogPopup(blog: Blog) {
     this.openPopup.emit(blog); // Emit the selected blog to the parent component
+  }
+  openReport() {
+    this.isModalVisible = true;
+  }
+  handleReportSubmit(form: any): void {
+    this.isModalVisible = false;
+    // this.store.dispatch(new TagsAction.CreateTag(form));
+  }
+
+  handleCancel(): void {
+    this.isModalVisible = false;
   }
 }

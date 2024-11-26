@@ -311,11 +311,26 @@
             nzType="flag"
             nzTheme="outline"
             class="text-3xl cursor-pointer"
-            (click)="onReport()"
+            (click)="openReport()"
           ></span>
           <span *ngIf="isPopup">Report</span>
         </div>
+        <nz-modal
+        [(nzVisible)]="isModalVisible"
+        [nzTitle]="TitleModal"
+        nzClosable="true"
+        nzOkText="Create"
+        (nzOnOk)="onReport()"
+        (nzOnCancel)="handleCancel()"
+      >
+        <ng-container *nzModalContent>
+          <app-report-blog [form]="reportForm" ></app-report-blog>
+        </ng-container>
+      </nz-modal>
       </div>
     </ng-template>
   </div>
 </div>
+<ng-template #TitleModal>
+  <div class="text-3xl font-bold text-[var(--font-color)]">Report blog</div>
+</ng-template>
