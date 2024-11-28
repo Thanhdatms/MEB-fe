@@ -1,12 +1,50 @@
-<form nz-form [formGroup]="form">
+<div class="reportForm">
+  <form nz-form [formGroup]="form">
     <nz-form-control>
       <nz-form-item>
+        <nz-select
+        nzPlaceHolder="Report's type"
+        nzAllowClear="true"
+        formControlName="reportType"
+        >
+          <nz-option 
+            *ngFor="let item of reportType"
+            [nzLabel]="item.label"
+            [nzValue]="item.value"
+          ></nz-option>
+        </nz-select>
+      </nz-form-item>
+    </nz-form-control>
+    <nz-form-control>
+      <nz-form-item>
+        
         <textarea
           formControlName="description"
           placeholder="Report's description"
-          class="text-white text-2xl w-full h-32 p-2 border rounded-xl mb-1 focus:outline-none bg-[var(--font-color)]"
+          class="text-white text-2xl w-full h-32 p-2 border rounded-xl mb-1 focus:outline-none bg-[var(--font-color)] box-border"
+          maxlength="255"
         ></textarea>
+      
       </nz-form-item>
     </nz-form-control>
   </form>
+</div>
+
+  
+  <!-- <div class="flex flex-col">
+    <input
+      type="text"
+      id="user-input"
+      placeholder="Enter text"
+      class="border border-gray-300 rounded p-2 mb-2"
+    />
+    <button class="self-end border border-black p-2 rounded" (click)="onSubmit()">Submit</button>
+  </div>
+  <div>
+    <p class="text-2xl font-bold">Reason: </p>
+  <div id="output"></div>
+  </div>
+   -->
+
+   
   

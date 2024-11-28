@@ -75,7 +75,36 @@
 }
   
 }
-
+.reportForm{
+  ::placeholder {
+    color: white !important;
+  }
+  .ant-select-selection-item{
+    background-color: var(--font-color) !important;
+    font-weight: bold;
+    color:white !important;
+    border-radius: 10px !important;
+  }
+  nz-select-top-control.ant-select-selector{
+    background-color: var(--font-color) !important;; 
+    height:40px;
+    border-radius: 12px !important; 
+    color:white !important
+  }
+  .ant-select-selection-search{
+    color:white !important
+  }
+  nz-select::placeholder { 
+    color: red !important;
+  }
+  .ant-select-close-icon, 
+  .anticon-close-circle{
+    color:white !important
+  }
+  .ant-select-clear{
+    background-color: transparent !important;
+}
+}
 .ant-select-multiple .ant-select-selection-item-remove{
   color:white !important;
 }

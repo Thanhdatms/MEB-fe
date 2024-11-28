@@ -32,6 +32,8 @@ import {
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { ReportBlogComponent } from '../../UI/report-blog/report-blog.component';
+import { ReportAction } from '../../store/report/reports.action';
+import { ReportState } from '../../store/report/reports.state';
 @Component({
   selector: 'app-blog-detail',
   standalone: true,
@@ -80,6 +82,7 @@ export class BlogDetailComponent implements OnInit {
   editingCommentId: string | null = null;
   editCommentForm: FormGroup;
   userBlogProfile$: Observable<User>;
+  reportStatus$: Observable<boolean>;
   userId: string = '';
   isModalVisible = false;
 
@@ -96,6 +99,7 @@ export class BlogDetailComponent implements OnInit {
     private fb: FormBuilder,
   ) {
     this.reportForm = this.fb.group({
+      reportType: ['', Validators.required],
       description: ['', Validators.required],
     });
 
@@ -111,6 +115,7 @@ export class BlogDetailComponent implements OnInit {
       content: ['', [Validators.required, Validators.minLength(1)]],
     });
 
+    this.reportStatus$ = this.store.select(ReportState.status);
     this.blog$ = this.store.select(BlogState.blog);
     this.isFollow$ = this.store.select(UserState.isFollow);
     this.isBookmark$ = this.store.select(UserState.isBookmark);
@@ -172,6 +177,11 @@ export class BlogDetailComponent implements OnInit {
     this.userBlogProfile$.subscribe((response) => {
       this.AuthorImage = response.avatar;
       this.UserName = response.username;
+    });
+    this.reportStatus$.subscribe((response) => {
+      if (response) {
+        this.isModalVisible = false;
+      }
     });
   }
   CheckLogin(): boolean {
@@ -259,6 +269,9 @@ export class BlogDetailComponent implements OnInit {
   }
   onReport(): void {
     if (!this.CheckLogin()) return;
+    this.store.dispatch(
+      new ReportAction.CreateReport(this.blogId, this.reportForm.value),
+    );
   }
 
   updateComment(commentId: string): void {
@@ -313,10 +326,6 @@ export class BlogDetailComponent implements OnInit {
   }
   openReport() {
     this.isModalVisible = true;
-  }
-  handleReportSubmit(form: any): void {
-    this.isModalVisible = false;
-    // this.store.dispatch(new TagsAction.CreateTag(form));
   }
 
   handleCancel(): void {

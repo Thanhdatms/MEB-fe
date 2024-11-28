@@ -17,7 +17,7 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { NgxsModule, provideStore } from '@ngxs/store';
-import { errorInterceptor } from './interceptors/error.interceptor';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { NgxsResetPlugin } from 'ngxs-reset-plugin';
 import { AuthState } from './store/auth/auth.state';
@@ -46,7 +46,7 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([errorInterceptor, AuthInterceptor])),
+    provideHttpClient(withInterceptors([AuthInterceptor])),
     provideStore([]),
   ],
 };

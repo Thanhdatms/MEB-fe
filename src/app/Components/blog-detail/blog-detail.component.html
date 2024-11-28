@@ -322,6 +322,7 @@
         nzOkText="Create"
         (nzOnOk)="onReport()"
         (nzOnCancel)="handleCancel()"
+        [nzFooter]="footerTemplate"
       >
         <ng-container *nzModalContent>
           <app-report-blog [form]="reportForm" ></app-report-blog>
@@ -333,4 +334,8 @@
 </div>
 <ng-template #TitleModal>
   <div class="text-3xl font-bold text-[var(--font-color)]">Report blog</div>
+</ng-template>
+<ng-template #footerTemplate>
+  <!-- <button nz-button nzType="default" (click)="handleCancel()">Cancel</button> -->
+  <button class="border border-black p-2 rounded" nz-button nzType="primary" (click)="onReport()">Create</button>
 </ng-template>
