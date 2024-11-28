@@ -43,7 +43,7 @@ export class SettingProfileComponent {
     });
     this.store.dispatch(new UserAction.getMe());
     // Fetch user profile from state
-    this.userProfile$ = this.store.select(UserState.userProfile);
+    this.userProfile$ = this.store.select(UserState.user);
     // Patch the form with profile data
     this.userProfile$.subscribe((profile) => {
       if (profile) {

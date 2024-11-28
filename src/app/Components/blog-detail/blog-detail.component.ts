@@ -30,6 +30,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { ReportBlogComponent } from '../../UI/report-blog/report-blog.component';
+import { ReportAction } from '../../store/report/reports.action';
+import { ReportState } from '../../store/report/reports.state';
 @Component({
   selector: 'app-blog-detail',
   standalone: true,
@@ -40,12 +44,15 @@ import { NzFormModule } from 'ng-zorro-antd/form';
     NzToolTipModule,
     NzFormModule,
     ReactiveFormsModule,
+    NzModalModule,
+    ReportBlogComponent,
   ],
   templateUrl: './blog-detail.component.html',
   styleUrl: './blog-detail.component.scss',
   providers: [DateFormatter],
 })
 export class BlogDetailComponent implements OnInit {
+  @Input() reportForm: FormGroup;
   blog$: Observable<Blog | null>;
   AuthorImage: string = '';
   blogContent: Text | undefined;
@@ -75,11 +82,12 @@ export class BlogDetailComponent implements OnInit {
   editingCommentId: string | null = null;
   editCommentForm: FormGroup;
   userBlogProfile$: Observable<User>;
+  reportStatus$: Observable<boolean>;
+  userId: string = '';
+  isModalVisible = false;
 
   @Input() blogId: string = '';
   @Input() isPopup: boolean = false;
-  @Input() userId: string | null = null;
-  // @Input() userName: string | null = null;
   @Output() openPopup = new EventEmitter<Blog>();
 
   constructor(
@@ -89,8 +97,13 @@ export class BlogDetailComponent implements OnInit {
     private msg: NzMessageService,
     private formatDate: DateFormatter,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef,
   ) {
+    this.reportForm = this.fb.group({
+      reportType: ['', Validators.required],
+      description: ['', Validators.required],
+    });
+
+    this.userId = localStorage.getItem('userId') ?? '';
     if (this.userId !== '') {
       this.isLogin = true;
     }
@@ -102,6 +115,7 @@ export class BlogDetailComponent implements OnInit {
       content: ['', [Validators.required, Validators.minLength(1)]],
     });
 
+    this.reportStatus$ = this.store.select(ReportState.status);
     this.blog$ = this.store.select(BlogState.blog);
     this.isFollow$ = this.store.select(UserState.isFollow);
     this.isBookmark$ = this.store.select(UserState.isBookmark);
@@ -123,13 +137,18 @@ export class BlogDetailComponent implements OnInit {
       this.blogTags = response?.tags ?? [];
       this.upVotes = response?.votes?.upVote ?? 0;
       this.downVotes = response?.votes?.downVote ?? 0;
-      if (this.userNameTag)
-        this.store.dispatch(new UserAction.getUserbyNameTag(this.userNameTag));
+      if (this.userNameTag) {
+        const payload = {
+          nameTag: this.userNameTag,
+          type: 'blog',
+        };
+        this.store.dispatch(new UserAction.getUserbyNameTag(payload));
+      }
+
       if (this.isLogin) {
         if (this.userId !== '' && this.blogId !== '') {
           this.store.dispatch(new UserAction.isFollow(this.userBlogid));
           this.store.dispatch(new UserAction.isBookmark(this.blogId));
-          this.store.dispatch(new CommentsAction.GetComment(this.blogId));
           this.store.dispatch(new BlogAction.GetVoteByBlog(this.blogId));
           if (this.userBlogid === localStorage.getItem('userId')) {
             this.isSelf = true;
@@ -138,6 +157,8 @@ export class BlogDetailComponent implements OnInit {
           }
         }
       }
+      if (this.blogId)
+        this.store.dispatch(new CommentsAction.GetComment(this.blogId));
     });
     this.isFollow$.subscribe((response) => {
       this.isFollowing = response;
@@ -156,6 +177,11 @@ export class BlogDetailComponent implements OnInit {
     this.userBlogProfile$.subscribe((response) => {
       this.AuthorImage = response.avatar;
       this.UserName = response.username;
+    });
+    this.reportStatus$.subscribe((response) => {
+      if (response) {
+        this.isModalVisible = false;
+      }
     });
   }
   CheckLogin(): boolean {
@@ -241,6 +267,12 @@ export class BlogDetailComponent implements OnInit {
       console.error('Form is invalid');
     }
   }
+  onReport(): void {
+    if (!this.CheckLogin()) return;
+    this.store.dispatch(
+      new ReportAction.CreateReport(this.blogId, this.reportForm.value),
+    );
+  }
 
   updateComment(commentId: string): void {
     if (this.editCommentForm.valid) {
@@ -291,5 +323,12 @@ export class BlogDetailComponent implements OnInit {
 
   openBlogPopup(blog: Blog) {
     this.openPopup.emit(blog); // Emit the selected blog to the parent component
+  }
+  openReport() {
+    this.isModalVisible = true;
+  }
+
+  handleCancel(): void {
+    this.isModalVisible = false;
   }
 }

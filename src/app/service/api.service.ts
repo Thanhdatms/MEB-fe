@@ -8,6 +8,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { CategoriesService } from './api/categories.service';
 import { CommentService } from './api/comment.service';
 import { environment } from '../../environments/environment';
+import { ReportService } from './api/report.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,7 @@ export class ApiService {
   public user: UserService;
   public category: CategoriesService;
   public comment: CommentService;
+  public reports: ReportService;
 
   constructor(
     private http: HttpClient,
@@ -32,5 +34,6 @@ export class ApiService {
     this.user = new UserService(http, this.apiUrl);
     this.category = new CategoriesService(http, this.apiUrl);
     this.comment = new CommentService(http, this.apiUrl);
+    this.reports = new ReportService(http, this.apiUrl);
   }
 }

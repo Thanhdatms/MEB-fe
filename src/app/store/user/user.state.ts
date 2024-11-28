@@ -99,7 +99,7 @@ export class UserState {
     return this.apiService.user.getMe().pipe(
       tap((response) => {
         const user = response.result;
-        ctx.patchState({ userProfile: user });
+        ctx.patchState({ user: user });
       }),
     );
   }
@@ -108,9 +108,11 @@ export class UserState {
     ctx: StateContext<UserStateModel>,
     action: UserAction.getUserbyNameTag,
   ) {
-    return this.apiService.user.getUserByTag(action.payload).pipe(
+    return this.apiService.user.getUserByTag(action.payload.nameTag).pipe(
       tap((response) => {
-        ctx.patchState({ userBlog: response.result });
+        if (action.payload.type === 'profile') {
+          ctx.patchState({ userProfile: response.result });
+        } else ctx.patchState({ userBlog: response.result });
       }),
     );
   }
@@ -122,6 +124,12 @@ export class UserState {
         if (response.code === 200) {
           this.msg.success('Profile updated');
           ctx.patchState({ userProfile: response.result, updateStatus: true });
+          const user = response.result;
+          localStorage.setItem('userId', user.id);
+          localStorage.setItem('nameTag', user.nameTag);
+          localStorage.setItem('name', user.username);
+          localStorage.setItem('avatar', user.avatar);
+          localStorage.setItem('bio', user.bio);
         } else {
           this.msg.error('Please check the profile again');
         }

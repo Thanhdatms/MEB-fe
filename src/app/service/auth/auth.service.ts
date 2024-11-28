@@ -1,17 +1,20 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private apiUrl: string;
+  router = inject(Router);
 
   constructor(
     private http: HttpClient,
     @Inject(String) apiUrl: string,
+
     private cookieService: CookieService,
   ) {
     this.apiUrl = `${apiUrl}`;
@@ -34,5 +37,12 @@ export class AuthService {
 
   Logout() {
     this.cookieService.delete('authToken', '/');
+    localStorage.setItem('name', '');
+    localStorage.setItem('userId', '');
+    localStorage.setItem('avatar', '');
+    localStorage.setItem('nameTag', '');
+    localStorage.setItem('bio', '');
+    localStorage.clear();
+    this.router.navigate(['/auth']);
   }
 }

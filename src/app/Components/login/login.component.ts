@@ -57,12 +57,6 @@ export class LoginComponent {
         this._msg.error(response.message);
       }
     });
-    this.user$.subscribe((user) => {
-      localStorage.setItem('name', user.username),
-        localStorage.setItem('userId', user.id);
-      localStorage.setItem('avatar', user.avatar);
-      localStorage.setItem('nameTag', user.nameTag);
-    });
   }
 
   onLogin() {

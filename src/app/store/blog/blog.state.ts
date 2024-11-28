@@ -166,7 +166,6 @@ export class BlogState {
       .getBlogByUser(action.payload)
       .pipe(
         tap((response: any) => {
-          console.log(response);
           ctx.patchState({
             userBlog: response.result.blogs.map((blog: Blog) => ({
               id: blog.id,

@@ -13,8 +13,8 @@ export class UserIdMatchResolver implements Resolve<boolean> {
   constructor(private router: Router) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    const userId = localStorage.getItem('userId'); // Get userId from local storage
-    const idFromRoute = route.paramMap.get('id'); // Get id from route parameters
+    const userId = localStorage.getItem('nameTag'); // Get userId from local storage
+    const idFromRoute = route.paramMap.get('nametag'); // Get id from route parameters
     if (userId && idFromRoute === userId) {
       this.router.navigate(['/profile']);
       return false;
