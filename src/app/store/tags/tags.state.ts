@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { catchError, tap, throwError } from 'rxjs';
 import { Blog } from '../blog/blog.state';
 import { TagsAction } from './tags.actions';
+import { error } from 'jquery';
 
 export interface Tags {
   id: string;
@@ -46,15 +47,21 @@ export class TagsState {
 
   @Action(TagsAction.GetTags)
   getTags(ctx: StateContext<TagsStateModel>) {
-    this.apiService.tags
+  return this.apiService.tags
       .getTags()
       .pipe(
         tap((response: any) => {
+          if(response.code != 200) {
+            return;
+          }
           const tags: Tags[] = response.result;
           ctx.patchState({ tags, status: false });
         }),
-      )
-      .subscribe();
+        catchError((error) => {
+          console.log(error);
+          return throwError(() => error);
+        })
+      );
   }
 
   @Action(TagsAction.CreateTag)

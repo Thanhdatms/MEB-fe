@@ -27,6 +27,7 @@ import { DiscoverBlogsComponent } from './Components/blog-list/discover-blogs/di
 import { CommentsState } from './store/comments/comments.state';
 import { UserStatsState } from './store';
 import { ReportState } from './store/report/reports.state';
+import { errorInterceptor } from './interceptors/error.interceptor';
 
 export const routes: Routes = [
   {

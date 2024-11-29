@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import { ApiService } from '../../service/api.service';
-import { tap } from 'rxjs';
+import { catchError, EMPTY, map, take, tap } from 'rxjs';
 import { AuthAction } from './auth.action';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { StateResetAll } from 'ngxs-reset-plugin';
+import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
 
 export interface loginStatus {
   status: boolean;
@@ -30,6 +33,9 @@ export class AuthState {
   constructor(
     private apiService: ApiService,
     private msg: NzMessageService,
+    private store: Store,
+    private cookieService: CookieService,
+    private router: Router
   ) {}
 
   @Selector()
@@ -112,6 +118,55 @@ export class AuthState {
   @Action(AuthAction.Logout)
   Logout(ctx: StateContext<AuthStateModel>) {
     ctx.patchState({ token: '', LoginStatus: { status: false, message: '' } });
-    return this.apiService.auth.Logout();
+    return this.apiService.auth.Logout().pipe(
+
+    );
+  }
+  @Action(AuthAction.Logout)
+  logout(ctx: StateContext<AuthStateModel>) {
+    return this.apiService.auth.Logout().pipe(
+      tap((res) => {
+        ctx.patchState({ token: '', LoginStatus: { status: false, message: '' } });
+        this.store.dispatch(new StateResetAll());
+        localStorage.clear();
+        this.router.navigate(['/auth']);
+      })
+    );
+  }
+  @Action(AuthAction.RefreshToken)
+  RefreshToken(
+    ctx: StateContext<AuthStateModel>,
+    action: AuthAction.RefreshToken,
+  ) {
+    return this.apiService.auth.RefreshToken().pipe(
+      take(1),
+      tap((res) => {
+        if(res.code == 200) {
+          ctx.dispatch(
+            new AuthAction.RefreshTokenSuccess(res)
+          );
+        } else {
+          ctx.dispatch(new AuthAction.Logout());
+          throw Error('Invalid token');
+        }
+      }),
+      catchError((_) => {
+        ctx.dispatch(new AuthAction.Logout());
+        return EMPTY;
+      })
+    );
+  }
+
+  @Action(AuthAction.RefreshTokenSuccess)
+  refreshTokenSuccess(
+    ctx: StateContext<AuthStateModel>,
+    { payload }: AuthAction.RefreshTokenSuccess
+  ) {
+    const token = payload.result;
+    this.apiService.auth.setToken(token);
+    ctx.patchState({
+      token: token,
+      LoginStatus: { status: true, message: '' },
+    });
   }
 }

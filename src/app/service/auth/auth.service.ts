@@ -1,5 +1,5 @@
 import { Injectable, Inject, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHandler, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
@@ -9,22 +9,34 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private apiUrl: string;
+  private httpOptions = {
+    withCredentials: true
+  };
   router = inject(Router);
 
   constructor(
     private http: HttpClient,
     @Inject(String) apiUrl: string,
-
     private cookieService: CookieService,
   ) {
     this.apiUrl = `${apiUrl}`;
   }
 
   Login(info: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/login`, info);
+    return this.http.post(`${this.apiUrl}/auth/login`, info, { withCredentials: true });
   }
+
   Register(info: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/users`, info);
+    return this.http.post(`${this.apiUrl}/users`, info, this.httpOptions);
+  }
+
+  RefreshToken(): Observable<any> {
+    this.cookieService.delete('authToken', '/');
+    return this.http.post(
+      `${this.apiUrl}/auth/refresh-token`, 
+      {}, 
+      this.httpOptions
+    );
   }
 
   setToken(token: string) {
@@ -35,14 +47,8 @@ export class AuthService {
     return this.cookieService.get('authToken');
   }
 
-  Logout() {
+  Logout(): Observable<any> {
     this.cookieService.delete('authToken', '/');
-    localStorage.setItem('name', '');
-    localStorage.setItem('userId', '');
-    localStorage.setItem('avatar', '');
-    localStorage.setItem('nameTag', '');
-    localStorage.setItem('bio', '');
-    localStorage.clear();
-    this.router.navigate(['/auth']);
+    return this.http.post(`${this.apiUrl}/auth/logout`, {}, this.httpOptions);
   }
 }
