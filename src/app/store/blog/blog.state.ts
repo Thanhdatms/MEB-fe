@@ -93,6 +93,9 @@ export class BlogState {
       .getBlogs()
       .pipe(
         tap((response: any) => {
+          if(response.code != 200) {
+            return;
+          }
           const blogs: Blog[] = response.result;
           ctx.patchState({ blogs: blogs, status: { status: false, code: 0 } });
         }),

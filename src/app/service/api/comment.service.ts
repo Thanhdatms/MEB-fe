@@ -7,6 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class CommentService {
   private apiUrl: string;
+  private httpOptions = {
+    withCredentials: true
+  };
 
   constructor(
     private http: HttpClient,
@@ -16,15 +19,18 @@ export class CommentService {
   }
 
   getComment(blogId: string, page: number, size: number): Observable<any> {
-    // Use Angular's HttpClient to send a GET request with the body
     return this.http.get(
       `${this.apiUrl}/${blogId}/comments?page=${page}&size=${size}`,
+      this.httpOptions
     );
   }
+
   createComment(blogId: string, content: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${blogId}/comments`, {
-      content: content,
-    });
+    return this.http.post(
+      `${this.apiUrl}/${blogId}/comments`,
+      { content },
+      this.httpOptions
+    );
   }
 
   updateComment(
@@ -32,11 +38,17 @@ export class CommentService {
     commentId: string,
     content: string,
   ): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${blogId}/comments/${commentId}`, {
-      content: content,
-    });
+    return this.http.put(
+      `${this.apiUrl}/${blogId}/comments/${commentId}`,
+      { content },
+      this.httpOptions
+    );
   }
+
   deleteComment(blogId: string, commentId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${blogId}/comments/${commentId}`);
+    return this.http.delete(
+      `${this.apiUrl}/${blogId}/comments/${commentId}`, 
+      this.httpOptions
+    );
   }
 }

@@ -6,6 +6,9 @@ export enum Actions {
   REGISTER_SUCCESS = '[Auth] register successfully',
   REGISTER_FAILED = '[Auth] register failed',
   LOGOUT = '[Auth] logout',
+  REFRESH_TOKEN = '[Auth] refresh token',
+  REFRESH_TOKEN_SUCCESS = '[Auth] refresh token successfully',
+  REFRESH_TOKEN_FAILED = '[Auth] refresh token failed',
 }
 export namespace AuthAction {
   export class Login {
@@ -35,5 +38,14 @@ export namespace AuthAction {
 
   export class Logout {
     static type = Actions.LOGOUT;
+  }
+
+  export class RefreshToken {
+    static type = Actions.REFRESH_TOKEN;
+  }
+
+  export class RefreshTokenSuccess {
+    static type = Actions.REFRESH_TOKEN_SUCCESS;
+    constructor(public payload: any) {}
   }
 }

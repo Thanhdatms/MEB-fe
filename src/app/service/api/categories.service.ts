@@ -7,6 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class CategoriesService {
   private apiUrl: string;
+  private httpOptions = {
+    withCredentials: true
+  };
 
   constructor(
     private http: HttpClient,
@@ -16,12 +19,14 @@ export class CategoriesService {
   }
 
   getCategories(): Observable<any> {
-    return this.http.get(this.apiUrl);
+    return this.http.get(this.apiUrl, this.httpOptions);
   }
+
   createCategory(tags: any): Observable<any> {
-    return this.http.post(this.apiUrl, tags);
+    return this.http.post(this.apiUrl, tags, this.httpOptions);
   }
+
   getBlogbyCategory(id: any): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`);
+    return this.http.get(`${this.apiUrl}/${id}`, this.httpOptions);
   }
 }

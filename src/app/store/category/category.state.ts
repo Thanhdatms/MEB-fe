@@ -49,6 +49,9 @@ export class CategoryState {
       .getCategories()
       .pipe(
         tap((response: any) => {
+          if(response.code != 200) {
+            return;
+          }
           const categories: Category[] = response.result;
           ctx.patchState({ categories, status: false });
         }),
