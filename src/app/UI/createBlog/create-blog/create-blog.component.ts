@@ -2,6 +2,8 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  inject,
+  Inject,
   Input,
   OnInit,
   Output,
@@ -43,6 +45,7 @@ import {
   MediaEmbed,
   Image,
   ImageInsert,
+  SimpleUploadAdapter,
 } from 'ckeditor5';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Blog, BlogState, Status } from '../../../store/blog/blog.state';
@@ -55,6 +58,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { CategoryState } from '../../../store/category/category.state';
 import { CategorysAction } from '../../../store/category/category.actions';
+import { environment } from '../../../../environments/environment.development';
+import { ApiService } from '../../../service/api.service';
 
 @Component({
   selector: 'app-create-blog',
@@ -91,13 +96,13 @@ export class CreateBlogComponent implements OnInit {
   imagePreview: string | ArrayBuffer | null = null;
   isModalVisible = false;
   isLoading = false;
-
+  private apiUrl = environment.apiUrl;
   status$: Observable<Status>;
   tagStatus$: Observable<boolean>;
   tags$: Observable<any>;
   categories$: Observable<any>;
   private destroy$ = new Subject<void>();
-
+  token = inject(ApiService).auth.getToken();
   editor = ClassicEditor;
 
   editorConfig: EditorConfig = {
@@ -119,7 +124,8 @@ export class CreateBlogComponent implements OnInit {
       MediaEmbed,
       Image,
       ImageInsert,
-      // ImageUpload
+      ImageUpload,
+      SimpleUploadAdapter
     ],
     toolbar: [
       'fontSize',
@@ -134,12 +140,19 @@ export class CreateBlogComponent implements OnInit {
       'blockQuote',
       'code',
 
-      // '|',
-      // 'mediaEmbed',
-      // 'insertImage',
+      '|',
+      'mediaEmbed',
+      'insertImage',
       '|',
       'alignment',
     ],
+    simpleUpload: {
+      uploadUrl: `${this.apiUrl}/blogs/images/upload`, // Backend endpoint to handle image uploads
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${this.token}`,
+      }
+    },
     mediaEmbed: {
       previewsInData: true,
     },
@@ -273,7 +286,18 @@ export class CreateBlogComponent implements OnInit {
   handleCancel(): void {
     this.isModalVisible = false;
   }
+  onReady(editor: any) {
+    const toolbarContainer = document.querySelector('#toolbar-container');
+    if (toolbarContainer) {
+      toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+    }
+  }
 
+  onChange(event: any) {
+    const editorData = event.editor.getData();
+    console.log('Editor content:', editorData);
+  }
+  
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
